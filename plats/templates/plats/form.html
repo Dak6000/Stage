@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="auth-card card border-0 shadow-lg">
+            <div class="card-header py-3 auth-card-header">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-utensils me-2"></i>{{ title }}
+                </h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Afficher tous les champs du formulaire manuellement -->
+                    {% for field in form %}
+                        <div class="mb-3">
+                            {% if field.name == 'disponible' %}
+                                <!-- Affichage spécial pour le champ booléen/disponibilité -->
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" name="{{ field.name }}" id="{{ field.id_for_label }}"
+                                           class="form-check-input {% if field.errors %}is-invalid{% endif %}"
+                                           {% if field.value %}checked{% endif %}>
+                                    <label class="form-check-label" for="{{ field.id_for_label }}">
+                                        {{ field.label }}
+                                    </label>
+                                    {% if field.errors %}
+                                        <div class="invalid-feedback">
+                                            {% for error in field.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <!-- Affichage standard pour les autres champs -->
+                                <label for="{{ field.id_for_label }}" class="form-label">
+                                    {{ field.label }}
+                                    {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                                </label>
+
+                                {{ field }}
+
+                                {% if field.help_text %}
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                {% endif %}
+
+                                {% if field.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in field.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'plats:plat-list' %}" class="btn btn-secondary">
+                            <i class="fas fa-times me-2"></i>Annuler
+                        </a>
+                        <button type="submit" class="btn auth-submit-btn">
+                            <i class="fas fa-save me-2"></i>Enregistrer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .auth-card {
+        border-radius: 10px;
+    }
+    .auth-card-header {
+        background-color: var(--bs-vert);
+        color: white;
+        border-radius: 10px 10px 0 0 !important;
+    }
+    .auth-submit-btn {
+        background-color: var(--bs-vert);
+        color: white;
+    }
+    .auth-submit-btn:hover {
+        background-color: var(--bs-jaune);
+        color: white;
+    }
+    .form-control, .form-select {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: var(--bs-vert);
+        box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+    }
+    .is-invalid {
+        border-color: #dc3545;
+    }
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875em;
+    }
+    .form-switch .form-check-input {
+        width: 3em;
+        height: 1.5em;
+    }
+</style>
+{% endblock %}

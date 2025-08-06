@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Structures - {{ block.super }}{% endblock %}
+
+
+{% block content %}
+<!-- Structures Listing -->
+<section id="structures" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: var(--bs-vert);">Nos Structures Partenaires</h2>
+            <p class="lead text-muted">Découvrez les meilleures adresses gastronomiques</p>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="searchInput" placeholder="Rechercher une structure...">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="villeFilter">
+                    <option value="">Toutes les villes</option>
+                    {% for ville in villes %}
+                        <option value="{{ ville }}">{{ ville }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="categoryFilter">
+                    <option value="">Toutes les catégories</option>
+                    {% for categorie in categories %}
+                        <option value="{{ categorie }}">{{ categorie }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for structure in featured_structures %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-3 structure-card"
+                 data-ville="{{ structure.ville|lower }}"
+                 data-categorie="{{ structure.categorie.nom|lower }}"
+                 data-nom="{{ structure.nom|lower }}">
+                <div class="card h-100 shadow-sm" style="background-color: var(--bs-fontSecondary);">
+                    <div class="position-relative">
+                        {% if structure.photo %}
+                        <img src="{{ structure.photo.url }}" class="card-img-top" alt="{{ structure.nom }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                        <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 150px; background: var(--bs-jaune)">
+                            <i class="fas fa-utensils fa-3x text-white"></i>
+                        </div>
+                        {% endif %}
+                        <div class="badge position-absolute" style="top: 10px; right: 10px; background: var(--bs-jaune); color: var(--bs-rouge)">
+                            {{ structure.categorie.nom }}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ structure.nom|default:"Nom du restaurant" }}</h5>
+                        <p class="card-text text-muted">
+                            <i class="fas fa-map-marker-alt me-2"></i>{{ structure.ville|default:"Lomé" }}
+                        </p>
+                        <p class="card-text">{{ structure.description|default:"Description du restaurant"|truncatechars:100 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            {% if structure.note_moyenne %}
+                            <span class="badge" style="background: var(--bs-jaune); color: var(--bs-rouge)">
+                                <i class="fas fa-star"></i> {{ structure.note_moyenne|floatformat:1 }}
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="{% url 'structures:detail' structure.pk %}" class="btn btn-sm" style="background: var(--bs-jaune); color: var(--bs-rouge)">
+                            <i class="fas fa-eye me-2"></i> Voir détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="alert" style="background: var(--bs-jaune)">
+                    <i class="fas fa-info-circle me-2"></i> Aucun restaurant disponible pour le moment. Revenez bientôt!
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Section Plats -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: var(--bs-vert);">Nos Plats Populaires</h2>
+            <p class="lead text-muted">Découvrez nos spécialités culinaires</p>
+        </div>
+
+        <!-- Filtres Plats -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="structureSearch" placeholder="Rechercher un plat...">
+            </div>
+            <div class="col-md-6">
+                <select class="form-select" id="menuCategoryFilter">
+                    <option value="">Toutes catégories</option>
+                    {% for categorie in plat_categories %}
+                        <option value="{{ categorie|lower }}">{{ categorie }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Cartes Plats -->
+        <div class="row" id="menusContainer">
+            {% for plat in featured_plats %}
+            <div class="col-lg-3 col-md-6 mb-4 menu-card"
+                 data-categorie="{{ plat.categorie.nom|lower }}"
+                 data-nom="{{ plat.nom|lower }}">
+                <div class="card h-100 shadow-sm">
+                    <div class="position-relative">
+                        {% if plat.photo %}
+                        <img src="{{ plat.photo.url }}" class="card-img-top" alt="{{ plat.nom }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                        <div class="card-img-top bg-warning d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-utensils fa-3x text-white"></i>
+                        </div>
+                        {% endif %}
+                        <div class="badge bg-warning text-dark position-absolute" style="top: 10px; right: 10px;">
+                            {{ plat.categorie.nom }}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ plat.nom }}</h5>
+                        <p class="card-text">{{ plat.description|truncatechars:100 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="auth-card-title fw-bold">{{ plat.prix }} FCFA</span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-clock me-1"></i> {{ plat.temps_preparation }} min
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between">
+                        <a href="{% url 'structures:detail' plat.pk %}" class="btn" style="background: var(--bs-jaune); color: var(--bs-rouge)">
+                            <i class="fas fa-eye me-2"></i> Détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="alert alert-warning">
+                    <i class="fas fa-info-circle me-2"></i> Aucun menu disponible
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5">
+    <div class="container text-center">
+        <h2 class="mb-4">Vous gérez un restaurant ?</h2>
+        <p class="lead mb-4">Rejoignez notre plateforme et augmentez votre visibilité</p>
+        <a href="#" class="btn btn-light btn-lg px-4">Nous contacter</a>
+    </div>
+</section>
+
+{% endblock %}

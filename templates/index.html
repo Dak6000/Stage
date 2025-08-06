@@ -1,0 +1,309 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Structures - {{ block.super }}{% endblock %}
+
+{% block hero %}
+    <section class="hero-section" style="padding: 7rem 0; color: var(--bs-jaune);">
+        <!-- Carrousel dynamique amélioré -->
+        <div id="structureCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2000" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: -1;">
+            <div class="carousel-inner h-100">
+                {% for structure in featured_structures|slice:":5" %}
+                <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
+                    {% if structure.photo %}
+                    <img src="{{ structure.photo.url }}" class="d-block w-100 h-100" style="object-fit: cover; filter: brightness(0.7);" alt="{{ structure.nom }}">
+                    {% else %}
+                    <div class="d-block w-100 h-100" style="background: linear-gradient(rgba(0, 107, 63, 0.7), rgba(0, 107, 63, 0.7));">
+                        <div class="d-flex justify-content-center align-items-center h-100">
+                            <i class="fas fa-utensils fa-5x text-white"></i>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% empty %}
+                <div class="carousel-item h-100 active">
+                    <img src="{% static 'images/background.jpg' %}" class="d-block w-100 h-100" style="object-fit: cover; filter: brightness(0.7);">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Overlay et contenu -->
+        <div style="position: relative; z-index: 1;">
+            <div class="container text-center">
+                <h1 class="display-4 fw-bold mb-4">Découvrez les meilleures tables du Togo</h1>
+                <p class="lead mb-5">Trouvez les restaurants, cafés et bars les mieux notés</p>
+
+                <!-- Formulaire de recherche -->
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <form class="search-form">
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-lg" placeholder="Rechercher un restaurant...">
+                                <button class="btn btn-lg" type="submit" style="background-color: var(--bs-jaune); color: var(--bs-text);">
+                                    <i class="fas fa-search"></i> Rechercher
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block content %}
+<!-- Section Structures -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: var(--bs-vert);">Nos Structures Partenaires</h2>
+            <p class="lead text-muted">Découvrez nos meilleures adresses</p>
+        </div>
+
+        <!-- Filtres Structures -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="structureSearch" placeholder="Rechercher une structure...">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="villeFilter">
+                    <option value="">Toutes les villes</option>
+                    {% for ville in villes %}
+                        <option value="{{ ville|lower }}">{{ ville }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="structureCategoryFilter">
+                    <option value="">Toutes catégories</option>
+                    {% for categorie in structure_categories %}
+                        <option value="{{ categorie|lower }}">{{ categorie }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Cartes Structures -->
+        <div class="row" id="structuresContainer">
+            {% for structure in featured_structures %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-3 structure-card"
+                 data-ville="{{ structure.ville|lower }}"
+                 data-categorie="{{ structure.categorie.nom|lower }}"
+                 data-nom="{{ structure.nom|lower }}">
+                <div class="card h-100 shadow-sm" style="background-color: var(--bs-fontSecondary);">
+                    <div class="position-relative">
+                        {% if structure.photo %}
+                        <img src="{{ structure.photo.url }}" class="card-img-top" alt="{{ structure.nom }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                        <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 150px; background: var(--bs-jaune)">
+                            <i class="fas fa-utensils fa-3x text-white"></i>
+                        </div>
+                        {% endif %}
+                        <div class="badge position-absolute" style="top: 10px; right: 10px; background: var(--bs-jaune); color: var(--bs-rouge)">
+                            {{ structure.categorie.nom }}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ structure.nom|default:"Nom du restaurant" }}</h5>
+                        <p class="card-text text-muted">
+                            <i class="fas fa-map-marker-alt me-2"></i>{{ structure.ville|default:"Lomé" }}
+                        </p>
+                        <p class="card-text">{{ structure.description|default:"Description du restaurant"|truncatechars:100 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            {% if structure.note_moyenne %}
+                            <span class="badge" style="background: var(--bs-jaune); color: var(--bs-rouge)">
+                                <i class="fas fa-star"></i> {{ structure.note_moyenne|floatformat:1 }}
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="{% url 'structures:detail' structure.pk %}" class="btn btn-sm" style="background: var(--bs-jaune); color: var(--bs-rouge)">
+                            <i class="fas fa-eye me-2"></i> Voir détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="alert" style="background: var(--bs-jaune)">
+                    <i class="fas fa-info-circle me-2"></i> Aucun restaurant disponible pour le moment. Revenez bientôt!
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'structures:structure' %}" class="btn btn-secondary-btn">
+                Voir toutes les structures <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Section Menus -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: var(--bs-vert);">Nos Menus Populaires</h2>
+            <p class="lead text-muted">Découvrez nos spécialités culinaires</p>
+        </div>
+
+        <!-- Filtres Menus -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <select class="form-select" id="platCategoryFilter">
+                    <option value="">Toutes les nom</option>
+                    {% for nom in nom_plats %}
+                        <option value="{{ nom|lower }}">{{ nom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <select class="form-select" id="menuCategoryFilter">
+                    <option value="">Toutes catégories</option>
+                    {% for categorie in plat_categories %}
+                        <option value="{{ categorie|lower }}">{{ categorie }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Cartes Menus -->
+        <div class="row" id="menusContainer">
+            {% for plat in featured_plats %}
+            <div class="col-lg-3 col-md-6 mb-4 menu-card"
+                 data-categorie="{{ plat.categorie.nom|lower }}"
+                 data-nom="{{ plat.nom|lower }}">
+                <div class="card h-100 shadow-sm">
+                    <div class="position-relative">
+                        {% if plat.photo %}
+                        <img src="{{ plat.photo.url }}" class="card-img-top" alt="{{ plat.nom }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                        <div class="card-img-top bg-warning d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-utensils fa-3x text-white"></i>
+                        </div>
+                        {% endif %}
+                        <div class="badge bg-warning text-dark position-absolute" style="top: 10px; right: 10px;">
+                            {{ plat.categorie.nom }}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ plat.nom }}</h5>
+                        <p class="card-text">{{ plat.description|truncatechars:100 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="auth-card-title fw-bold">{{ plat.prix }} FCFA</span>
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-clock me-1"></i> {{ plat.temps_preparation }} min
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between">
+                        <a href="{% url 'structures:detail' plat.pk %}" class="btn btn-sm " style="background: var(--bs-jaune); color: var(--bs-rouge)">
+                            <i class="fas fa-eye me-2"></i> Détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="alert alert-warning">
+                    <i class="fas fa-info-circle me-2"></i> Aucun menu disponible
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'structures:structure' %}" class="btn btn-secondary-btn" >
+                Voir tous les menus <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="py-3" style="background: var(--bs-fontSecondary)">
+    <div class="container">
+        <h2 class="text-center mb-5" style="color: var(--bs-vert);">Catégories</h2>
+
+        <div class="row">
+            <div class="col-md-3 col-6 mb-4">
+                <a href="#" class="text-decoration-none">
+                    <div class="card category-card h-100 text-center p-4"  style="background: var(--bs-font);">
+                        <i class="fas fa-hamburger fa-3x mb-3" style="color: var(--bs-vert);"></i>
+                        <h5>Fast Food</h5>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <a href="#" class="text-decoration-none">
+                    <div class="card category-card h-100 text-center p-4"  style="background: var(--bs-font);">
+                        <i class="fas fa-pizza-slice fa-3x mb-3" style="color: var(--bs-vert);"></i>
+                        <h5>Pizzeria</h5>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <a href="#" class="text-decoration-none">
+                    <div class="card category-card h-100 text-center p-4"  style="background: var(--bs-font);">
+                        <i class="fas fa-mug-hot fa-3x mb-3" style="color: var(--bs-vert);"></i>
+                        <h5>Cafés</h5>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-6 mb-4">
+                <a href="#" class="text-decoration-none">
+                    <div class="card category-card h-100 text-center p-4"  style="background: var(--bs-font);">
+                        <i class="fas fa-cocktail fa-3x mb-3" style="color: var(--bs-vert);"></i>
+                        <h5>Bars</h5>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How it Works -->
+<section class="py-3">
+    <div class="container">
+        <h2 class="text-center mb-5" style="color: var(--bs-jaune);">Comment ça marche</h2>
+
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="text-center p-4">
+                    <div class="step-number mb-3" style="background-color: var(--bs-jaune); color: var(--bs-rouge); width: 50px; height: 50px; line-height: 50px; border-radius: 50%; margin: 0 auto;">1</div>
+                    <h4>Trouvez un restaurant</h4>
+                    <p>Recherchez par nom, type de cuisine ou localisation</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center p-4">
+                    <div class="step-number mb-3" style="background-color: var(--bs-jaune); color: var(--bs-rouge); width: 50px; height: 50px; line-height: 50px; border-radius: 50%; margin: 0 auto;">2</div>
+                    <h4>Consultez le menu</h4>
+                    <p>Découvrez les plats disponibles et leurs prix</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center p-4">
+                    <div class="step-number mb-3" style="background-color: var(--bs-jaune); color: var(--bs-rouge); width: 50px; height: 50px; line-height: 50px; border-radius: 50%; margin: 0 auto;">3</div>
+                    <h4>Commandez ou réservez</h4>
+                    <p>Faites votre choix et profitez de votre repas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-3" style="background: var(--bs-fontSecondary); color: var(--bs-vert);">
+{% if not has_structure %}
+    <div class="container text-center">
+        <h2 class="mb-4">Vous êtes un restaurant?</h2>
+        <p class="lead mb-4">Rejoignez notre plateforme et augmentez votre visibilité</p>
+        <a href="{% url 'structures:register_structure' %}" class="btn btn-lg" style="background: var(--bs-jaune); color: var(--bs-rouge)">Inscrivez votre établissement</a>
+    </div>
+{% endif %}
+</section>
+
+{% endblock %}

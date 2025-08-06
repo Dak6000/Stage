@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Supprimer mon compte</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <strong>Attention!</strong> Cette action est irréversible. Toutes vos données seront supprimées définitivement.
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Affichage manuel des champs du formulaire -->
+                        {% for field in form %}
+                            <div class="form-group mb-3">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {% if field.field.widget.input_type == 'checkbox' %}
+                                    <div class="form-check">
+                                        <input type="checkbox"
+                                               class="form-check-input {% if field.errors %}is-invalid{% endif %}"
+                                               id="{{ field.id_for_label }}"
+                                               name="{{ field.name }}"
+                                               {% if field.value %}checked{% endif %}>
+                                        <label class="form-check-label" for="{{ field.id_for_label }}">
+                                            {{ field.help_text }}
+                                        </label>
+                                    </div>
+                                {% else %}
+                                    <input type="{{ field.field.widget.input_type }}"
+                                           class="form-control {% if field.errors %}is-invalid{% endif %}"
+                                           id="{{ field.id_for_label }}"
+                                           name="{{ field.name }}"
+                                           value="{{ field.value|default_if_none:'' }}">
+                                {% endif %}
+
+                                {% if field.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ field.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Confirmer la suppression
+                        </button>
+                        <a href="{% url 'accounts:profile' %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Annuler
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
