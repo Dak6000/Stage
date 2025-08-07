@@ -18,7 +18,6 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
 
     # URLs de profil utilisateur
-    path('profile/', views.profile_view, name='profile'),
     path('profile_form', views.profile_update, name='profile-update'),
     path('change_password', views.change_password, name='password-change'),
     path('account_delete', views.account_delete, name='account-delete'),

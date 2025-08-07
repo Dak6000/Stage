@@ -150,11 +150,6 @@ def logout_view(request):
     return redirect('accounts:login')
 
 @login_required
-def profile_view(request):
-    """Affichage du profil utilisateur"""
-    return render(request, 'accounts/profile.html', {'user': request.user})
-
-@login_required
 def profile_update(request):
     """Mise à jour du profil utilisateur"""
     if request.method == 'POST':
@@ -162,7 +157,7 @@ def profile_update(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Votre profil a été mis à jour avec succès!')
-            return redirect('accounts:profile')
+            return redirect('accounts:dashboard')
     else:
         form = UserUpdateForm(instance=request.user)
 

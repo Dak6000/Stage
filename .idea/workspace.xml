@@ -5,49 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6eb8d3b2-24c7-429a-bfaf-385010f2143c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/E_Menu.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounts/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/account_delete.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/change_password.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/confirm_delete.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/dashboard.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/profile.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/profile_form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounts/templates/accounts/register_user.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounts/templates/base_auth.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounts/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/avis/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/avis/templates/avis/confirm_delete.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/avis/templates/avis/form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/avis/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/menus/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/menus/templates/menus/confirm_delete.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/menus/templates/menus/form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/menus/templates/menus/list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/menus/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plats/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plats/templates/plats/confirm_delete.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plats/templates/plats/form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plats/templates/plats/list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plats/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/promotions/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/promotions/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/structures/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/structures/templates/structures/detail.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/structures/templates/structures/register_structure.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/structures/templates/structures/structure.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/structures/templates/structures/structure_detail.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/structures/templates/structures/structure_form.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/structures/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/templates/accounts/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/templates/accounts/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/templates/accounts/profile.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/templates/accounts/profile_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/templates/accounts/profile_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/structures/templates/structures/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/structures/templates/structures/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/structures/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/structures/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +45,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "D:/STAGE/E_Menu/avis/templates/avis",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -121,7 +87,7 @@
       <option name="presentableId" value="Default" />
       <updated>1754422650239</updated>
       <workItem from="1754422651273" duration="1000" />
-      <workItem from="1754470183374" duration="29256000" />
+      <workItem from="1754470183374" duration="38566000" />
     </task>
     <servers />
   </component>

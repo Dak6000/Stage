@@ -65,19 +65,23 @@ def structure_detail(request, pk):
     structure = get_object_or_404(Structures, pk=pk, user=request.user)
     return render(request, 'structures/structure_detail.html', {'structure': structure})
 
+
 @login_required(login_url='accounts:login')
 def detail(request, pk):
     """Détails d'une structure spécifique avec les menus et les plats qui la constituent"""
     structure = get_object_or_404(Structures, pk=pk)
-    menus = Menus.objects.filter(structure=structure).prefetch_related(
-        'plats')  # Récupère tous les menus de cette structure avec leurs plats
+    menus = Menus.objects.filter(structure=structure).prefetch_related('plats')
+
+    # Vérifie si l'utilisateur actuel est le propriétaire de la structure
+    is_owner = request.user == structure.user
 
     context = {
         'structure': structure,
         'menus': menus,
-        'has_structure': request.user.structure_set.exists() if request.user.is_authenticated else False # Vérifie si l'utilisateur est propriétaire
+        'has_structure': is_owner,  # Utilisez ce booléen dans votre template pour conditionner l'affichage
     }
     return render(request, 'structures/detail.html', context)
+
 
 @login_required
 def structure_update(request, pk):

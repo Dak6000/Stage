@@ -77,10 +77,10 @@
                             {% if has_structure %}
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <a href="{% url 'menus-update' menu.pk %}" class="btn auth-submit-btn">
+                                        <a href="{% url 'menus:menus-update' menu.pk %}" class="btn auth-submit-btn">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{% url 'menus-delete' menu.pk %}" class="btn btn-danger">
+                                        <a href="{% url 'menus:menus-delete' menu.pk %}" class="btn btn-danger">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </div>
