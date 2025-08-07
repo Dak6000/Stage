@@ -215,6 +215,9 @@
             <div class="card shadow mb-4 profile-card">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center card-header-style">
                     <h6 class="m-0 fw-bold profile-title">Votre Profil</h6>
+                    <a href="{% url 'accounts:password-change' %}" class="btn edit-profile-btn">
+                        <i class="fas fa-lock me-2"></i>Changer mot de passe
+                    </a>
                 </div>
                 <div class="card-body text-center">
                     {% if user.photo %}

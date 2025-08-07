@@ -83,38 +83,10 @@ class UserRegistrationForm(UserCreationForm):
             'placeholder': 'Nom'
         })
     )
-    telephone = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Téléphone (optionnel)'
-        })
-    )
-    adresse = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Adresse'
-        })
-    )
-    ville = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Ville'
-        })
-    )
-    photo = forms.ImageField(
-        required=False,
-        widget=forms.FileInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Photo'
-        })
-    )
 
     class Meta:
         model = User
-        fields = ['email', 'password1', 'password2', 'first_name', 'last_name', 'telephone', 'adresse', 'ville', 'photo']
+        fields = ['email', 'password1', 'password2', 'first_name', 'last_name']
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

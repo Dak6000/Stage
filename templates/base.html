@@ -100,13 +100,9 @@
         </div>
     </nav>
 
-    {% if not hide_hero and not request.path == '/dashboard/' %}
-    <div class="hero-section">
-        {% block hero %}
+    {% block hero %}
         <!-- Contenu par défaut -->
-        {% endblock %}
-    </div>
-    {% endif %}
+    {% endblock %}
 
     <!-- Contenu principal -->
     <main class="container dash">

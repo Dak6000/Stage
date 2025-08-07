@@ -25,7 +25,7 @@ class MenuForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple(attrs={
             'class': 'form-check-input'
         }),
-        required=True
+        required=False
     )
 
     class Meta:
@@ -39,8 +39,3 @@ class MenuForm(forms.ModelForm):
         if user:
             self.fields['plats'].queryset = Plats.objects.filter(createur=user)
 
-    def clean_plats(self):
-        plats = self.cleaned_data.get('plats')
-        if not plats:
-            raise ValidationError("Vous devez sélectionner au moins un plat.")
-        return plats
