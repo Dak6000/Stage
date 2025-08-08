@@ -25,6 +25,8 @@ __pycache__/
 #staticfiles/
 #static/
 
+.settings.py
+
 # Fichiers de l'IDE (VS Code, PyCharm, etc.)
 .vscode/
 .idea/
