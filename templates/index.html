@@ -1,51 +1,68 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Structures - {{ block.super }}{% endblock %}
+{% block title %}Accueil - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
 
 {% block hero %}
-    <section class="hero-section" style="padding: 7rem 0; color: var(--bs-jaune);">
+    <section class="hero-section">
         <!-- Carrousel dynamique amélioré -->
-        <div id="structureCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2000" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: -1;">
-            <div class="carousel-inner h-100">
-                {% for structure in featured_structures|slice:":5" %}
-                <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
-                    {% if structure.photo %}
-                    <img src="{{ structure.photo.url }}" class="d-block w-100 h-100" style="object-fit: cover; filter: brightness(0.7);" alt="{{ structure.nom }}">
-                    {% else %}
-                    <div class="d-block w-100 h-100" style="background: linear-gradient(rgba(0, 107, 63, 0.7), rgba(0, 107, 63, 0.7));">
-                        <div class="d-flex justify-content-center align-items-center h-100">
-                            <i class="fas fa-utensils fa-5x text-white"></i>
-                        </div>
+        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
+            <div class="carousel-inner">
+                <!-- Slide 1: Guide -->
+                <div class="carousel-item active">
+                    <img src="{% static 'images/restaurant-bg1.jpg' %}" alt="Guide d'utilisation" class="d-block w-100">
+                    <div class="carousel-overlay"></div>
+                    <div class="hero-content">
+                        <h1 class="hero-title">Guide d'utilisation</h1>
+                        <p class="hero-subtitle">Découvrez comment utiliser E-Menu Togo pour trouver les meilleurs restaurants</p>
+                        <a href="{% url 'guide' %}" class="cta-btn">
+                            <i class="fas fa-book me-2"></i>Consulter le guide
+                        </a>
                     </div>
-                    {% endif %}
                 </div>
-                {% empty %}
-                <div class="carousel-item h-100 active">
-                    <img src="{% static 'images/background.jpg' %}" class="d-block w-100 h-100" style="object-fit: cover; filter: brightness(0.7);">
+                
+                <!-- Slide 2: Restaurants -->
+                <div class="carousel-item">
+                    <img src="{% static 'images/restaurant-bg2.jpg' %}" alt="Restaurants" class="d-block w-100">
+                    <div class="carousel-overlay"></div>
+                    <div class="hero-content">
+                        <h1 class="hero-title">Découvrez les meilleures tables du Togo</h1>
+                        <p class="hero-subtitle">Trouvez les restaurants, cafés et bars les mieux notés</p>
+                    </div>
                 </div>
-                {% endfor %}
+                
+                <!-- Slide 3: Menus -->
+                <div class="carousel-item">
+                    <img src="{% static 'images/restaurant-bg3.jpg' %}" alt="Menus" class="d-block w-100">
+                    <div class="carousel-overlay"></div>
+                    <div class="hero-content">
+                        <h1 class="hero-title">Menus variés et délicieux</h1>
+                        <p class="hero-subtitle">Explorez une grande variété de cuisines et de spécialités locales</p>
+                        <a href="#menus-section" class="cta-btn">
+                            <i class="fas fa-utensils me-2"></i>Voir les menus
+                        </a>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <!-- Overlay et contenu -->
-        <div style="position: relative; z-index: 1;">
-            <div class="container text-center">
-                <h1 class="display-4 fw-bold mb-4">Découvrez les meilleures tables du Togo</h1>
-                <p class="lead mb-5">Trouvez les restaurants, cafés et bars les mieux notés</p>
-
-                <!-- Formulaire de recherche -->
-                <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        <form class="search-form">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-lg" placeholder="Rechercher un restaurant...">
-                                <button class="btn btn-lg" type="submit" style="background-color: var(--bs-jaune); color: var(--bs-text);">
-                                    <i class="fas fa-search"></i> Rechercher
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+            
+            <!-- Contrôles du carrousel -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+                <span class="visually-hidden">Précédent</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+                <span class="visually-hidden">Suivant</span>
+            </button>
+            
+            <!-- Indicateurs -->
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
             </div>
         </div>
     </section>
@@ -53,88 +70,90 @@
 
 {% block content %}
 <!-- Section Structures -->
-<section class="py-5">
+<section class="structures-section">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold" style="color: var(--bs-vert);">Nos Structures Partenaires</h2>
-            <p class="lead text-muted">Découvrez nos meilleures adresses</p>
+        <div class="section-header">
+            <h2 class="section-title">Nos Structures Partenaires</h2>
+            <p class="section-subtitle">Découvrez nos meilleures adresses</p>
         </div>
 
         <!-- Filtres Structures -->
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <input type="text" class="form-control" id="structureSearch" placeholder="Rechercher une structure...">
-            </div>
-            <div class="col-md-3">
-                <select class="form-select" id="villeFilter">
-                    <option value="">Toutes les villes</option>
-                    {% for ville in villes %}
-                        <option value="{{ ville|lower }}">{{ ville }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3">
-                <select class="form-select" id="structureCategoryFilter">
-                    <option value="">Toutes catégories</option>
-                    {% for categorie in structure_categories %}
-                        <option value="{{ categorie|lower }}">{{ categorie }}</option>
-                    {% endfor %}
-                </select>
+        <div class="filter-section">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <input type="text" class="form-control filter-input" id="structureSearch" placeholder="Rechercher une structure...">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <select class="form-select filter-input" id="villeFilter">
+                        <option value="">Toutes les villes</option>
+                        {% for ville in villes %}
+                            <option value="{{ ville|lower }}">{{ ville }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <select class="form-select filter-input" id="structureCategoryFilter">
+                        <option value="">Toutes catégories</option>
+                        {% for categorie in structure_categories %}
+                            <option value="{{ categorie|lower }}">{{ categorie }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
         </div>
 
         <!-- Cartes Structures -->
         <div class="row" id="structuresContainer">
             {% for structure in featured_structures %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-3 structure-card"
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4 structure-card"
                  data-ville="{{ structure.ville|lower }}"
-                 data-categorie="{{ structure.categorie.nom|lower }}"
+                 data-categorie="{{ structure.type|lower }}"
                  data-nom="{{ structure.nom|lower }}">
-                <div class="card h-100 shadow-sm" style="background-color: var(--bs-fontSecondary);">
-                    <div class="position-relative">
+                <div class="card h-100">
+                    <div class="structure-image">
                         {% if structure.photo %}
-                        <img src="{{ structure.photo.url }}" class="card-img-top" alt="{{ structure.nom }}" style="height: 200px; object-fit: cover;">
+                        <img src="{{ structure.photo.url }}" class="card-img-top" alt="{{ structure.nom }}">
                         {% else %}
-                        <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 150px; background: var(--bs-jaune)">
+                        <div class="d-flex align-items-center justify-content-center h-100" style="background: var(--bs-jaune)">
                             <i class="fas fa-utensils fa-3x text-white"></i>
                         </div>
                         {% endif %}
-                        <div class="badge position-absolute" style="top: 10px; right: 10px; background: var(--bs-jaune); color: var(--bs-rouge)">
-                            {{ structure.categorie.nom }}
+                        <div class="structure-badge">
+                            {{ structure.get_type_display }}
                         </div>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ structure.nom|default:"Nom du restaurant" }}</h5>
-                        <p class="card-text text-muted">
+                    <div class="structure-content">
+                        <h5 class="structure-title">{{ structure.nom|default:"Nom du restaurant" }}</h5>
+                        <p class="structure-location">
                             <i class="fas fa-map-marker-alt me-2"></i>{{ structure.ville|default:"Lomé" }}
                         </p>
-                        <p class="card-text">{{ structure.description|default:"Description du restaurant"|truncatechars:100 }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            {% if structure.note_moyenne %}
-                            <span class="badge" style="background: var(--bs-jaune); color: var(--bs-rouge)">
-                                <i class="fas fa-star"></i> {{ structure.note_moyenne|floatformat:1 }}
-                            </span>
-                            {% endif %}
+                        <p class="structure-description">{{ structure.description|default:"Description du restaurant"|truncatechars:100 }}</p>
+                        {% if structure.note_moyenne %}
+                        <div class="structure-rating">
+                            <i class="fas fa-star me-1"></i>{{ structure.note_moyenne|floatformat:1 }}
                         </div>
+                        {% endif %}
                     </div>
                     <div class="card-footer bg-transparent">
-                        <a href="{% url 'structures:detail' structure.pk %}" class="btn btn-sm" style="background: var(--bs-jaune); color: var(--bs-rouge)">
-                            <i class="fas fa-eye me-2"></i> Voir détails
+                        <a href="{% url 'structures:detail' structure.pk %}" class="structure-btn">
+                            <i class="fas fa-eye me-2"></i>Voir détails
                         </a>
                     </div>
                 </div>
             </div>
             {% empty %}
             <div class="col-12 text-center">
-                <div class="alert" style="background: var(--bs-jaune)">
-                    <i class="fas fa-info-circle me-2"></i> Aucun restaurant disponible pour le moment. Revenez bientôt!
+                <div class="guide-card">
+                    <i class="fas fa-info-circle fa-3x mb-3" style="color: var(--bs-jaune);"></i>
+                    <h4>Aucun restaurant disponible</h4>
+                    <p>Revenez bientôt pour découvrir de nouvelles adresses !</p>
                 </div>
             </div>
             {% endfor %}
         </div>
 
         <div class="text-center mt-4">
-            <a href="{% url 'structures:structure' %}" class="btn btn-secondary-btn">
+            <a href="{% url 'structures:structure' %}" class="cta-btn">
                 Voir toutes les structures <i class="fas fa-arrow-right ms-2"></i>
             </a>
         </div>
@@ -142,30 +161,32 @@
 </section>
 
 <!-- Section Menus -->
-<section class="py-5 bg-light">
+<section id="menus-section" class="py-5" style="background: var(--bs-fontSecondary);">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold" style="color: var(--bs-vert);">Nos Menus Populaires</h2>
-            <p class="lead text-muted">Découvrez nos spécialités culinaires</p>
+        <div class="section-header">
+            <h2 class="section-title">Nos Menus Populaires</h2>
+            <p class="section-subtitle">Découvrez nos spécialités culinaires</p>
         </div>
 
         <!-- Filtres Menus -->
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <select class="form-select" id="platCategoryFilter">
-                    <option value="">Toutes les nom</option>
-                    {% for nom in nom_plats %}
-                        <option value="{{ nom|lower }}">{{ nom }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-6">
-                <select class="form-select" id="menuCategoryFilter">
-                    <option value="">Toutes catégories</option>
-                    {% for categorie in plat_categories %}
-                        <option value="{{ categorie|lower }}">{{ categorie }}</option>
-                    {% endfor %}
-                </select>
+        <div class="filter-section">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <select class="form-select filter-input" id="platCategoryFilter">
+                        <option value="">Toutes les catégories</option>
+                        {% for categorie in plat_categories %}
+                            <option value="{{ categorie|lower }}">{{ categorie }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <select class="form-select filter-input" id="menuCategoryFilter">
+                        <option value="">Tous les types</option>
+                        {% for nom in nom_plats %}
+                            <option value="{{ nom|lower }}">{{ nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -175,47 +196,49 @@
             <div class="col-lg-3 col-md-6 mb-4 menu-card"
                  data-categorie="{{ plat.categorie.nom|lower }}"
                  data-nom="{{ plat.nom|lower }}">
-                <div class="card h-100 shadow-sm">
-                    <div class="position-relative">
+                <div class="card h-100">
+                    <div class="structure-image">
                         {% if plat.photo %}
-                        <img src="{{ plat.photo.url }}" class="card-img-top" alt="{{ plat.nom }}" style="height: 200px; object-fit: cover;">
+                        <img src="{{ plat.photo.url }}" class="card-img-top" alt="{{ plat.nom }}">
                         {% else %}
-                        <div class="card-img-top bg-warning d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <div class="d-flex align-items-center justify-content-center h-100" style="background: var(--bs-jaune)">
                             <i class="fas fa-utensils fa-3x text-white"></i>
                         </div>
                         {% endif %}
-                        <div class="badge bg-warning text-dark position-absolute" style="top: 10px; right: 10px;">
+                        <div class="structure-badge">
                             {{ plat.categorie.nom }}
                         </div>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ plat.nom }}</h5>
-                        <p class="card-text">{{ plat.description|truncatechars:100 }}</p>
+                    <div class="structure-content">
+                        <h5 class="structure-title">{{ plat.nom }}</h5>
+                        <p class="structure-description">{{ plat.description|truncatechars:100 }}</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="auth-card-title fw-bold">{{ plat.prix }} FCFA</span>
-                            <span class="badge bg-light text-dark">
-                                <i class="fas fa-clock me-1"></i> {{ plat.temps_preparation }} min
+                            <span class="structure-rating">{{ plat.prix }} FCFA</span>
+                            <span class="badge" style="background: var(--bs-vert); color: var(--bs-font);">
+                                <i class="fas fa-clock me-1"></i>{{ plat.temps_preparation|default:"15" }} min
                             </span>
                         </div>
                     </div>
-                    <div class="card-footer bg-transparent d-flex justify-content-between">
-                        <a href="{% url 'structures:detail' plat.pk %}" class="btn btn-sm " style="background: var(--bs-jaune); color: var(--bs-rouge)">
-                            <i class="fas fa-eye me-2"></i> Détails
+                    <div class="card-footer bg-transparent">
+                        <a href="{% url 'structures:detail' plat.pk %}" class="structure-btn">
+                            <i class="fas fa-eye me-2"></i>Détails
                         </a>
                     </div>
                 </div>
             </div>
             {% empty %}
             <div class="col-12 text-center">
-                <div class="alert alert-warning">
-                    <i class="fas fa-info-circle me-2"></i> Aucun menu disponible
+                <div class="guide-card">
+                    <i class="fas fa-utensils fa-3x mb-3" style="color: var(--bs-jaune);"></i>
+                    <h4>Aucun menu disponible</h4>
+                    <p>Découvrez bientôt nos délicieuses spécialités !</p>
                 </div>
             </div>
             {% endfor %}
         </div>
 
         <div class="text-center mt-4">
-            <a href="{% url 'structures:structure' %}" class="btn btn-secondary-btn" >
+            <a href="{% url 'structures:structure' %}" class="cta-btn">
                 Voir tous les menus <i class="fas fa-arrow-right ms-2"></i>
             </a>
         </div>
@@ -223,40 +246,51 @@
 </section>
 
 <!-- Categories Section -->
-<section class="py-3" style="background: var(--bs-fontSecondary)">
+<section class="py-5">
     <div class="container">
-        <h2 class="text-center mb-5" style="color: var(--bs-vert);">Catégories</h2>
+        <div class="section-header">
+            <h2 class="section-title">Catégories</h2>
+            <p class="section-subtitle">Explorez différents types de restaurants</p>
+        </div>
 
         <div class="row">
             <div class="col-md-3 col-6 mb-4">
                 <a href="#" class="text-decoration-none">
-                    <div class="card category-card h-100 text-center p-4"  style="background: var(--bs-font);">
-                        <i class="fas fa-hamburger fa-3x mb-3" style="color: var(--bs-vert);"></i>
-                        <h5>Fast Food</h5>
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-hamburger"></i>
+                        </div>
+                        <h5 class="category-title">Fast Food</h5>
                     </div>
                 </a>
             </div>
             <div class="col-md-3 col-6 mb-4">
                 <a href="#" class="text-decoration-none">
-                    <div class="card category-card h-100 text-center p-4"  style="background: var(--bs-font);">
-                        <i class="fas fa-pizza-slice fa-3x mb-3" style="color: var(--bs-vert);"></i>
-                        <h5>Pizzeria</h5>
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-pizza-slice"></i>
+                        </div>
+                        <h5 class="category-title">Pizzeria</h5>
                     </div>
                 </a>
             </div>
             <div class="col-md-3 col-6 mb-4">
                 <a href="#" class="text-decoration-none">
-                    <div class="card category-card h-100 text-center p-4"  style="background: var(--bs-font);">
-                        <i class="fas fa-mug-hot fa-3x mb-3" style="color: var(--bs-vert);"></i>
-                        <h5>Cafés</h5>
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-mug-hot"></i>
+                        </div>
+                        <h5 class="category-title">Cafés</h5>
                     </div>
                 </a>
             </div>
             <div class="col-md-3 col-6 mb-4">
                 <a href="#" class="text-decoration-none">
-                    <div class="card category-card h-100 text-center p-4"  style="background: var(--bs-font);">
-                        <i class="fas fa-cocktail fa-3x mb-3" style="color: var(--bs-vert);"></i>
-                        <h5>Bars</h5>
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-cocktail"></i>
+                        </div>
+                        <h5 class="category-title">Bars</h5>
                     </div>
                 </a>
             </div>
@@ -265,30 +299,39 @@
 </section>
 
 <!-- How it Works -->
-<section class="py-3">
+<section class="py-5" style="background: var(--bs-fontSecondary);">
     <div class="container">
-        <h2 class="text-center mb-5" style="color: var(--bs-jaune);">Comment ça marche</h2>
+        <div class="section-header">
+            <h2 class="section-title">Comment ça marche</h2>
+            <p class="section-subtitle">Trois étapes simples pour trouver votre restaurant idéal</p>
+        </div>
 
         <div class="row">
             <div class="col-md-4 mb-4">
-                <div class="text-center p-4">
-                    <div class="step-number mb-3" style="background-color: var(--bs-jaune); color: var(--bs-rouge); width: 50px; height: 50px; line-height: 50px; border-radius: 50%; margin: 0 auto;">1</div>
-                    <h4>Trouvez un restaurant</h4>
-                    <p>Recherchez par nom, type de cuisine ou localisation</p>
+                <div class="guide-card text-center">
+                    <div class="guide-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h4 class="guide-title">1. Trouvez un restaurant</h4>
+                    <p class="guide-description">Recherchez par nom, type de cuisine ou localisation</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="text-center p-4">
-                    <div class="step-number mb-3" style="background-color: var(--bs-jaune); color: var(--bs-rouge); width: 50px; height: 50px; line-height: 50px; border-radius: 50%; margin: 0 auto;">2</div>
-                    <h4>Consultez le menu</h4>
-                    <p>Découvrez les plats disponibles et leurs prix</p>
+                <div class="guide-card text-center">
+                    <div class="guide-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h4 class="guide-title">2. Consultez le menu</h4>
+                    <p class="guide-description">Découvrez les plats disponibles et leurs prix</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="text-center p-4">
-                    <div class="step-number mb-3" style="background-color: var(--bs-jaune); color: var(--bs-rouge); width: 50px; height: 50px; line-height: 50px; border-radius: 50%; margin: 0 auto;">3</div>
-                    <h4>Commandez ou réservez</h4>
-                    <p>Faites votre choix et profitez de votre repas</p>
+                <div class="guide-card text-center">
+                    <div class="guide-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h4 class="guide-title">3. Commandez ou réservez</h4>
+                    <p class="guide-description">Contactez le restaurant et profitez de votre repas</p>
                 </div>
             </div>
         </div>
@@ -296,14 +339,101 @@
 </section>
 
 <!-- Call to Action -->
-<section class="py-3" style="background: var(--bs-fontSecondary); color: var(--bs-vert);">
-{% if not has_structure %}
-    <div class="container text-center">
-        <h2 class="mb-4">Vous êtes un restaurant?</h2>
-        <p class="lead mb-4">Rejoignez notre plateforme et augmentez votre visibilité</p>
-        <a href="{% url 'structures:register_structure' %}" class="btn btn-lg" style="background: var(--bs-jaune); color: var(--bs-rouge)">Inscrivez votre établissement</a>
-    </div>
-{% endif %}
-</section>
+{% with has_structure=user.structure.exists %}
+    {% if has_structure %}
+    <section class="cta-section">
+        <div class="container text-center">
+            <h2 class="cta-title">Besoin d'aide ?</h2>
+            <p class="cta-description">Consultez notre guide d'utilisation pour une expérience optimale</p>
+            <a href="{% url 'guide' %}" class="cta-btn">
+                <i class="fas fa-book me-2"></i>Consulter le guide
+            </a>
+        </div>
+    </section>
+    {% else %}
+    <section class="cta-section">
+        <div class="container text-center">
+            <h2 class="cta-title">Vous êtes un restaurant ?</h2>
+            <p class="cta-description">Rejoignez notre plateforme et augmentez votre visibilité</p>
+            <a href="{% url 'structures:register_structure' %}" class="cta-btn">
+                <i class="fas fa-store me-2"></i>Inscrivez votre établissement
+            </a>
+        </div>
+    </section>
+    {% endif %}
+{% endwith %}
+
+<script>
+// Filtres pour les structures
+document.addEventListener('DOMContentLoaded', function() {
+    const structureSearch = document.getElementById('structureSearch');
+    const villeFilter = document.getElementById('villeFilter');
+    const structureCategoryFilter = document.getElementById('structureCategoryFilter');
+    const structureCards = document.querySelectorAll('.structure-card');
+
+    function filterStructures() {
+        const searchTerm = structureSearch.value.toLowerCase();
+        const selectedVille = villeFilter.value.toLowerCase();
+        const selectedCategory = structureCategoryFilter.value.toLowerCase();
+
+        structureCards.forEach(card => {
+            const nom = card.dataset.nom;
+            const ville = card.dataset.ville;
+            const categorie = card.dataset.categorie;
+
+            const matchesSearch = nom.includes(searchTerm);
+            const matchesVille = !selectedVille || ville === selectedVille;
+            const matchesCategory = !selectedCategory || categorie === selectedCategory;
+
+            if (matchesSearch && matchesVille && matchesCategory) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    if (structureSearch) {
+        structureSearch.addEventListener('input', filterStructures);
+    }
+    if (villeFilter) {
+        villeFilter.addEventListener('change', filterStructures);
+    }
+    if (structureCategoryFilter) {
+        structureCategoryFilter.addEventListener('change', filterStructures);
+    }
+
+    // Filtres pour les menus
+    const platCategoryFilter = document.getElementById('platCategoryFilter');
+    const menuCategoryFilter = document.getElementById('menuCategoryFilter');
+    const menuCards = document.querySelectorAll('.menu-card');
+
+    function filterMenus() {
+        const selectedPlatCategory = platCategoryFilter.value.toLowerCase();
+        const selectedMenuCategory = menuCategoryFilter.value.toLowerCase();
+
+        menuCards.forEach(card => {
+            const nom = card.dataset.nom;
+            const categorie = card.dataset.categorie;
+
+            const matchesPlatCategory = !selectedPlatCategory || categorie === selectedPlatCategory;
+            const matchesMenuCategory = !selectedMenuCategory || nom === selectedMenuCategory;
+
+            if (matchesPlatCategory && matchesMenuCategory) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    if (platCategoryFilter) {
+        platCategoryFilter.addEventListener('change', filterMenus);
+    }
+    if (menuCategoryFilter) {
+        menuCategoryFilter.addEventListener('change', filterMenus);
+    }
+});
+</script>
 
 {% endblock %}

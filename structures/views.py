@@ -8,7 +8,7 @@ from structures.forms import StructuresRegistrationForm, StructuresUpdateForm
 from structures.models import Structures
 
 
-@login_required
+@login_required(login_url='accounts:login')
 def register_structure(request):
     """Vue pour enregistrer une nouvelle structure (réservée aux utilisateurs connectés)"""
     if request.method == 'POST':
@@ -59,31 +59,34 @@ def list_structures(request):
     }
     return render(request, 'structures/structure.html', context)
 
-@login_required
+@login_required(login_url='accounts:login')
 def structure_detail(request, pk):
     """Détails d'une structure spécifique (accessible seulement par son propriétaire)"""
     structure = get_object_or_404(Structures, pk=pk, user=request.user)
     return render(request, 'structures/structure_detail.html', {'structure': structure})
 
 
-@login_required(login_url='accounts:login')
 def detail(request, pk):
     """Détails d'une structure spécifique avec les menus et les plats qui la constituent"""
     structure = get_object_or_404(Structures, pk=pk)
-    menus = Menus.objects.filter(structure=structure).prefetch_related('plats')
+    
+    # Récupère tous les plats créés par l'utilisateur qui possède cette structure
+    plats = Plats.objects.filter(createur=structure.user)
 
-    # Vérifie si l'utilisateur actuel est le propriétaire de la structure
-    is_owner = request.user == structure.user
+    # Vérifie si l'utilisateur actuel a des structures
+    has_structure = False
+    if request.user.is_authenticated:
+        has_structure = request.user.structure.exists()
 
     context = {
         'structure': structure,
-        'menus': menus,
-        'has_structure': is_owner,  # Utilisez ce booléen dans votre template pour conditionner l'affichage
+        'plats': plats,
+        'has_structure': has_structure,
     }
     return render(request, 'structures/detail.html', context)
 
 
-@login_required
+@login_required(login_url='accounts:login')
 def structure_update(request, pk):
     """Mise à jour d'une structure (accessible seulement par son propriétaire)"""
     structure = get_object_or_404(Structures, pk=pk, user=request.user)
@@ -98,7 +101,7 @@ def structure_update(request, pk):
 
     return render(request, 'structures/structure_form.html', {'form': form, 'structure': structure})
 
-@login_required
+@login_required(login_url='accounts:login')
 def structure_delete(request, pk):
     """Suppression d'une structure (accessible seulement par son propriétaire)"""
     structure = get_object_or_404(Structures, pk=pk, user=request.user)

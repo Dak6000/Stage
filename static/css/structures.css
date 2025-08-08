@@ -1,0 +1,40 @@
+/* ===== CSS SPÉCIFIQUE AUX STRUCTURES ===== */
+
+/* Styles spécifiques aux pages de structures */
+.structure-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid var(--bs-vert);
+    background: var(--bs-font);
+}
+
+.structure-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.2);
+}
+
+.structure-form {
+    background: var(--bs-font);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--bs-vert);
+}
+
+.structure-detail {
+    background: var(--bs-font);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--bs-vert);
+}
+
+/* Responsive pour les structures */
+@media (max-width: 768px) {
+    .structure-form,
+    .structure-detail {
+        padding: 1rem;
+        margin: 1rem;
+    }
+}

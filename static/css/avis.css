@@ -1,0 +1,240 @@
+/* ===== CSS SPÉCIFIQUE AUX AVIS ===== */
+
+/* Styles pour les cartes d'avis */
+.avis-card {
+    background: var(--bs-font);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--bs-rouge);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.avis-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(215, 38, 61, 0.2);
+}
+
+.avis-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.avis-user-info {
+    flex: 1;
+}
+
+.avis-user-name {
+    color: var(--bs-text);
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+
+.avis-date {
+    color: var(--bs-text);
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+.avis-rating {
+    display: flex;
+    align-items: center;
+}
+
+.avis-stars {
+    color: var(--bs-jaune);
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+}
+
+.avis-rating-text {
+    color: var(--bs-text);
+    font-weight: 600;
+}
+
+.avis-content {
+    color: var(--bs-text);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.avis-structure {
+    color: var(--bs-vert);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Formulaire d'avis */
+.avis-form {
+    background: var(--bs-font);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--bs-rouge);
+}
+
+.avis-form .form-control {
+    border: 2px solid var(--bs-rouge);
+    border-radius: 10px;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+    background: var(--bs-font);
+}
+
+.avis-form .form-control:focus {
+    border-color: var(--bs-vert);
+    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+}
+
+.avis-form .form-label {
+    color: var(--bs-text);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Système de notation */
+.rating-system {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.rating-label {
+    color: var(--bs-text);
+    font-weight: 600;
+    margin-right: 1rem;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.rating-star {
+    font-size: 1.5rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.rating-star:hover,
+.rating-star.active {
+    color: var(--bs-jaune);
+}
+
+/* Boutons pour les avis */
+.btn-avis-primary {
+    background-color: var(--bs-rouge);
+    color: var(--bs-font);
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-avis-primary:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(215, 38, 61, 0.3);
+}
+
+.btn-avis-secondary {
+    background-color: var(--bs-jaune);
+    color: var(--bs-text);
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-avis-secondary:hover {
+    background-color: #e0a800;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(244, 180, 0, 0.3);
+}
+
+/* Statistiques des avis */
+.avis-stats {
+    background: var(--bs-font);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--bs-rouge);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.avis-stats-header {
+    color: var(--bs-rouge);
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.avis-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.avis-stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(215, 38, 61, 0.1);
+    border-radius: 10px;
+}
+
+.avis-stat-number {
+    color: var(--bs-rouge);
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.avis-stat-label {
+    color: var(--bs-text);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* État vide */
+.avis-empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--bs-text);
+}
+
+.avis-empty-state i {
+    color: var(--bs-rouge);
+    margin-bottom: 1rem;
+}
+
+/* Responsive pour les avis */
+@media (max-width: 768px) {
+    .avis-form {
+        padding: 1rem;
+        margin: 1rem;
+    }
+    
+    .avis-card {
+        padding: 1rem;
+    }
+    
+    .avis-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .avis-rating {
+        margin-top: 0.5rem;
+    }
+    
+    .avis-stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

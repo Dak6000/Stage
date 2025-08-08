@@ -4,7 +4,9 @@
 {% block title %}Tableau de Bord{% endblock %}
 
 {% block content %}
+{% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
 <div class="container-fluid">
     <!-- En-tête -->
     <div class="d-flex justify-content-between align-items-center mb-4">

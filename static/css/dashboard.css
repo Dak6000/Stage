@@ -1,0 +1,226 @@
+/* ===== CSS SPÉCIFIQUE AU TABLEAU DE BORD ===== */
+
+/* Styles généraux */
+.container-fluid {
+    padding: 20px;
+}
+
+/* En-tête */
+.dashboard-title {
+    color: var(--bs-vert);
+}
+
+.welcome-message {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: var(--bs-vert);
+    border: none;
+}
+
+/* Cartes de statistiques */
+.stats-card {
+    border-left: 4px solid var(--bs-vert);
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    background: var(--bs-fontSecondary);
+}
+
+.stats-title {
+    color: var(--bs-vert);
+    text-transform: uppercase;
+}
+
+.last-login-title {
+    color: var(--bs-rouge);
+    text-transform: uppercase;
+}
+
+.login-history-title {
+    color: var(--bs-jaune);
+    text-transform: uppercase;
+}
+
+.stats-value {
+    color: var(--bs-text);
+}
+
+.stats-icon {
+    color: var(--bs-text);
+}
+
+/* Cartes principales */
+.main-card {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    background: var(--bs-fontSecondary);
+}
+
+.card-header-style {
+    background-color: var(--bs-font);
+}
+
+.card-title {
+    color: var(--bs-vert);
+    font-size: 20px;
+}
+
+/* Boutons */
+.add-btn {
+    background-color: var(--bs-jaune);
+    color: var(--bs-rouge);
+}
+
+.view-btn {
+    border: 1px solid var(--bs-jaune);
+    color: var(--bs-vert);
+}
+
+.edit-btn {
+    border: 1px solid var(--bs-vert);
+    color: var(--bs-text);
+}
+
+.delete-btn {
+    border: 1px solid var(--bs-jaune);
+    color: var(--bs-rouge);
+}
+
+.add-first-btn {
+    background-color: var(--bs-jaune);
+    color: var(--bs-rouge);
+}
+
+.toggle-history-btn {
+    background-color: var(--bs-jaune);
+    color: var(--bs-rouge);
+}
+
+/* Tableau */
+.table-header {
+    background-color: var(--bs-font);
+    color: var(--bs-text);
+    font-weight: 700;
+}
+
+.no-structure-text {
+    color: var(--bs-text);
+}
+
+/* Historique des connexions */
+.login-item-current {
+    border-left: 3px solid var(--bs-vert);
+}
+
+.login-item-login {
+    border-left: 3px solid var(--bs-vert);
+}
+
+.login-item-logout {
+    border-left: 3px solid var(--bs-jaune);
+}
+
+.login-item-failed {
+    border-left: 3px solid var(--bs-rouge);
+}
+
+.login-action {
+    color: var(--bs-vert);
+}
+
+.login-time {
+    color: var(--bs-text);
+}
+
+.login-details {
+    color: var(--bs-text);
+}
+
+.success-badge {
+    background-color: var(--bs-vert);
+    color: var(--bs-text);
+}
+
+.failed-badge {
+    background-color: var(--bs-rouge);
+    color: var(--bs-text);
+}
+
+/* Profil utilisateur */
+.profile-card {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    background: var(--bs-fontSecondary);
+}
+
+.profile-header {
+    background-color: var(--bs-font);
+}
+
+.profile-title {
+    color: var(--bs-vert);
+}
+
+.profile-image {
+    object-fit: cover;
+}
+
+.user-name {
+    color: var(--bs-text);
+}
+
+.user-email, .user-phone {
+    color: var(--bs-text);
+    margin-bottom: 0.5rem;
+}
+
+.profile-divider {
+    color: var(--bs-text);
+}
+
+.edit-profile-btn {
+    background-color: var(--bs-jaune);
+    color: var(--bs-vert);
+}
+
+.logout-btn {
+    background-color: var(--bs-rouge);
+    color: var(--bs-text);
+}
+
+/* Actions rapides */
+.quick-actions-card {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    background: var(--bs-fontSecondary);
+}
+
+.quick-actions-header {
+    background-color: var(--bs-font);
+}
+
+.quick-actions-title {
+    color: var(--bs-vert);
+}
+
+.new-structure-btn {
+    background-color: var(--bs-jaune);
+    color: var(--bs-vert);
+}
+
+.help-btn {
+    border: 1px solid var(--bs-vert);
+    color: var(--bs-vert);
+}
+
+/* Responsive pour le tableau de bord */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 10px;
+    }
+    
+    .stats-card,
+    .main-card,
+    .profile-card,
+    .quick-actions-card {
+        margin-bottom: 1rem;
+    }
+    
+    .card-title {
+        font-size: 18px;
+    }
+}

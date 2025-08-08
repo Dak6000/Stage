@@ -1,0 +1,269 @@
+/* ===== CSS SPÉCIFIQUE AUX PROMOTIONS ===== */
+
+/* Styles pour les cartes de promotions */
+.promotion-card {
+    background: var(--bs-font);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--bs-jaune);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.promotion-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(244, 180, 0, 0.2);
+}
+
+.promotion-header {
+    background: linear-gradient(135deg, var(--bs-jaune) 0%, #e0a800 100%);
+    color: var(--bs-text);
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+}
+
+.promotion-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--bs-rouge);
+    color: var(--bs-font);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.promotion-title {
+    color: var(--bs-text);
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.promotion-description {
+    color: var(--bs-text);
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+.promotion-body {
+    padding: 1.5rem;
+}
+
+.promotion-discount {
+    color: var(--bs-rouge);
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.promotion-dates {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.promotion-start,
+.promotion-end {
+    color: var(--bs-text);
+    font-weight: 600;
+}
+
+.promotion-start-label,
+.promotion-end-label {
+    color: var(--bs-text);
+    opacity: 0.7;
+    font-size: 0.8rem;
+}
+
+.promotion-structure {
+    color: var(--bs-vert);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* Formulaire de promotion */
+.promotion-form {
+    background: var(--bs-font);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--bs-jaune);
+}
+
+.promotion-form .form-control {
+    border: 2px solid var(--bs-jaune);
+    border-radius: 10px;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+    background: var(--bs-font);
+}
+
+.promotion-form .form-control:focus {
+    border-color: var(--bs-rouge);
+    box-shadow: 0 0 0 0.2rem rgba(215, 38, 61, 0.25);
+}
+
+.promotion-form .form-label {
+    color: var(--bs-text);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Boutons pour les promotions */
+.btn-promotion-primary {
+    background-color: var(--bs-jaune);
+    color: var(--bs-text);
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-promotion-primary:hover {
+    background-color: #e0a800;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(244, 180, 0, 0.3);
+}
+
+.btn-promotion-secondary {
+    background-color: var(--bs-rouge);
+    color: var(--bs-font);
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-promotion-secondary:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(215, 38, 61, 0.3);
+}
+
+/* Statut des promotions */
+.promotion-status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.promotion-status.active {
+    background-color: rgba(76, 175, 80, 0.2);
+    color: var(--bs-vert);
+}
+
+.promotion-status.expired {
+    background-color: rgba(215, 38, 61, 0.2);
+    color: var(--bs-rouge);
+}
+
+.promotion-status.upcoming {
+    background-color: rgba(244, 180, 0, 0.2);
+    color: var(--bs-jaune);
+}
+
+/* Filtres de promotions */
+.promotion-filters {
+    background: var(--bs-font);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--bs-jaune);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.promotion-filters-header {
+    color: var(--bs-jaune);
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-item label {
+    color: var(--bs-text);
+    font-weight: 600;
+    margin: 0;
+}
+
+.filter-item select {
+    border: 2px solid var(--bs-jaune);
+    border-radius: 8px;
+    padding: 0.5rem;
+    background: var(--bs-font);
+    color: var(--bs-text);
+}
+
+/* État vide */
+.promotion-empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--bs-text);
+}
+
+.promotion-empty-state i {
+    color: var(--bs-jaune);
+    margin-bottom: 1rem;
+}
+
+/* Responsive pour les promotions */
+@media (max-width: 768px) {
+    .promotion-form {
+        padding: 1rem;
+        margin: 1rem;
+    }
+    
+    .promotion-body {
+        padding: 1rem;
+    }
+    
+    .promotion-header {
+        padding: 1rem;
+    }
+    
+    .promotion-title {
+        font-size: 1.1rem;
+    }
+    
+    .promotion-dates {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-item {
+        justify-content: space-between;
+    }
+}
