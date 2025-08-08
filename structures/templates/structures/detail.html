@@ -269,27 +269,6 @@
                 <i class="fas fa-arrow-left"></i>Retour
             </a>
             
-            {% if user.is_authenticated %}
-                {% with has_structure=user.structure.exists %}
-                    {% if has_structure %}
-                    <a href="{% url 'plats:plat-create' %}" class="action-btn btn-primary-action">
-                        <i class="fas fa-plus"></i>Ajouter un plat
-                    </a>
-                    
-                    <a href="{% url 'menus:menus-create' %}" class="action-btn btn-primary-action">
-                        <i class="fas fa-list"></i>Créer un menu
-                    </a>
-                    
-                    <a href="{% url 'structures:structure-update' structure.pk %}" class="action-btn btn-secondary-action">
-                        <i class="fas fa-edit"></i>Modifier
-                    </a>
-                    
-                    <a href="{% url 'structures:structure-delete' structure.pk %}" class="action-btn btn-danger-action">
-                        <i class="fas fa-trash"></i>Supprimer
-                    </a>
-                    {% endif %}
-                {% endwith %}
-            {% endif %}
         </div>
     </div>
 </section>
