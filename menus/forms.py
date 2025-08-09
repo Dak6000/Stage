@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 from menus.models import Menus
-from plats.models import Plats
 
 User = get_user_model()
 
@@ -20,22 +19,14 @@ class MenuForm(forms.ModelForm):
             'class': 'form-control'
         })
     )
-    plats = forms.ModelMultipleChoiceField(
-        queryset=Plats.objects.none(),  # Sera surchargé dans __init__
-        widget=forms.CheckboxSelectMultiple(attrs={
-            'class': 'form-check-input'
-        }),
-        required=False
-    )
+    # On ne sélectionne plus des plats ici (1 plat -> 1 menu)
+    # L'ajout de plats se fait via le formulaire des plats
 
     class Meta:
         model = Menus
-        fields = ['nom', 'status', 'plats']
+        fields = ['nom', 'status']
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
+        kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-
-        if user:
-            self.fields['plats'].queryset = Plats.objects.filter(createur=user)
 

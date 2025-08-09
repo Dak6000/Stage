@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} - {{ block.super }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/avis.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="avis-form">
+                <div class="mb-4 d-flex align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-star me-2" style="color: var(--bs-jaune)"></i>{{ title }}
+                    </h4>
+                </div>
+                <div>
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                                <div><i class="fas fa-exclamation-circle me-1"></i>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Note -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold d-block">
+                                <i class="fas fa-star me-2" style="color: var(--bs-jaune)"></i>{{ form.note.label }}
+                            </label>
+                            {{ form.note }}
+                            {{ form.structure_id }}
+                            {{ form.plat_id }}
+                            <div id="star-rating" class="rating-system" role="radiogroup" aria-label="Note">
+                                <span class="rating-label">Votre note:</span>
+                                <div class="rating-stars">
+                                    {% for i in "12345" %}
+                                    <button type="button" class="star-btn rating-star" data-value="{{ forloop.counter }}" aria-label="{{ forloop.counter }} étoile{% if forloop.counter > 1 %}s{% endif %}">
+                                        <i class="far fa-star"></i>
+                                    </button>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% if form.note.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.note.errors %}
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Commentaire -->
+                        <div class="mb-4">
+                            <label for="{{ form.commentaire.id_for_label }}" class="form-label fw-bold">
+                                <i class="fas fa-comment me-2 text-primary"></i>{{ form.commentaire.label }}
+                            </label>
+                            {{ form.commentaire }}
+                            {% if form.commentaire.help_text %}
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>{{ form.commentaire.help_text }}
+                                </div>
+                            {% endif %}
+                            {% if form.commentaire.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.commentaire.errors %}
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Informations sur l'élément -->
+                        {% if structure %}
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-building me-2"></i>Structure : {{ structure.nom }}</h6>
+                            <p class="mb-0">{{ structure.description|truncatechars:200 }}</p>
+                        </div>
+                        {% elif plat %}
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-utensils me-2"></i>Plat : {{ plat.nom }}</h6>
+                            <p class="mb-0">{{ plat.description|truncatechars:200 }}</p>
+                        </div>
+                        {% endif %}
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% if structure %}{% url 'structures:structure-detail' structure.pk %}{% elif plat %}{% url 'plats:plat-detail' plat.pk %}{% else %}{% url 'avis:avis-list' %}{% endif %}" class="btn btn-avis-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Annuler
+                            </a>
+                            <button type="submit" class="btn btn-avis-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Publier l'avis
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.star-rating {
+    display: inline-flex;
+    gap: 0.5rem;
+}
+
+.star-btn {
+    background: transparent;
+    border: none;
+    padding: 0.25rem;
+    cursor: pointer;
+}
+
+.star-btn i {
+    font-size: 1.6rem;
+    color: #adb5bd; /* muted */
+    transition: color 0.15s ease;
+}
+
+.star-btn.active i,
+.star-btn.hover i {
+    color: #ffc107; /* warning */
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const hiddenInput = document.getElementById('id_note');
+    const structureHidden = document.getElementById('id_structure_id');
+    const platHidden = document.getElementById('id_plat_id');
+    const starContainer = document.getElementById('star-rating');
+    if (!hiddenInput || !starContainer) return;
+
+    const stars = Array.from(starContainer.querySelectorAll('.star-btn'));
+
+    function render(rating) {
+        stars.forEach((btn, idx) => {
+            const isActive = idx < rating;
+            btn.classList.toggle('active', isActive);
+            const icon = btn.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fas', isActive);
+                icon.classList.toggle('far', !isActive);
+            }
+        });
+    }
+
+    function setRating(value) {
+        hiddenInput.value = value;
+        render(value);
+    }
+
+    // Initialiser les IDs si fournis dans le contexte
+    {% if structure %}
+    if (structureHidden) structureHidden.value = {{ structure.pk }};
+    {% endif %}
+    {% if plat %}
+    if (platHidden) platHidden.value = {{ plat.pk }};
+    {% endif %}
+
+    // Initial render from bound value
+    const initial = parseInt(hiddenInput.value || '0', 10) || 0;
+    render(initial);
+
+    // Click to set
+    stars.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const value = parseInt(btn.getAttribute('data-value'), 10);
+            setRating(value);
+        });
+        btn.addEventListener('mouseenter', () => {
+            const value = parseInt(btn.getAttribute('data-value'), 10);
+            render(value);
+        });
+        btn.addEventListener('mouseleave', () => {
+            const current = parseInt(hiddenInput.value || '0', 10) || 0;
+            render(current);
+        });
+    });
+});
+</script>
+{% endblock %}

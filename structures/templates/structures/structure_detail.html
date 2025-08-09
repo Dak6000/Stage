@@ -9,9 +9,32 @@
     <div class="col-md-8">
         <div class="auth-card card border-0 shadow-lg">
             <div class="card-header py-3 auth-card-header">
-                <h3 class="card-title mb-0">
-                    <i class="fas fa-store me-2"></i>{{ structure.nom }}
-                </h3>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-store me-2"></i>{{ structure.nom }}
+                    </h3>
+                    <div class="d-flex align-items-center">
+                        <!-- Note moyenne -->
+                        {% if structure.note_moyenne > 0 %}
+                        <div class="rating-display me-3">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= structure.get_note_etoiles %}
+                                    <i class="fas fa-star text-warning"></i>
+                                {% else %}
+                                    <i class="far fa-star text-muted"></i>
+                                {% endif %}
+                            {% endfor %}
+                            <span class="ms-2 fw-bold">{{ structure.get_note_display }}</span>
+                            <small class="text-muted">({{ structure.nombre_avis }} avis)</small>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Bouton pour voir les avis -->
+                        <a href="{% url 'avis:avis-structure-public' structure.pk %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-star me-1"></i>Voir les avis
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="card-body p-4">
                 <div class="row">
@@ -74,6 +97,52 @@
                     </div>
                 </div>
 
+                <!-- Section des avis récents -->
+                {% if structure.get_avis_recent %}
+                <div class="mt-4">
+                    <h5><i class="fas fa-star me-2 text-warning"></i>Avis récents</h5>
+                    <div class="row">
+                        {% for avis in structure.get_avis_recent %}
+                        <div class="col-12 mb-3">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="card-title mb-1">
+                                                <i class="fas fa-user me-2 text-primary"></i>
+                                                {{ avis.user.first_name }} {{ avis.user.last_name }}
+                                            </h6>
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar-alt me-1"></i>
+                                                {{ avis.get_date_relative }}
+                                            </small>
+                                        </div>
+                                        <div class="rating-display">
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= avis.note %}
+                                                    <i class="fas fa-star text-warning"></i>
+                                                {% else %}
+                                                    <i class="far fa-star text-muted"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="commentaire mt-2">
+                                        <p class="mb-0">{{ avis.commentaire|truncatechars:150 }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center">
+                        <a href="{% url 'avis:avis-structure-public' structure.pk %}" class="btn btn-outline-primary">
+                            <i class="fas fa-star me-2"></i>Voir tous les avis
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+
                 <!-- Boutons d'action -->
                 <div class="d-flex justify-content-between mt-4">
                     <a href="{% url 'accounts:dashboard' %}" class="btn btn-secondary">
@@ -81,6 +150,19 @@
                     </a>
 
                     <div>
+                        <!-- Bouton pour ajouter un avis -->
+                        {% if user.is_authenticated %}
+                            {% if user_has_avis %}
+                                <a href="{% url 'avis:avis-update' user_avis.pk %}" class="btn btn-warning btn-sm me-2">
+                                    <i class="fas fa-edit me-1"></i>Modifier mon avis
+                                </a>
+                            {% else %}
+                                <a href="{% url 'avis:avis-create-structure' structure.pk %}" class="btn btn-warning btn-sm me-2">
+                                    <i class="fas fa-star me-1"></i>Laisser un avis
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                        
                         <a href="{% url 'plats:plat-create' %}" class="btn auth-submit-btn me-2">
                             <i class="fas fa-utensils me-2"></i>Plats
                         </a>
@@ -99,4 +181,23 @@
         </div>
     </div>
 </div>
+
+<style>
+.rating-display {
+    display: flex;
+    align-items: center;
+}
+
+.rating-display i {
+    font-size: 1.1rem;
+    margin-right: 0.1rem;
+}
+
+.commentaire {
+    background-color: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+</style>
 {% endblock %}

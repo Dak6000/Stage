@@ -4,6 +4,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/promotions.css' %}">
 {% endblock %}
 
 {% block hero %}
@@ -69,6 +70,113 @@
 {% endblock %}
 
 {% block content %}
+<!-- Section Promotions -->
+{% if plats_promotion %}
+<section class="promotions-section py-5" style="background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="section-title">
+                <i class="fas fa-fire text-warning me-3"></i>Offres Spéciales
+            </h2>
+            <p class="section-subtitle">Découvrez nos promotions exclusives et économisez sur vos plats préférés !</p>
+        </div>
+
+        <div class="row">
+            {% for plat in plats_promotion|slice:":4" %}
+            <div class="col-lg-3 col-md-4 mb-3">
+                <div class="card h-100 promotion-card border-0 shadow-lg">
+                    <div class="promotion-vote">
+                        {% if plat.note_moyenne > 0 %}
+                        <div class="rating-display me-3">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= plat.get_note_etoiles %}
+                                    <i class="fas fa-star text-jaune"></i>
+                                {% else %}
+                                    <i class="far fa-star text-muted"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Badge de promotion -->
+                    <div class="promotion-badge">
+                        <i class="fas fa-fire"></i>
+                        {% if plat.pourcentage_reduction %}
+                            -{{ plat.pourcentage_reduction }}%
+                        {% else %}
+                            PROMO
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Image du plat -->
+                    <div class="promotion-image-container">
+                        {% if plat.photo %}
+                        <img src="{{ plat.photo.url }}" class="card-img-top promotion-image" alt="{{ plat.nom }}">
+                        {% else %}
+                        <div class="promotion-placeholder">
+                            <i class="fas fa-utensils fa-3x"></i>
+                            <p>Aucune image</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">{{ plat.nom }}</h5>
+                        <p class="card-text text-muted">{{ plat.description|truncatechars:80 }}</p>
+                        
+                        <!-- Prix -->
+                        <div class="price-section">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="original-price text-muted text-decoration-line-through">
+                                        {{ plat.prix }} FCFA
+                                    </span>
+                                    <br>
+                                    <span class="promotion-price fw-bold text-danger fs-6">
+                                        {{ plat.get_prix_promotionnel|floatformat:2 }} FCFA
+                                    </span>
+                                </div>
+                                <div class="economy-badge">
+                                    <span class="badge bg-success">
+                                        Économisez {{ plat.get_economie|floatformat:2 }} FCFA
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Jours restants -->
+                        {% if plat.get_jours_restants_promotion > 0 %}
+                        <div class="days-remaining mt-2">
+                            <small class="text-warning">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                Plus que {{ plat.get_jours_restants_promotion }} jour{{ plat.get_jours_restants_promotion|pluralize:"s" }}
+                            </small>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="card-footer bg-transparent border-0">
+                        <div class="d-grid">
+                            <a href="{% url 'plats:plat-detail' plat.pk %}" class="btn btn-warning">
+                                <i class="fas fa-eye me-2"></i>Voir les détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'plats:plats-promotion' %}" class="btn btn-warning">
+                <i class="fas fa-tags me-2"></i>Voir toutes les promotions
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
 <!-- Section Structures -->
 <section class="structures-section">
     <div class="container">
@@ -94,7 +202,7 @@
                 <div class="col-md-4 mb-3">
                     <select class="form-select filter-input" id="structureCategoryFilter">
                         <option value="">Toutes catégories</option>
-                        {% for categorie in structure_categories %}
+                        {% for categorie in categories %}
                             <option value="{{ categorie|lower }}">{{ categorie }}</option>
                         {% endfor %}
                     </select>
@@ -160,11 +268,11 @@
     </div>
 </section>
 
-<!-- Section Menus -->
-<section id="menus-section" class="py-5" style="background: var(--bs-fontSecondary);">
+<!-- Section Plats -->
+<section id="menus-section" class="py-5" style="background: var(--bs-font);">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">Nos Menus Populaires</h2>
+            <h2 class="section-title">Nos Plats Populaires</h2>
             <p class="section-subtitle">Découvrez nos spécialités culinaires</p>
         </div>
 
@@ -172,12 +280,7 @@
         <div class="filter-section">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <select class="form-select filter-input" id="platCategoryFilter">
-                        <option value="">Toutes les catégories</option>
-                        {% for categorie in plat_categories %}
-                            <option value="{{ categorie|lower }}">{{ categorie }}</option>
-                        {% endfor %}
-                    </select>
+                    <input type="text" class="form-control filter-input" id="platSearch" placeholder="Rechercher un plat...">
                 </div>
                 <div class="col-md-6 mb-3">
                     <select class="form-select filter-input" id="menuCategoryFilter">
@@ -197,6 +300,19 @@
                  data-categorie="{{ plat.categorie.nom|lower }}"
                  data-nom="{{ plat.nom|lower }}">
                 <div class="card h-100">
+                    <div class="promotion-vote">
+                        {% if plat.note_moyenne > 0 %}
+                        <div class="rating-display me-3">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= plat.get_note_etoiles %}
+                                    <i class="fas fa-star text-jaune"></i>
+                                {% else %}
+                                    <i class="far fa-star text-muted"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
                     <div class="structure-image">
                         {% if plat.photo %}
                         <img src="{{ plat.photo.url }}" class="card-img-top" alt="{{ plat.nom }}">
@@ -211,7 +327,7 @@
                     </div>
                     <div class="structure-content">
                         <h5 class="structure-title">{{ plat.nom }}</h5>
-                        <p class="structure-description">{{ plat.description|truncatechars:100 }}</p>
+                        <p class="structure-description">{{ plat.description|truncatechars:50 }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="structure-rating">{{ plat.prix }} FCFA</span>
                             <span class="badge" style="background: var(--bs-vert); color: var(--bs-font);">
@@ -220,7 +336,7 @@
                         </div>
                     </div>
                     <div class="card-footer bg-transparent">
-                        <a href="{% url 'structures:detail' plat.pk %}" class="structure-btn">
+                        <a href="{% url 'plats:plat-detail' plat.pk %}" class="structure-btn">
                             <i class="fas fa-eye me-2"></i>Détails
                         </a>
                     </div>
@@ -245,58 +361,6 @@
     </div>
 </section>
 
-<!-- Categories Section -->
-<section class="py-5">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Catégories</h2>
-            <p class="section-subtitle">Explorez différents types de restaurants</p>
-        </div>
-
-        <div class="row">
-            <div class="col-md-3 col-6 mb-4">
-                <a href="#" class="text-decoration-none">
-                    <div class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-hamburger"></i>
-                        </div>
-                        <h5 class="category-title">Fast Food</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3 col-6 mb-4">
-                <a href="#" class="text-decoration-none">
-                    <div class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-pizza-slice"></i>
-                        </div>
-                        <h5 class="category-title">Pizzeria</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3 col-6 mb-4">
-                <a href="#" class="text-decoration-none">
-                    <div class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-mug-hot"></i>
-                        </div>
-                        <h5 class="category-title">Cafés</h5>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3 col-6 mb-4">
-                <a href="#" class="text-decoration-none">
-                    <div class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-cocktail"></i>
-                        </div>
-                        <h5 class="category-title">Bars</h5>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- How it Works -->
 <section class="py-5" style="background: var(--bs-fontSecondary);">
@@ -366,26 +430,36 @@
 <script>
 // Filtres pour les structures
 document.addEventListener('DOMContentLoaded', function() {
+    // Filtres pour les structures
     const structureSearch = document.getElementById('structureSearch');
+    const platSearch = document.getElementById('platSearch');
     const villeFilter = document.getElementById('villeFilter');
     const structureCategoryFilter = document.getElementById('structureCategoryFilter');
     const structureCards = document.querySelectorAll('.structure-card');
 
+    // Filtres pour les menus
+    const platCategoryFilter = document.getElementById('platCategoryFilter');
+    const menuCategoryFilter = document.getElementById('menuCategoryFilter');
+    const menuCards = document.querySelectorAll('.menu-card');
+
     function filterStructures() {
-        const searchTerm = structureSearch.value.toLowerCase();
-        const selectedVille = villeFilter.value.toLowerCase();
-        const selectedCategory = structureCategoryFilter.value.toLowerCase();
+        const searchTerm = structureSearch ? structureSearch.value.toLowerCase() : '';
+        const platTerm = platSearch ? platSearch.value.toLowerCase() : '';
+        const selectedVille = villeFilter ? villeFilter.value.toLowerCase() : '';
+        const selectedCategory = structureCategoryFilter ? structureCategoryFilter.value.toLowerCase() : '';
 
         structureCards.forEach(card => {
-            const nom = card.dataset.nom;
-            const ville = card.dataset.ville;
-            const categorie = card.dataset.categorie;
+            const nom = card.dataset.nom ? card.dataset.nom.toLowerCase() : '';
+            const ville = card.dataset.ville ? card.dataset.ville.toLowerCase() : '';
+            const categorie = card.dataset.categorie ? card.dataset.categorie.toLowerCase() : '';
+            const plats = card.dataset.plats ? card.dataset.plats.toLowerCase() : '';
 
-            const matchesSearch = nom.includes(searchTerm);
+            const matchesSearch = !searchTerm || nom.includes(searchTerm);
+            const matchesPlat = !platTerm || plats.includes(platTerm);
             const matchesVille = !selectedVille || ville === selectedVille;
             const matchesCategory = !selectedCategory || categorie === selectedCategory;
 
-            if (matchesSearch && matchesVille && matchesCategory) {
+            if (matchesSearch && matchesPlat && matchesVille && matchesCategory) {
                 card.style.display = 'block';
             } else {
                 card.style.display = 'none';
@@ -393,8 +467,39 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function filterMenus() {
+        const platTerm = platSearch ? platSearch.value.toLowerCase() : '';
+        const selectedPlatCategory = platCategoryFilter ? platCategoryFilter.value.toLowerCase() : '';
+        const selectedMenuCategory = menuCategoryFilter ? menuCategoryFilter.value.toLowerCase() : '';
+
+        menuCards.forEach(card => {
+            const nom = card.dataset.nom ? card.dataset.nom.toLowerCase() : '';
+            const categorie = card.dataset.categorie ? card.dataset.categorie.toLowerCase() : '';
+            const description = card.dataset.description ? card.dataset.description.toLowerCase() : '';
+
+            const matchesPlatTerm = !platTerm || 
+                                 nom.includes(platTerm) || 
+                                 description.includes(platTerm);
+            const matchesPlatCategory = !selectedPlatCategory || categorie === selectedPlatCategory;
+            const matchesMenuCategory = !selectedMenuCategory || nom === selectedMenuCategory;
+
+            if (matchesPlatTerm && matchesPlatCategory && matchesMenuCategory) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Écouteurs d'événements pour les structures
     if (structureSearch) {
         structureSearch.addEventListener('input', filterStructures);
+    }
+    if (platSearch) {
+        platSearch.addEventListener('input', function() {
+            filterStructures();
+            filterMenus();
+        });
     }
     if (villeFilter) {
         villeFilter.addEventListener('change', filterStructures);
@@ -403,37 +508,36 @@ document.addEventListener('DOMContentLoaded', function() {
         structureCategoryFilter.addEventListener('change', filterStructures);
     }
 
-    // Filtres pour les menus
-    const platCategoryFilter = document.getElementById('platCategoryFilter');
-    const menuCategoryFilter = document.getElementById('menuCategoryFilter');
-    const menuCards = document.querySelectorAll('.menu-card');
-
-    function filterMenus() {
-        const selectedPlatCategory = platCategoryFilter.value.toLowerCase();
-        const selectedMenuCategory = menuCategoryFilter.value.toLowerCase();
-
-        menuCards.forEach(card => {
-            const nom = card.dataset.nom;
-            const categorie = card.dataset.categorie;
-
-            const matchesPlatCategory = !selectedPlatCategory || categorie === selectedPlatCategory;
-            const matchesMenuCategory = !selectedMenuCategory || nom === selectedMenuCategory;
-
-            if (matchesPlatCategory && matchesMenuCategory) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    }
-
+    // Écouteurs d'événements pour les menus
     if (platCategoryFilter) {
         platCategoryFilter.addEventListener('change', filterMenus);
     }
     if (menuCategoryFilter) {
         menuCategoryFilter.addEventListener('change', filterMenus);
     }
+
+    // Filtrage initial au chargement
+    filterStructures();
+    filterMenus();
 });
 </script>
+
+<style>
+/* Styles pour la section Promotions */
+    .promotion-vote {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        background: var(--bs-jaune);
+        color: white;
+        padding: 3px 5px;
+        border-radius: 15px;
+        font-size: 0.6rem;
+        font-weight: bold;
+        z-index: 2;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        animation: pulse 1.5s infinite;
+    }
+</style>
 
 {% endblock %}

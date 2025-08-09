@@ -2,11 +2,9 @@
 {% load static %}
 
 {% block content %}
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/plats.css' %}">
-{% endblock %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
 <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="auth-card card border-0 shadow-lg">
             <div class="card-header py-3 auth-card-header">
                 <h3 class="card-title mb-0">
@@ -14,52 +12,371 @@
                 </h3>
             </div>
             <div class="card-body p-4">
+                <!-- Affichage des erreurs non-field -->
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger mb-4">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
                 <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                     {% csrf_token %}
 
-                    <!-- Afficher tous les champs du formulaire manuellement -->
-                    {% for field in form %}
+                    <!-- Informations de base -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.nom.id_for_label }}" class="form-label">
+                                    {{ form.nom.label }}
+                                    <span class="text-danger">*</span>
+                                </label>
+                                {{ form.nom }}
+                                {% if form.nom.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {% for error in form.nom.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">{{ form.nom.help_text }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.categorie.id_for_label }}" class="form-label">
+                                    {{ form.categorie.label }}
+                                    <span class="text-danger">*</span>
+                                </label>
+                                {{ form.categorie }}
+                                {% if form.categorie.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {% for error in form.categorie.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">
+                            {{ form.description.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="invalid-feedback d-block">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                {% for error in form.description.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ form.prix.id_for_label }}" class="form-label">
+                                    {{ form.prix.label }}
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">FCFA</span>
+                                    {{ form.prix }}
+                                </div>
+                                {% if form.prix.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {% for error in form.prix.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">{{ form.prix.help_text }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ form.temps_preparation.id_for_label }}" class="form-label">
+                                    {{ form.temps_preparation.label }}
+                                </label>
+                                <div class="input-group">
+                                    {{ form.temps_preparation }}
+                                    <span class="input-group-text">min</span>
+                                </div>
+                                {% if form.temps_preparation.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {% for error in form.temps_preparation.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">{{ form.temps_preparation.help_text }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ form.temps_cuisson.id_for_label }}" class="form-label">
+                                    {{ form.temps_cuisson.label }}
+                                </label>
+                                <div class="input-group">
+                                    {{ form.temps_cuisson }}
+                                    <span class="input-group-text">min</span>
+                                </div>
+                                {% if form.temps_cuisson.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {% for error in form.temps_cuisson.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">{{ form.temps_cuisson.help_text }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.difficulte.id_for_label }}" class="form-label">
+                                    {{ form.difficulte.label }}
+                                </label>
+                                {{ form.difficulte }}
+                                {% if form.difficulte.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {% for error in form.difficulte.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">{{ form.difficulte.help_text }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.photo.id_for_label }}" class="form-label">
+                                    {{ form.photo.label }}
+                                </label>
+                                {{ form.photo }}
+                                {% if form.photo.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {% for error in form.photo.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">{{ form.photo.help_text }}</small>
+                                {% if form.instance.photo %}
+                                <div class="mt-2">
+                                    <img src="{{ form.instance.photo.url }}" alt="Photo actuelle" class="img-thumbnail" style="max-height: 100px;">
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.calories.id_for_label }}" class="form-label">
+                                    {{ form.calories.label }}
+                                </label>
+                                <div class="input-group">
+                                    {{ form.calories }}
+                                    <span class="input-group-text">kcal</span>
+                                </div>
+                                {% if form.calories.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {% for error in form.calories.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.portion.id_for_label }}" class="form-label">
+                                    {{ form.portion.label }}
+                                </label>
+                                {{ form.portion }}
+                                {% if form.portion.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {% for error in form.portion.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.ingredients.id_for_label }}" class="form-label">
+                            {{ form.ingredients.label }}
+                        </label>
+                        {{ form.ingredients }}
+                        {% if form.ingredients.errors %}
+                            <div class="invalid-feedback d-block">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                {% for error in form.ingredients.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">{{ form.ingredients.help_text }}</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.allergenes.id_for_label }}" class="form-label">
+                            {{ form.allergenes.label }}
+                        </label>
+                        {{ form.allergenes }}
+                        {% if form.allergenes.errors %}
+                            <div class="invalid-feedback d-block">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                {% for error in form.allergenes.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">{{ form.allergenes.help_text }}</small>
+                    </div>
+
+                    <!-- Section Promotion -->
+                    <div class="promotion-section border rounded p-4 mt-4" style="background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);">
+                        <h5 class="mb-3">
+                            <i class="fas fa-tags me-2 text-warning"></i>Options de Promotion
+                        </h5>
+
                         <div class="mb-3">
-                            {% if field.name == 'disponible' %}
-                                <!-- Affichage spécial pour le champ booléen/disponibilité -->
-                                <div class="form-check form-switch">
-                                    <input type="checkbox" name="{{ field.name }}" id="{{ field.id_for_label }}"
-                                           class="form-check-input {% if field.errors %}is-invalid{% endif %}"
-                                           {% if field.value %}checked{% endif %}>
-                                    <label class="form-check-label" for="{{ field.id_for_label }}">
-                                        {{ field.label }}
+                            <div class="form-check form-switch">
+                                <input type="checkbox" name="{{ form.en_promotion.name }}" id="{{ form.en_promotion.id_for_label }}"
+                                       class="form-check-input {% if form.en_promotion.errors %}is-invalid{% endif %}"
+                                       {% if form.en_promotion.value %}checked{% endif %}>
+                                <label class="form-check-label fw-bold" for="{{ form.en_promotion.id_for_label }}">
+                                    {{ form.en_promotion.label }}
+                                </label>
+                                {% if form.en_promotion.errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.en_promotion.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div id="promotion-fields" class="row" style="display: none;">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.prix_promotionnel.id_for_label }}" class="form-label">
+                                        {{ form.prix_promotionnel.label }}
                                     </label>
-                                    {% if field.errors %}
+                                    {{ form.prix_promotionnel }}
+                                    {% if form.prix_promotionnel.errors %}
                                         <div class="invalid-feedback">
-                                            {% for error in field.errors %}
+                                            {% for error in form.prix_promotionnel.errors %}
                                                 {{ error }}
                                             {% endfor %}
                                         </div>
                                     {% endif %}
                                 </div>
-                            {% else %}
-                                <!-- Affichage standard pour les autres champs -->
-                                <label for="{{ field.id_for_label }}" class="form-label">
-                                    {{ field.label }}
-                                    {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
-                                </label>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.pourcentage_reduction.id_for_label }}" class="form-label">
+                                        {{ form.pourcentage_reduction.label }}
+                                    </label>
+                                    {{ form.pourcentage_reduction }}
+                                    {% if form.pourcentage_reduction.errors %}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.pourcentage_reduction.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.date_debut_promotion.id_for_label }}" class="form-label">
+                                        {{ form.date_debut_promotion.label }}
+                                    </label>
+                                    {{ form.date_debut_promotion }}
+                                    {% if form.date_debut_promotion.errors %}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.date_debut_promotion.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.date_fin_promotion.id_for_label }}" class="form-label">
+                                        {{ form.date_fin_promotion.label }}
+                                    </label>
+                                    {{ form.date_fin_promotion }}
+                                    {% if form.date_fin_promotion.errors %}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.date_fin_promotion.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="{{ form.description_promotion.id_for_label }}" class="form-label">
+                                        {{ form.description_promotion.label }}
+                                    </label>
+                                    {{ form.description_promotion }}
+                                    {% if form.description_promotion.errors %}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.description_promotion.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                {{ field }}
-
-                                {% if field.help_text %}
-                                    <small class="form-text text-muted">{{ field.help_text }}</small>
-                                {% endif %}
-
-                                {% if field.errors %}
-                                    <div class="invalid-feedback">
-                                        {% for error in field.errors %}
-                                            {{ error }}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
+                    <!-- Options générales -->
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input type="checkbox" name="{{ form.disponibilite.name }}" id="{{ form.disponibilite.id_for_label }}"
+                                   class="form-check-input {% if form.disponibilite.errors %}is-invalid{% endif %}"
+                                   {% if form.disponibilite.value %}checked{% endif %}>
+                            <label class="form-check-label" for="{{ form.disponibilite.id_for_label }}">
+                                {{ form.disponibilite.label }}
+                            </label>
+                            {% if form.disponibilite.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.disponibilite.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
                             {% endif %}
                         </div>
-                    {% endfor %}
+                    </div>
 
                     <div class="d-flex justify-content-between mt-4">
                         <a href="{% url 'plats:plat-list' %}" class="btn btn-secondary">
@@ -75,42 +392,99 @@
     </div>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const promotionCheckbox = document.getElementById('{{ form.en_promotion.id_for_label }}');
+    const promotionFields = document.getElementById('promotion-fields');
+    const prixPromoField = document.getElementById('{{ form.prix_promotionnel.id_for_label }}');
+    const pourcentageField = document.getElementById('{{ form.pourcentage_reduction.id_for_label }}');
+    const dateDebutField = document.getElementById('{{ form.date_debut_promotion.id_for_label }}');
+    const dateFinField = document.getElementById('{{ form.date_fin_promotion.id_for_label }}');
+
+    // Fonction pour initialiser l'état des champs de promotion
+    function initPromotionFields() {
+        // Vérifie si la promotion est déjà activée (pour les modifications)
+        const isPromoActive = promotionCheckbox.checked || 
+                             dateDebutField.value || 
+                             dateFinField.value || 
+                             prixPromoField.value || 
+                             pourcentageField.value;
+        
+        if (isPromoActive) {
+            promotionCheckbox.checked = true;
+            promotionFields.style.display = 'block';
+        }
+    }
+
+    // Fonction pour basculer l'affichage des champs de promotion
+    function togglePromotionFields() {
+        if (promotionCheckbox.checked) {
+            promotionFields.style.display = 'block';
+        } else {
+            promotionFields.style.display = 'none';
+        }
+    }
+
+    // Fonction pour gérer l'exclusivité entre les champs
+    function handleExclusiveFields() {
+        if (prixPromoField.value) {
+            pourcentageField.disabled = true;
+            pourcentageField.value = '';
+        } else if (pourcentageField.value) {
+            prixPromoField.disabled = true;
+            prixPromoField.value = '';
+        } else {
+            prixPromoField.disabled = false;
+            pourcentageField.disabled = false;
+        }
+    }
+
+    // Initialisation
+    initPromotionFields();
+    handleExclusiveFields();
+
+    // Écouteurs d'événements
+    promotionCheckbox.addEventListener('change', togglePromotionFields);
+    prixPromoField.addEventListener('input', handleExclusiveFields);
+    pourcentageField.addEventListener('input', handleExclusiveFields);
+});
+</script>
+
 <style>
-    .auth-card {
-        border-radius: 10px;
-    }
-    .auth-card-header {
-        background-color: var(--bs-vert);
-        color: white;
-        border-radius: 10px 10px 0 0 !important;
-    }
-    .auth-submit-btn {
-        background-color: var(--bs-vert);
-        color: white;
-    }
-    .auth-submit-btn:hover {
-        background-color: var(--bs-jaune);
-        color: white;
-    }
-    .form-control, .form-select {
-        padding: 10px;
-        border-radius: 5px;
-        border: 1px solid #ced4da;
-    }
-    .form-control:focus, .form-select:focus {
-        border-color: var(--bs-vert);
-        box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
-    }
-    .is-invalid {
-        border-color: #dc3545;
-    }
-    .invalid-feedback {
-        color: #dc3545;
-        font-size: 0.875em;
-    }
     .form-switch .form-check-input {
         width: 3em;
         height: 1.5em;
+    }
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        transition: all 0.3s ease;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: var(--bs-vert);
+        box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+    }
+    .is-invalid {
+        border-color: var(--bs-rouge);
+    }
+    .invalid-feedback {
+        color: var(--bs-rouge);
+        font-size: 0.875em;
+    }
+    input:disabled, select:disabled, textarea:disabled {
+        background-color: #f8f9fa;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    /* Style pour la section promotion */
+    .promotion-section {
+        transition: all 0.3s ease;
+    }
+
+    #promotion-fields {
+        transition: all 0.3s ease;
     }
 </style>
 {% endblock %}

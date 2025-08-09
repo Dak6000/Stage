@@ -44,10 +44,6 @@
                                 <ul class="dropdown-menu" aria-labelledby="platsDropdown">
                                     <li><a class="dropdown-item" href="{% url 'plats:plat-list' %}">Mes plats</a></li>
                                     <li><a class="dropdown-item" href="{% url 'plats:plat-create' %}">Créer un plat</a></li>
-                                    {% if 'plats' in request.path %}
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item active" href="#"><i class="fas fa-edit me-2"></i>Gestion des plats</a></li>
-                                    {% endif %}
                                 </ul>
                             </li>
                             {% endif %}
@@ -61,10 +57,6 @@
                                 <ul class="dropdown-menu" aria-labelledby="menusDropdown">
                                     <li><a class="dropdown-item" href="{% url 'menus:menus-list' %}">Mes menus</a></li>
                                     <li><a class="dropdown-item" href="{% url 'menus:menus-create' %}">Créer un menu</a></li>
-                                    {% if 'menus' in request.path %}
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item active" href="#"><i class="fas fa-clipboard-list me-2"></i>Gestion des menus</a></li>
-                                    {% endif %}
                                 </ul>
                             </li>
                             {% endif %}
@@ -72,7 +64,7 @@
 
                         <!-- Lien pour les avis -->
                         <li class="nav-item">
-                            <a class="nav-link {% if 'avis' in request.path %}active{% endif %}" href="#">Avis</a>
+                            <a class="nav-link {% if 'avis' in request.path %}active{% endif %}" href="{% url 'avis:avis-list' %}">Avis</a>
                         </li>
 
                         <!-- Menu compte utilisateur -->

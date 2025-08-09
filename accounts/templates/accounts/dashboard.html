@@ -79,9 +79,15 @@
             <div class="card mb-4 main-card">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center card-header-style">
                     <h6 class="m-0 fw-bold card-title">Vos Structures</h6>
-                    <a href="{% url 'structures:register_structure' %}" class="btn btn-sm add-btn">
-                        <i class="fas fa-plus me-1"></i> Ajouter
-                    </a>
+                    {% if user.structure.exists %}
+                        <a href="{% url 'structures:structure-update' user.structure.first.pk %}" class="btn btn-sm add-btn">
+                            <i class="fas fa-edit me-1"></i> Modifier
+                        </a>
+                    {% else %}
+                        <a href="{% url 'structures:register_structure' %}" class="btn btn-sm add-btn">
+                            <i class="fas fa-plus me-1"></i> Ajouter
+                        </a>
+                    {% endif %}
                 </div>
                 <div class="card-body">
                     {% if structures %}
@@ -120,9 +126,7 @@
                     {% else %}
                         <div class="text-center py-4">
                             <p class="no-structure-text">Aucune structure enregistrée</p>
-                            <a href="{% url 'structures:register_structure' %}" class="btn add-first-btn">
-                                Ajouter votre première structure
-                            </a>
+                            <a href="{% url 'structures:register_structure' %}" class="btn add-first-btn">Ajouter votre première structure</a>
                         </div>
                     {% endif %}
                 </div>
@@ -132,7 +136,7 @@
             <div class="card mb-4 main-card">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center card-header-style">
                     <h6 class="m-0 fw-bold card-title">Historique des Connexions</h6>
-                    {% if login_history.count > 5 %}
+                    {% if login_history.count > 4 %}
                     <button id="toggleHistory" class="btn btn-sm toggle-history-btn">
                         <i class="fas fa-eye me-1"></i> Tout afficher
                     </button>
@@ -140,7 +144,7 @@
                 </div>
                 <div class="card-body">
                     <div class="list-group">
-                        {% for login in login_history|slice:":5" %}
+                        {% for login in login_history|slice:":4" %}
                         <div class="list-group-item list-group-item-action {% if forloop.counter > 5 %}d-none history-item{% endif %} login-item-{% if login.action == 'LOGIN' and forloop.first %}current{% elif login.action == 'LOGIN' %}login{% elif login.action == 'LOGOUT' %}logout{% else %}failed{% endif %}">
                             <div class="d-flex w-100 justify-content-between">
                                 <h6 class="mb-1 login-action">
@@ -177,7 +181,7 @@
                         </div>
                         {% endfor %}
 
-                        {% for login in login_history|slice:"5:" %}
+                        {% for login in login_history|slice:"4:" %}
                         <div class="list-group-item list-group-item-action d-none history-item login-item-{% if login.action == 'LOGIN' %}login{% elif login.action == 'LOGOUT' %}logout{% else %}failed{% endif %}">
                             <div class="d-flex w-100 justify-content-between">
                                 <h6 class="mb-1 login-action">
@@ -216,7 +220,7 @@
             <!-- Profil utilisateur -->
             <div class="card shadow mb-4 profile-card">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center card-header-style">
-                    <h6 class="m-0 fw-bold profile-title">Votre Profil</h6>
+                    <h6 class="m-0 fw-bold profile-title">Profil</h6>
                     <a href="{% url 'accounts:password-change' %}" class="btn edit-profile-btn">
                         <i class="fas fa-lock me-2"></i>Changer mot de passe
                     </a>
@@ -248,8 +252,8 @@
                         <a href="{% url 'accounts:profile-update' %}" class="btn btn-sm edit-profile-btn">
                             <i class="fas fa-user-edit me-1"></i> Modifier
                         </a>
-                        <a href="{% url 'accounts:logout' %}" class="btn btn-sm logout-btn">
-                            <i class="fas fa-sign-out-alt me-1"></i> Déconnexion
+                        <a href="{% url 'accounts:account-delete' %}" class="btn btn-sm logout-btn">
+                            <i class="fas fa-trash me-1"></i> Supprimer
                         </a>
                     </div>
                 </div>
@@ -262,10 +266,16 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="{% url 'structures:register_structure' %}" class="btn new-structure-btn">
-                            <i class="fas fa-plus-circle me-1"></i> Nouvelle structure
-                        </a>
-                        <a href="#" class="btn help-btn">
+                        {% if user.structure.exists %}
+                            <a href="{% url 'structures:structure-update' user.structure.first.pk %}" class="btn new-structure-btn">
+                                <i class="fas fa-edit me-1"></i> Modifier ma structure
+                            </a>
+                        {% else %}
+                            <a href="{% url 'structures:register_structure' %}" class="btn new-structure-btn">
+                                <i class="fas fa-plus-circle me-1"></i> Nouvelle structure
+                            </a>
+                        {% endif %}
+                        <a href="{% url 'guide' %}" class="btn help-btn">
                             <i class="fas fa-question-circle me-1"></i> Aide
                         </a>
                     </div>

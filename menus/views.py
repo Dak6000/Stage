@@ -25,7 +25,6 @@ def menu_create(request):
             # Associer automatiquement à la structure de l'utilisateur
             menu.structure = request.user.structure.first()
             menu.save()
-            form.save_m2m()  # Pour sauvegarder les relations many-to-many
             messages.success(request, 'Menu créé avec succès!')
             return redirect('menus:menus-list')
     else:

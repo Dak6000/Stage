@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Supprimer l'avis - {{ block.super }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/avis.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="avis-form">
+                <div class="mb-3">
+                    <h4 class="mb-0" style="color: var(--bs-rouge)">
+                        <i class="fas fa-trash me-2"></i>{{ title }}
+                    </h4>
+                </div>
+                <div>
+                    <div class="text-center mb-4">
+                        <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                        <h5>Êtes-vous sûr de vouloir supprimer cet avis ?</h5>
+                        <p class="text-muted">Cette action est irréversible.</p>
+                    </div>
+
+                    <!-- Aperçu de l'avis -->
+                    <div class="card bg-light mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h6 class="card-title mb-1">
+                                        {% if avis.structure %}
+                                            <i class="fas fa-building me-2 text-primary"></i>
+                                            {{ avis.structure.nom }}
+                                        {% elif avis.plat %}
+                                            <i class="fas fa-utensils me-2 text-success"></i>
+                                            {{ avis.plat.nom }}
+                                        {% endif %}
+                                    </h6>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar-alt me-1"></i>
+                                        {{ avis.get_date_relative }}
+                                    </small>
+                                </div>
+                                <div class="rating-display">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= avis.note %}
+                                            <i class="fas fa-star text-warning"></i>
+                                        {% else %}
+                                            <i class="far fa-star text-muted"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <span class="ms-2 fw-bold">{{ avis.get_note_display }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="commentaire">
+                                <p class="mb-0">{{ avis.commentaire }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between">
+                            <a href="{% if avis.structure %}{% url 'structures:structure-detail' avis.structure.pk %}{% elif avis.plat %}{% url 'plats:plat-detail' avis.plat.pk %}{% else %}{% url 'avis:avis-list' %}{% endif %}" class="btn btn-avis-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Annuler
+                            </a>
+                            <button type="submit" class="btn btn-avis-primary">
+                                <i class="fas fa-trash me-2"></i>Supprimer l'avis
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.rating-display {
+    display: flex;
+    align-items: center;
+}
+
+.rating-display i {
+    font-size: 1.2rem;
+    margin-right: 0.1rem;
+}
+
+.commentaire {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #dc3545;
+}
+</style>
+{% endblock %}

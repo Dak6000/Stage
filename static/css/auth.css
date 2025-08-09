@@ -8,12 +8,14 @@
     --bs-rouge: #D7263D;
     --bs-font: #FAF3E0;
     --bs-text: #333333;
+    --bs-gray: #6e6c6c;
     --bs-fontSecondary: #EEEEEE;
 }
 
 body {
     background-color: var(--bs-font);
 }
+
 
 /* Styles pour les cartes d'authentification */
 .auth-card {
@@ -62,9 +64,9 @@ body {
     background: var(--bs-jaune) !important;
     color: var(--bs-vert) !important;
     border: none;
-    padding: 12px;
-    font-weight: 500;
-    border-radius: 8px;
+    padding: 6px;
+    font-weight: 300;
+    border-radius: 6px;
     transition: all 0.3s ease;
 }
 
@@ -76,17 +78,17 @@ body {
 
 .btn-secondary-btn {
     background: var(--bs-font) !important;
-    color: var(--bs-jaune) !important;
+    color: var(--bs-vert) !important;
     border: none;
-    padding: 12px;
-    font-weight: 500;
-    border-radius: 8px;
+    padding: 6px;
+    font-weight: 300;
+    border-radius: 6px;
     transition: all 0.3s ease;
 }
 
 .btn-secondary-btn:hover {
     color: var(--bs-font) !important;
-    background: var(--bs-jaune) !important;
+    background: var(--bs-vert) !important;
     transform: translateY(-2px);
 }
 
@@ -94,9 +96,9 @@ body {
     background: var(--bs-rouge) !important;
     color: var(--bs-font) !important;
     border: none;
-    padding: 12px;
-    font-weight: 500;
-    border-radius: 8px;
+    padding: 6px;
+    font-weight: 300;
+    border-radius: 6px;
     transition: all 0.3s ease;
 }
 
@@ -107,17 +109,33 @@ body {
 }
 
 .voir-btn {
-    background: var(--bs-jaune) !important;
-    color: var(--bs-rouge) !important;
+    background: var(--bs-vert) !important;
+    color: var(--bs-jaune) !important;
     border: none;
-    padding: 12px;
-    font-weight: 500;
-    border-radius: 8px;
+    padding: 6px;
+    font-weight: 300;
+    border-radius: 6px;
     transition: all 0.3s ease;
 }
 
 .voir-btn:hover {
-    color: var(--bs-font) !important;
+    color: var(--bs-vert) !important;
+    background: var(--bs-jaune) !important;
+    transform: translateY(-2px);
+}
+
+.btn-warning-btn {
+    background: var(--bs-rouge) !important;
+    color: var(--bs-jaune) !important;
+    border: none;
+    padding: 6px;
+    font-weight: 300;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-warning-btn:hover {
+    color: var(--bs-rouge) !important;
     background: var(--bs-jaune) !important;
     transform: translateY(-2px);
 }
@@ -125,7 +143,7 @@ body {
 /* Liens */
 .auth-link {
     color: var(--bs-vert) !important;
-    font-weight: 500;
+    font-weight: 300;
     transition: all 0.3s ease;
 }
 
@@ -180,7 +198,7 @@ body {
 
 .profile-email {
     color: var(--bs-text);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .form-control-static {
@@ -195,18 +213,18 @@ body {
 /* Responsive */
 @media (max-width: 768px) {
     .auth-card {
-        margin: 20px;
+        margin: 15px;
     }
 
     .section-title {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
     
     .profile-image,
     .profile-image-placeholder {
         width: 120px;
         height: 120px;
-        font-size: 2rem;
+        font-size: 1.6rem;
     }
 
     .d-flex.justify-content-between {

@@ -1,28 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/plats.css' %}">
-{% endblock %}
-
 {% block content %}
-    <!-- Modal pour afficher les détails du plat -->
-<div class="modal fade" id="platModal" tabindex="-1" aria-labelledby="platModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="platModalLabel">Détails du plat</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" id="platModalBody">
-        <!-- Contenu dynamique sera inséré ici -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-      </div>
-    </div>
-  </div>
-</div>
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
 
 <div class="container mt-4">
     <div class="auth-card card border-0 shadow-lg">
@@ -31,9 +11,14 @@
                 <h3 class="card-title mb-0">
                     <i class="fas fa-utensils me-2"></i>Liste des Plats
                 </h3>
-                <a href="{% url 'plats:plat-create' %}" class="btn auth-submit-btn">
-                    <i class="fas fa-plus-circle me-2"></i>Ajouter un plat
-                </a>
+                <div>
+                    <a href="{% url 'plats:plats-promotion' %}" class="btn btn-jaune me-2">
+                        <i class="fas fa-tags me-2"></i>Voir les promotions
+                    </a>
+                    <a href="{% url 'plats:plat-create' %}" class="btn auth-submit-btn">
+                        <i class="fas fa-plus-circle me-2"></i>Ajouter un plat
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -41,36 +26,64 @@
             {% if plats %}
             <div class="row">
                 {% for plat in plats %}
-                <div class="col-md-3 mb-3">
-                    <div class="card h-100 border-0 shadow-sm">
-                        {% if plat.photo %}
-                        <img src="{{ plat.photo.url }}" class="card-img-top img-fluid"
-                             style="height: 200px; object-fit: cover;"
-                             alt="{{ plat.nom }}">
-                        {% else %}
-                        <div class="bg-light d-flex align-items-center justify-content-center"
-                             style="height: 200px;">
-                            <i class="fas fa-utensils fa-4x" style="color: var(--bs-vert);"></i>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm plat-card" data-bs-toggle="modal" data-bs-target="#platModal">
+                        <!-- Badge de promotion -->
+                        {% if plat.est_en_promotion %}
+                        <!-- Badge de promotion -->
+                        <div class="promotion-badge">
+                            <i class="fas fa-fire"></i>
+                            {% if plat.pourcentage_reduction %}
+                                -{{ plat.pourcentage_reduction }}%
+                            {% else %}
+                                PROMO
+                            {% endif %}
                         </div>
                         {% endif %}
-
+                        
+                        <div class="square-img-container">
+                            {% if plat.photo %}
+                            <img src="{{ plat.photo.url }}" class="square-img" alt="{{ plat.nom }}">
+                            {% else %}
+                            <div class="square-img-placeholder">
+                                <i class="fas fa-utensils fa-3x"></i>
+                                <p>Aucune image</p>
+                            </div>
+                            {% endif %}
+                            <div class="img-badge">{{ plat.get_categorie_display }}</div>
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title text-truncate">{{ plat.nom }}</h5>
-                            <p class="card-text text-muted">
-                                {{ plat.description|truncatechars:100|default:"Aucune description" }}
-                            </p>
-                            <p class="text-success fw-bold">
-                                <i class="fas fa-tag me-2"></i>{{ plat.prix }} Fcfa
-                            </p>
-
-                            <div class="d-flex justify-content-between mt-3">
-                                <a href="{% url 'plats:plat-update' plat.pk %}"
-                                   class="btn btn-sm auth-submit-btn">
-                                    <i class="fas fa-edit me-1"></i>Modifier
+                            <h5 class="text-vert">{{ plat.nom }}</h5>
+                            <p class="card-text text-gray">{{ plat.description|truncatechars:80 }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                {% if plat.est_en_promotion %}
+                                <div>
+                                    <span class="text-rouge text-decoration-line-through">{{ plat.prix }} FCFA</span>
+                                    <br>
+                                    <span class="text-vert fw-bold">{{ plat.get_prix_promotionnel }} FCFA</span>
+                                </div>
+                                {% else %}
+                                <span class="text-vert fw-bold">{{ plat.prix }} FCFA</span>
+                                {% endif %}
+                                <span class="badge bg-jaune">{{ plat.temps_preparation|default:"15" }} min</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="btn-group btn-group-sm w-100">
+                                <a href="{% url 'plats:plat-update' plat.pk %}" class="btn auth-submit-btn" onclick="event.stopPropagation();">
+                                    <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="{% url 'plats:plat-delete' plat.pk %}"
-                                   class="btn btn-sm btn-danger">
-                                    <i class="fas fa-trash me-1"></i>Supprimer
+                                <a href="{% url 'plats:plat-detail' plat.pk %}" class="btn voir-btn" onclick="event.stopPropagation();">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <form method="POST" action="{% url 'plats:toggle-promotion' plat.pk %}" class="btn-jaune" onclick="event.stopPropagation();">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn {% if plat.est_en_promotion %}btn-vert{% else %}btn-jaune{% endif %}" title="{% if plat.est_en_promotion %}Désactiver la promotion{% else %}Activer la promotion{% endif %}">
+                                        <i class="fas fa-tags"></i>
+                                    </button>
+                                </form>
+                                <a href="{% url 'plats:plat-delete' plat.pk %}" class="btn btn-danger" onclick="event.stopPropagation();">
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </div>
                         </div>
@@ -80,11 +93,11 @@
             </div>
             {% else %}
             <div class="text-center py-5">
-                <div class="empty-state">
-                    <i class="fas fa-utensils fa-4x text-muted mb-3"></i>
-                    <h4 class="text-muted">Aucun plat disponible</h4>
-                    <p class="text-muted mb-4">Commencez par ajouter votre premier plat</p>
-                    <a href="{% url 'plats:plat-create' %}" class="btn auth-submit-btn">
+                <div class="guide-card">
+                    <i class="fas fa-utensils fa-4x mb-3" style="color: var(--bs-jaune);"></i>
+                    <h4>Aucun plat disponible</h4>
+                    <p>Commencez par ajouter votre premier plat</p>
+                    <a href="{% url 'plats:plat-create' %}" class="btn auth-submit-btn mt-3">
                         <i class="fas fa-plus-circle me-2"></i>Ajouter un plat
                     </a>
                 </div>
@@ -95,22 +108,241 @@
 </div>
 
 <style>
-    .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Couleurs de texte personnalisées */
+    .text-vert {
+        color: var(--bs-vert) !important;
     }
-    .card:hover {
+
+    .text-jaune {
+        color: var(--bs-jaune) !important;
+    }
+
+    .text-rouge {
+        color: var(--bs-rouge) !important;
+    }
+
+    .text-font {
+        color: var(--bs-font) !important;
+    }
+
+    .text-text {
+        color: var(--bs-text) !important;
+        font-size: 0.9rem;}
+
+    .text-gray {
+        color: var(--bs-gray) !important;
+        font-size: 0.8rem;
+    }
+
+    .text-fontSecondary {
+        color: var(--bs-fontSecondary) !important;
+    }
+
+    /* Arrière-plans personnalisés */
+    .bg-vert {
+        background-color: var(--bs-vert) !important;
+    }
+
+    .bg-jaune {
+        background-color: var(--bs-jaune) !important;
+    }
+
+    .bg-rouge {
+        background-color: var(--bs-rouge) !important;
+    }
+
+    .bg-font {
+        background-color: var(--bs-font) !important;
+    }
+
+    .bg-text {
+        background-color: var(--bs-text) !important;
+    }
+
+    .bg-fontSecondary {
+        background-color: var(--bs-fontSecondary) !important;
+    }
+
+    /* Bordures personnalisées */
+    .border-vert {
+        border-color: var(--bs-vert) !important;
+    }
+
+    .border-jaune {
+        border-color: var(--bs-jaune) !important;
+    }
+
+    .border-rouge {
+        border-color: var(--bs-rouge) !important;
+    }
+
+    .border-font {
+        border-color: var(--bs-font) !important;
+    }
+
+    .border-text {
+        border-color: var(--bs-text) !important;
+    }
+
+    .border-fontSecondary {
+        border-color: var(--bs-fontSecondary) !important;
+    }
+
+    /* Boutons personnalisés */
+    .btn-vert {
+        color: var(--bs-font);
+        background-color: var(--bs-vert);
+        border-color: var(--bs-vert);
+    }
+
+    .btn-vert:hover {
+        color: var(--bs-font);
+        background-color: #3e8e41;
+        border-color: #3e8e41;
+    }
+
+    .btn-jaune {
+        color: var(--bs-text);
+        background-color: var(--bs-jaune);
+        border-color: var(--bs-jaune);
+    }
+
+    .btn-jaune:hover {
+        color: var(--bs-text);
+        background-color: #e6ac00;
+        border-color: #e6ac00;
+    }
+
+    .btn-rouge {
+        color: var(--bs-font);
+        background-color: var(--bs-rouge);
+        border-color: var(--bs-rouge);
+    }
+
+    .btn-rouge:hover {
+        color: var(--bs-font);
+        background-color: #c21f35;
+        border-color: #c21f35;
+    }
+
+    /* Badges personnalisés */
+    .badge-vert {
+        color: var(--bs-font);
+        background-color: var(--bs-vert);
+    }
+
+    .badge-jaune {
+        color: var(--bs-text);
+        background-color: var(--bs-jaune);
+    }
+
+    .badge-rouge {
+        color: var(--bs-font);
+        background-color: var(--bs-rouge);
+    }
+
+    /* Alertes personnalisées */
+    .alert-vert {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+
+    .alert-jaune {
+        color: #856404;
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+    }
+
+    .alert-rouge {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+
+    /* Classes utilitaires supplémentaires */
+    .hover-vert:hover {
+        color: var(--bs-vert) !important;
+    }
+
+    .hover-bg-vert:hover {
+        background-color: var(--bs-vert) !important;
+    }
+
+    .hover-border-vert:hover {
+        border-color: var(--bs-vert) !important;
+    }
+
+    .link-vert {
+        color: var(--bs-vert);
+        text-decoration: none;
+    }
+
+    .link-vert:hover {
+        color: #3e8e41;
+        text-decoration: underline;
+    }
+    .plat-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+    .plat-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
-    .empty-state {
+    .square-img-container {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+        border-radius: 10px 10px 0 0;
+    }
+    .square-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .square-img-placeholder {
+        width: 100%;
+        height: 100%;
+        background: var(--bs-jaune);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+    .square-img-placeholder p {
+        margin: 0;
+        font-size: 0.7rem;
+    }
+    .img-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: var(--bs-jaune);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.7rem;
+        font-weight: bold;
+    }
+    .promotion-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: var(--bs-vert);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.7rem;
+        font-weight: bold;
+        z-index: 10;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .guide-card {
         max-width: 500px;
         margin: 0 auto;
     }
-    .text-truncate {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
 </style>
 {% endblock %}
-

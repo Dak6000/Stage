@@ -1,0 +1,587 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ plat.nom }} - Détails{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+
+<div class="container mt-4">
+    <div class="auth-card card border-0 shadow-lg">
+        <div class="card-header py-3 auth-card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-utensils me-2"></i>{{ plat.nom }}
+                    {% if plat.est_en_promotion %}
+                    <span class="badge bg-warning ms-2">
+                        <i class="fas fa-fire me-1"></i>EN PROMOTION
+                    </span>
+                    {% endif %}
+                </h3>
+                <div class="d-flex align-items-center">
+                    <!-- Note moyenne -->
+                    {% if plat.note_moyenne > 0 %}
+                    <div class="rating-display me-3">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= plat.get_note_etoiles %}
+                                <i class="fas fa-star text-jaune"></i>
+                            {% else %}
+                                <i class="far fa-star text-muted"></i>
+                            {% endif %}
+                        {% endfor %}
+                        <span class="ms-2 fw-bold">{{ plat.get_note_display }}</span>
+                        <small class="text-muted">({{ plat.nombre_avis }} avis)</small>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Bouton pour voir les avis -->
+                    <a href="{% url 'avis:avis-plat-public' plat.pk %}" class="btn btn-vert btn-sm">
+                        <i class="fas fa-star me-1"></i>Voir les avis
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-4">
+            <!-- En-tête du plat -->
+            <div class="row align-items-center mb-4">
+                <div class="col-md-8">
+                    <h4 class="text-vert mb-2">{{ plat.nom }}</h4>
+                    <p class="text-text mb-3">{{ plat.description }}</p>
+                    <div class="mb-3">
+                        <span class="badge bg-vert me-2">{{ plat.get_categorie_display }}</span>
+                        <span class="badge bg-jaune me-2">{{ plat.get_difficulte_display }}</span>
+                        {% if plat.disponibilite %}
+                            <span class="badge bg-vert">Disponible</span>
+                        {% else %}
+                            <span class="badge bg-rouge">Non disponible</span>
+                        {% endif %}
+                        {% if plat.est_en_promotion %}
+                            <span class="badge bg-danger">
+                                <i class="fas fa-fire me-1"></i>Promotion
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    {% if plat.est_en_promotion %}
+                    <div class="promotion-price-section">
+                        <div class="original-price text-rouge text-decoration-line-through">
+                            {{ plat.prix }} FCFA
+                        </div>
+                        <div class="promotion-price h3 text-vert fw-bold">
+                            {{ plat.get_prix_promotionnel|floatformat:2 }} FCFA
+                        </div>
+                        <div class="economy-badge">
+                            <span class="badge bg-vert">
+                                Économisez {{ plat.get_economie|floatformat:2 }} FCFA
+                            </span>
+                        </div>
+                        {% if plat.get_jours_restants_promotion > 0 %}
+                        <div class="days-remaining mt-2">
+                            <small class="text-jaune">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                Plus que {{ plat.get_jours_restants_promotion }} jour{{ plat.get_jours_restants_promotion|pluralize:"s" }}
+                            </small>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <div class="h3 text-vert fw-bold">{{ plat.prix }} FCFA</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Image et informations principales -->
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="square-img-container">
+                        {% if plat.photo %}
+                            <img src="{{ plat.photo.url }}" alt="{{ plat.nom }}" class="square-img">
+                        {% else %}
+                            <div class="square-img-placeholder">
+                                <i class="fas fa-utensils fa-4x"></i>
+                                <p class="mt-2">Aucune image disponible</p>
+                            </div>
+                        {% endif %}
+                        {% if plat.est_en_promotion %}
+                        <div class="promotion-badge">
+                            <i class="fas fa-fire"></i>
+                            {% if plat.pourcentage_reduction %}
+                                -{{ plat.pourcentage_reduction }}%
+                            {% else %}
+                                PROMO
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <!-- Informations principales -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Informations</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span><i class="fas fa-clock me-2"></i>Temps de préparation:</span>
+                                <strong>{{ plat.temps_preparation }} min</strong>
+                            </div>
+                            
+                            {% if plat.temps_cuisson %}
+                            <div class="d-flex justify-content-between mb-2">
+                                <span><i class="fas fa-fire me-2"></i>Temps de cuisson:</span>
+                                <strong>{{ plat.temps_cuisson }} min</strong>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="d-flex justify-content-between mb-2">
+                                <span><i class="fas fa-stopwatch me-2"></i>Temps total:</span>
+                                <strong>{{ temps_total }} min</strong>
+                            </div>
+                            
+                            {% if plat.calories %}
+                            <div class="d-flex justify-content-between mb-2">
+                                <span><i class="fas fa-burn me-2"></i>Calories:</span>
+                                <strong>{{ plat.calories }} kcal</strong>
+                            </div>
+                            {% endif %}
+                            
+                            {% if plat.portion %}
+                            <div class="d-flex justify-content-between mb-2">
+                                <span><i class="fas fa-weight me-2"></i>Portion:</span>
+                                <strong>{{ plat.portion }}</strong>
+                            </div>
+                            {% endif %}
+                            
+                            {% if plat.note_moyenne > 0 %}
+                            <div class="d-flex justify-content-between mb-2">
+                                <span><i class="fas fa-star me-2"></i>Note moyenne:</span>
+                                <strong>{{ plat.note_moyenne }}/5 ({{ plat.nombre_avis }} avis)</strong>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if plat.est_en_promotion %}
+                    <!-- Section Promotion -->
+                    <div class="promotion-card mb-4">
+                        <div class="promotion-header bg-vert text-font">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-tag me-2"></i>Offre promotionnelle
+                                </h5>
+                                <span class="badge bg-jaune text-text">
+                                    {% if plat.pourcentage_reduction %}
+                                        -{{ plat.pourcentage_reduction }}%
+                                    {% else %}
+                                        Prix spécial
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="promotion-body">
+                            {% if plat.description_promotion %}
+                            <div class="promotion-description mb-3">
+                                <i class="fas fa-info-circle me-2 text-jaune"></i>
+                                {{ plat.description_promotion }}
+                            </div>
+                            {% endif %}
+                            
+                            <div class="promotion-details">
+                                {% if plat.date_debut_promotion and plat.date_fin_promotion %}
+                                <div class="promotion-dates">
+                                    <div class="date-item">
+                                        <i class="fas fa-calendar-day text-jaune me-2"></i>
+                                        <div>
+                                            <small class="text-text">Début</small>
+                                            <div class="fw-bold">
+                                                {{ plat.date_debut_promotion|date:"d/m/Y à H:i" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="date-item">
+                                        <i class="fas fa-calendar-times text-jaune me-2"></i>
+                                        <div>
+                                            <small class="text-text">Fin</small>
+                                            <div class="fw-bold">
+                                                {{ plat.date_fin_promotion|date:"d/m/Y à H:i" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Compte à rebours -->
+                                <div class="promotion-countdown mt-3">
+                                    <small class="text-text">Temps restant :</small>
+                                    <div class="countdown-timer">
+                                        <span class="badge bg-jaune text-text" id="countdown-{{ plat.id }}"></span>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-warning mt-2">
+                                    <i class="fas fa-infinity me-2"></i>Promotion permanente
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if plat.ingredients %}
+                    <!-- Ingrédients -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-list-ul me-2"></i>Ingrédients</h5>
+                        </div>
+                        <div class="card-body">
+                            {{ plat.ingredients|linebreaks }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if plat.allergenes %}
+                    <!-- Allergènes -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Allergènes</h5>
+                        </div>
+                        <div class="card-body">
+                            {{ plat.allergenes }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Informations sur le créateur -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0 text-vert"><i class="fas fa-user me-2"></i>Créé par</h5>
+                        </div>
+                        <div class="card-body">
+                            <strong>{{ plat.createur.first_name }} {{ plat.createur.last_name }}</strong>
+                            <br>
+                            <small class="text-text">Créé le {{ plat.date_creation|date:"d/m/Y" }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section des avis récents -->
+            {% if plat.get_avis_recent %}
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-star me-2 text-warning"></i>Avis récents</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                {% for avis in plat.get_avis_recent %}
+                                <div class="col-12 mb-3">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <h6 class="card-title mb-1">
+                                                        <i class="fas fa-user me-2 text-success"></i>
+                                                        {{ avis.user.first_name }} {{ avis.user.last_name }}
+                                                    </h6>
+                                                    <small class="text-muted">
+                                                        <i class="fas fa-calendar-alt me-1"></i>
+                                                        {{ avis.get_date_relative }}
+                                                    </small>
+                                                </div>
+                                                <div class="rating-display">
+                                                    {% for i in "12345" %}
+                                                        {% if forloop.counter <= avis.note %}
+                                                            <i class="fas fa-star text-warning"></i>
+                                                        {% else %}
+                                                            <i class="far fa-star text-muted"></i>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            <div class="commentaire mt-2">
+                                                <p class="mb-0">{{ avis.commentaire|truncatechars:150 }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="text-center">
+                                <a href="{% url 'avis:avis-plat-public' plat.pk %}" class="btn btn-outline-success">
+                                    <i class="fas fa-star me-2"></i>Voir tous les avis
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Boutons d'action -->
+            <div class="d-flex justify-content-between mt-4">
+                {% if plat.est_en_promotion %}
+                    <a href="{% url 'plats:plats-promotion' %}" class="btn btn-rouge">
+                        <i class="fas fa-arrow-left me-2"></i>Retour
+                    </a>
+                {% elif user.is_authenticated and user == plat.createur %}
+                    <a href="{% url 'plats:plat-list' %}" class="btn btn-rouge">
+                        <i class="fas fa-arrow-left me-2"></i>Retour
+                    </a>
+                {% else %}
+                    <a href="{% url 'structures:structure' %}" class="btn btn-rouge">
+                        <i class="fas fa-arrow-left me-2"></i>Retour
+                    </a>
+                {% endif %}
+                
+                <div>
+                    <!-- Bouton pour ajouter un avis -->
+                    {% if user.is_authenticated %}
+                        {% if user_has_avis %}
+                            <a href="{% url 'avis:avis-update' user_avis.pk %}" class="btn btn-jaune btn-sm me-2">
+                                <i class="fas fa-edit me-1"></i>Modifier mon avis
+                            </a>
+                        {% else %}
+                            <a href="{% url 'avis:avis-create-plat' plat.pk %}" class="btn btn-jaune btn-sm me-2">
+                                <i class="fas fa-star me-1"></i>Laisser un avis
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                    
+                    {% if user.is_authenticated and user == plat.createur %}
+                    <a href="{% url 'plats:plat-update' plat.pk %}" class="btn btn-vert me-2">
+                        <i class="fas fa-edit me-2"></i>Modifier
+                    </a>
+                    <a href="{% url 'plats:plat-delete' plat.pk %}" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Supprimer
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .text-vert {
+        color: var(--bs-vert) !important;
+    }
+
+    .text-jaune {
+        color: var(--bs-jaune) !important;
+    }
+
+    .text-rouge {
+        color: var(--bs-rouge) !important;
+    }
+
+    .text-text {
+        color: var(--bs-text) !important;
+    }
+
+    .bg-vert {
+        background-color: var(--bs-vert) !important;
+    }
+
+    .text-rouge {
+        color: var(--bs-rouge) !important;
+    }
+
+    .bg-rouge {
+        background-color: var(--bs-rouge) !important;
+    }
+
+    .bg-vert {
+        background-color: var(--bs-vert) !important;
+    }
+
+    .bg-jaune {
+        background-color: var(--bs-jaune) !important;
+    }
+
+    .btn-jaune {
+        color: var(--bs-text);
+        background-color: var(--bs-jaune);
+        border-color: var(--bs-jaune);
+    }
+
+    .btn-jaune:hover {
+        color: var(--bs-jaune);
+        background-color: var(--bs-vert);
+        border-color: var(--bs-vert);
+    }
+
+    .btn-vert {
+        color: var(--bs-text);
+        background-color: var(--bs-vert);
+        border-color: var(--bs-vert);
+    }
+
+    .btn-vert:hover {
+        color: var(--bs-vert);
+        background-color: var(--bs-jaune);
+        border-color: var(--bs-jaune);
+    }
+
+    .btn-rouge {
+        color: var(--bs-text);
+        background-color: var(--bs-rouge);
+        border-color: var(--bs-rouge);
+    }
+
+    .btn-rouge:hover {
+        color: var(--bs-rouge);
+        background-color: var(--bs-jaune);
+        border-color: var(--bs-jaune);
+    }
+
+    .square-img-container {
+        position: relative;
+        height: 350px;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .square-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .square-img-placeholder {
+        width: 100%;
+        height: 100%;
+        background: var(--bs-jaune);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+    .square-img-placeholder p {
+        margin: 0;
+        font-size: 1.1rem;
+    }
+    .rating-display {
+        display: flex;
+        align-items: center;
+    }
+    .rating-display i {
+        font-size: 1.1rem;
+        margin-right: 0.1rem;
+    }
+    .commentaire {
+        background-color: #f8f9fa;
+        padding: 0.75rem;
+        border-radius: 8px;
+        border-left: 4px solid #28a745;
+    }
+
+    .promotion-card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border: 1px solid var(--bs-vert);
+    }
+    
+    .promotion-header {
+        padding: 12px 20px;
+        background: linear-gradient(135deg, var(--bs-vert) 0%, #3e8e41 100%);
+    }
+    
+    .promotion-body {
+        padding: 20px;
+        background-color: var(--bs-font);
+    }
+    
+    .promotion-description {
+        background-color: rgba(244, 180, 0, 0.1);
+        padding: 10px 15px;
+        border-radius: 8px;
+        border-left: 3px solid var(--bs-jaune);
+    }
+    
+    .price-comparison {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .original-price {
+        font-size: 1.1rem;
+    }
+    
+    .promo-price {
+        font-size: 1.5rem;
+    }
+    
+    .promotion-dates {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 15px;
+    }
+    
+    .date-item {
+        display: flex;
+        align-items: center;
+        background-color: rgba(244, 180, 0, 0.05);
+        padding: 10px;
+        border-radius: 8px;
+    }
+    
+    .promotion-countdown {
+        text-align: center;
+        margin-top: 10px;
+    }
+    
+    @media (max-width: 576px) {
+        .promotion-dates {
+            grid-template-columns: 1fr;
+        }
+        
+        .price-comparison {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+    }
+</style>
+
+{% if plat.date_fin_promotion %}
+<script>
+    // Compte à rebours pour la promotion
+    function updateCountdown(endDateStr, elementId) {
+        const now = new Date();
+        const end = new Date(endDateStr.replace(' ', 'T'));
+        const diff = end - now;
+        
+        if (diff <= 0) {
+            document.getElementById(elementId).textContent = "Promotion terminée";
+            return;
+        }
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        
+        let text = "";
+        if (days > 0) text += `${days}j `;
+        text += `${hours}h ${minutes}m`;
+        
+        document.getElementById(elementId).textContent = text;
+    }
+    
+    // Mise à jour toutes les minutes
+    updateCountdown("{{ plat.date_fin_promotion|date:'Y-m-d H:i:s' }}", "countdown-{{ plat.id }}");
+    setInterval(function() {
+        updateCountdown("{{ plat.date_fin_promotion|date:'Y-m-d H:i:s' }}", "countdown-{{ plat.id }}");
+    }, 60000);
+</script>
+{% endif %}
+{% endblock %}

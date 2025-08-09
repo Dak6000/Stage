@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Plats en Promotion - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/promotions.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="promotion-header text-center mb-5">
+                <h1 class="display-4 fw-bold text-vert">
+                    <i class="fas fa-tags me-3"></i>Plats en Promotion
+                </h1>
+                <p class="lead text-muted">Découvrez nos offres spéciales et économisez sur vos plats préférés !</p>
+            </div>
+        </div>
+    </div>
+
+    {% if plats_promotion %}
+    <div class="row">
+        {% for plat in plats_promotion %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 promotion-card border-0 shadow-lg">
+                <!-- Badge de promotion -->
+                <div class="promotion-badge">
+                    <i class="fas fa-fire"></i>
+                    {% if plat.pourcentage_reduction %}
+                        -{{ plat.pourcentage_reduction }}%
+                    {% else %}
+                        PROMO
+                    {% endif %}
+                </div>
+                
+                <!-- Image du plat -->
+                <div class="promotion-image-container">
+                    {% if plat.photo %}
+                    <img src="{{ plat.photo.url }}" class="card-img-top promotion-image" alt="{{ plat.nom }}">
+                    {% else %}
+                    <div class="promotion-placeholder">
+                        <i class="fas fa-utensils fa-3x"></i>
+                        <p>Aucune image</p>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ plat.nom }}</h5>
+                    <p class="card-text text-muted">{{ plat.description|truncatechars:100 }}</p>
+                    
+                    <!-- Prix -->
+                    <div class="price-section">
+                        {% if plat.est_en_promotion %}
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="original-price text-rouge text-decoration-line-through">
+                                    {{ plat.prix }} FCFA
+                                </span>
+                                <br>
+                                <span class="promotion-price fw-bold text-vert fs-5">
+                                    {{ plat.get_prix_promotionnel }} FCFA
+                                </span>
+                            </div>
+                            <div class="economy-badge">
+                                <span class="badge bg-vert">
+                                    Économisez {{ plat.get_economie }} FCFA
+                                </span>
+                            </div>
+                        </div>
+                        {% else %}
+                        <span class="price fw-bold">{{ plat.prix }} FCFA</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Informations supplémentaires -->
+                    <div class="plat-info mt-3">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>
+                                    {{ plat.temps_preparation|default:"15" }} min
+                                </small>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted">
+                                    <i class="fas fa-star me-1"></i>
+                                    {{ plat.note_moyenne|floatformat:1 }}/5
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Jours restants -->
+                    {% if plat.get_jours_restants_promotion > 0 %}
+                    <div class="days-remaining mt-2">
+                        <small class="text-warning">
+                            <i class="fas fa-calendar-alt me-1"></i>
+                            Plus que {{ plat.get_jours_restants_promotion }} jour{{ plat.get_jours_restants_promotion|pluralize:"s" }}
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="card-footer bg-transparent border-0">
+                    <div class="d-grid">
+                        <a href="{% url 'plats:plat-detail' plat.pk %}" class="btn btn-jaune">
+                            <i class="fas fa-eye me-2"></i>Voir les détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center py-5">
+                <div class="empty-state">
+                    <i class="fas fa-tags fa-4x text-muted mb-3"></i>
+                    <h3>Aucune promotion disponible</h3>
+                    <p class="text-muted">Revenez bientôt pour découvrir nos offres spéciales !</p>
+                    <a href="{% url 'plats:plat-list' %}" class="btn btn-primary">
+                        <i class="fas fa-utensils me-2"></i>Voir tous les plats
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.text-vert {
+    color: var(--bs-vert) !important;
+}
+
+.bg-vert {
+    background-color: var(--bs-vert) !important;
+}
+
+.text-rouge {
+    color: var(--bs-rouge) !important;
+}
+
+.bg-rouge {
+    background-color: var(--bs-rouge) !important;
+}
+
+.btn-jaune {
+    color: var(--bs-text);
+    background-color: var(--bs-jaune);
+    border-color: var(--bs-jaune);
+}
+
+.btn-jaune:hover {
+    color: var(--bs-jaune);
+    background-color: var(--bs-vert);
+    border-color: var(--bs-vert);
+}
+
+.promotion-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.promotion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.promotion-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--bs-vert);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    z-index: 10;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.promotion-image-container {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.promotion-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.promotion-card:hover .promotion-image {
+    transform: scale(1.05);
+}
+
+.promotion-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.promotion-placeholder p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.original-price {
+    font-size: 0.9rem;
+}
+
+.promotion-price {
+    color: var(--bs-vert);
+}
+
+.economy-badge {
+    text-align: right;
+}
+
+.plat-info {
+    border-top: 1px solid #f8f9fa;
+    padding-top: 15px;
+}
+
+.days-remaining {
+    text-align: center;
+    padding: 8px;
+    background: #fff3cd;
+    border-radius: 8px;
+    border: 1px solid #ffeaa7;
+}
+
+.empty-state {
+    max-width: 500px;
+    margin: 0 auto;
+}
+</style>
+{% endblock %}

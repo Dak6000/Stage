@@ -9,7 +9,7 @@
 
 {% block content %}
 <!-- Hero Section du restaurant -->
-<section class="restaurant-hero" style="background-image: url('{% if structure.photo %}{{ structure.photo.url }}{% else %}{% static 'images/restaurant-bg1.jpg' %}{% endif %}');">
+<section class="restaurant-hero" style="background-image: url('{{ hero_bg_url }}');">
     <div class="restaurant-hero-content">
         <h1 class="restaurant-name">{{ structure.nom }}</h1>
         <p class="restaurant-subtitle">{{ structure.description|default:"Découvrez nos délicieuses spécialités" }}</p>
@@ -26,6 +26,13 @@
                 <i class="fas fa-clock"></i>
                 <span>{{ structure.heure_ouverture|default:"--" }} - {{ structure.heure_fermeture|default:"--" }}</span>
             </div>
+            <div class="restaurant-info-item">
+                {% if structure.note_moyenne %}
+                <div class="structure-rating">
+                    <i class="fas fa-star me-1"></i>{{ structure.note_moyenne|floatformat:1 }}
+                </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </section>
@@ -38,149 +45,51 @@
             <p class="menu-subtitle">Découvrez nos délicieuses spécialités</p>
         </div>
 
-        <!-- Catégories de menu -->
+        <!-- Catégories de menu dynamiques -->
+        {% if categories %}
         <div class="menu-categories">
-            <a href="#entrees" class="category-tab active">Entrées</a>
-            <a href="#plats" class="category-tab">Plats principaux</a>
-            <a href="#desserts" class="category-tab">Desserts</a>
-            <a href="#boissons" class="category-tab">Boissons</a>
+            {% for cat in categories %}
+            <a href="#cat-{{ cat.key }}" class="category-tab {% if forloop.first %}active{% endif %}">{{ cat.label }}</a>
+            {% endfor %}
         </div>
+        {% endif %}
 
         {% if plats %}
-        <!-- Section Entrées -->
-        <div class="menu-section" id="entrees">
-            <h3 class="section-title">Entrées</h3>
-            <div class="row">
-                {% for plat in plats %}
-                    {% if plat.categorie == "entree" %}
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="plat-card" data-bs-toggle="modal" data-bs-target="#platModal" 
-                            onclick="showPlatDetails('{{ plat.id }}', '{{ plat.nom }}', '{{ plat.description|default:"Aucune description"|escapejs }}', '{{ plat.prix }}', '{{ plat.get_categorie_display|default:"Aucune catégorie"|escapejs }}', '{% if plat.photo %}{{ plat.photo.url }}{% else %}{% static "img/default-food.jpg" %}{% endif %}')">
-                            <div class="plat-image">
-                                {% if plat.photo %}
-                                <img src="{{ plat.photo.url }}" alt="{{ plat.nom }}">
-                                {% else %}
-                                <div class="d-flex align-items-center justify-content-center h-100" style="background: var(--bs-jaune)">
-                                    <i class="fas fa-utensils fa-3x text-white"></i>
+        {% if categories %}
+            {% for cat in categories %}
+            <div class="menu-section" id="cat-{{ cat.key }}">
+                <h3 class="section-title">{{ cat.label }}</h3>
+                <div class="row">
+                    {% for plat in plats %}
+                        {% if plat.categorie == cat.key %}
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <a class="plat-card text-decoration-none" href="{% url 'plats:plat-detail' plat.pk %}">
+                                <div class="plat-image">
+                                    {% if plat.photo %}
+                                    <img src="{{ plat.photo.url }}" alt="{{ plat.nom }}">
+                                    {% else %}
+                                    <div class="d-flex align-items-center justify-content-center h-100" style="background: var(--bs-jaune)">
+                                        <i class="fas fa-utensils fa-3x text-white"></i>
+                                    </div>
+                                    {% endif %}
+                                    <div class="plat-badge">{{ plat.get_categorie_display }}</div>
                                 </div>
-                                {% endif %}
-                                <div class="plat-badge">{{ plat.get_categorie_display }}</div>
-                            </div>
-                            <div class="plat-content">
-                                <h4 class="plat-name">{{ plat.nom }}</h4>
-                                <p class="plat-description">{{ plat.description|truncatechars:80 }}</p>
-                                <div class="plat-details">
-                                    <span class="plat-price">{{ plat.prix }} FCFA</span>
-                                    <span class="plat-time">15 min</span>
+                                <div class="plat-content">
+                                    <h4 class="plat-name">{{ plat.nom }}</h4>
+                                    <p class="plat-description">{{ plat.description|truncatechars:80 }}</p>
+                                    <div class="plat-details">
+                                        <span class="plat-price">{{ plat.prix }} FCFA</span>
+                                        <span class="plat-time">15 min</span>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-
-        <!-- Section Plats principaux -->
-        <div class="menu-section" id="plats">
-            <h3 class="section-title">Plats principaux</h3>
-            <div class="row">
-                {% for plat in plats %}
-                    {% if plat.categorie == "plat" %}
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="plat-card" data-bs-toggle="modal" data-bs-target="#platModal" 
-                            onclick="showPlatDetails('{{ plat.id }}', '{{ plat.nom }}', '{{ plat.description|default:"Aucune description"|escapejs }}', '{{ plat.prix }}', '{{ plat.get_categorie_display|default:"Aucune catégorie"|escapejs }}', '{% if plat.photo %}{{ plat.photo.url }}{% else %}{% static "img/default-food.jpg" %}{% endif %}')">
-                            <div class="plat-image">
-                                {% if plat.photo %}
-                                <img src="{{ plat.photo.url }}" alt="{{ plat.nom }}">
-                                {% else %}
-                                <div class="d-flex align-items-center justify-content-center h-100" style="background: var(--bs-jaune)">
-                                    <i class="fas fa-utensils fa-3x text-white"></i>
-                                </div>
-                                {% endif %}
-                                <div class="plat-badge">{{ plat.get_categorie_display }}</div>
-                            </div>
-                            <div class="plat-content">
-                                <h4 class="plat-name">{{ plat.nom }}</h4>
-                                <p class="plat-description">{{ plat.description|truncatechars:80 }}</p>
-                                <div class="plat-details">
-                                    <span class="plat-price">{{ plat.prix }} FCFA</span>
-                                    <span class="plat-time">25 min</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Section Desserts -->
-        <div class="menu-section" id="desserts">
-            <h3 class="section-title">Desserts</h3>
-            <div class="row">
-                {% for plat in plats %}
-                    {% if plat.categorie == "dessert" %}
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="plat-card" data-bs-toggle="modal" data-bs-target="#platModal" 
-                            onclick="showPlatDetails('{{ plat.id }}', '{{ plat.nom }}', '{{ plat.description|default:"Aucune description"|escapejs }}', '{{ plat.prix }}', '{{ plat.get_categorie_display|default:"Aucune catégorie"|escapejs }}', '{% if plat.photo %}{{ plat.photo.url }}{% else %}{% static "img/default-food.jpg" %}{% endif %}')">
-                            <div class="plat-image">
-                                {% if plat.photo %}
-                                <img src="{{ plat.photo.url }}" alt="{{ plat.nom }}">
-                                {% else %}
-                                <div class="d-flex align-items-center justify-content-center h-100" style="background: var(--bs-jaune)">
-                                    <i class="fas fa-utensils fa-3x text-white"></i>
-                                </div>
-                                {% endif %}
-                                <div class="plat-badge">{{ plat.get_categorie_display }}</div>
-                            </div>
-                            <div class="plat-content">
-                                <h4 class="plat-name">{{ plat.nom }}</h4>
-                                <p class="plat-description">{{ plat.description|truncatechars:80 }}</p>
-                                <div class="plat-details">
-                                    <span class="plat-price">{{ plat.prix }} FCFA</span>
-                                    <span class="plat-time">10 min</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Section Boissons -->
-        <div class="menu-section" id="boissons">
-            <h3 class="section-title">Boissons</h3>
-            <div class="row">
-                {% for plat in plats %}
-                    {% if plat.categorie == "boisson" %}
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="plat-card" data-bs-toggle="modal" data-bs-target="#platModal" onclick="showPlatDetails('{{ plat.id }}', '{{ plat.nom }}', '{{ plat.description|default:"Aucune description"|escapejs }}', '{{ plat.prix }}', '{{ plat.get_categorie_display|default:"Aucune catégorie"|escapejs }}', '{% if plat.photo %}{{ plat.photo.url }}{% else %}{% static "img/default-food.jpg" %}{% endif %}')">
-                            <div class="plat-image">
-                                {% if plat.photo %}
-                                <img src="{{ plat.photo.url }}" alt="{{ plat.nom }}">
-                                {% else %}
-                                <div class="d-flex align-items-center justify-content-center h-100" style="background: var(--bs-jaune)">
-                                    <i class="fas fa-utensils fa-3x text-white"></i>
-                                </div>
-                                {% endif %}
-                                <div class="plat-badge">{{ plat.get_categorie_display }}</div>
-                            </div>
-                            <div class="plat-content">
-                                <h4 class="plat-name">{{ plat.nom }}</h4>
-                                <p class="plat-description">{{ plat.description|truncatechars:80 }}</p>
-                                <div class="plat-details">
-                                    <span class="plat-price">{{ plat.prix }} FCFA</span>
-                                    <span class="plat-time">Disponible</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
+            {% endfor %}
+        {% endif %}
         {% else %}
         <div class="text-center py-5">
             <div class="guide-card">
@@ -265,124 +174,66 @@
 
         <!-- Boutons d'action -->
         <div class="action-buttons">
-            <a href="{% url 'structures:structure' %}" class="action-btn btn-secondary-action">
+            <a href="{% url 'structures:structure' %}" class="action-btn btn-rouge">
                 <i class="fas fa-arrow-left"></i>Retour
             </a>
-            
+            {% if user.is_authenticated %}
+                {% if user_has_avis %}
+                    <a href="{% url 'avis:avis-update' user_avis.pk %}" class="action-btn btn-jaune">
+                        <i class="fas fa-edit"></i> Modifier mon avis
+                    </a>
+                {% else %}
+                    <a href="{% url 'avis:avis-create-structure' structure.pk %}" class="action-btn btn-vert">
+                        <i class="fas fa-star"></i> Laisser un avis
+                    </a>
+                {% endif %}
+            {% endif %}
         </div>
     </div>
 </section>
 
-<!-- Modal pour afficher les détails du plat -->
-<div class="modal fade menu-modal" id="platModal" tabindex="-1" aria-labelledby="platModalLabel" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="platModalLabel">Détails du plat</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="platModalBody">
-                <!-- Contenu dynamique sera inséré ici -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Variables globales pour le modal
-    let currentModal = null;
-    
-    function showPlatDetails(id, nom, description, prix, categorie, imageUrl) {
-        // Mettre à jour le titre du modal
-        document.getElementById('platModalLabel').textContent = nom;
-
-        // Préparer le contenu du modal
-        const modalBody = document.getElementById('platModalBody');
-        modalBody.innerHTML = `
-            <div class="row align-items-start">
-                <div class="col-md-5 mb-3">
-                    <div class="modal-image-container">
-                        <img src="${imageUrl}" alt="${nom}" class="modal-img" onerror="this.src='{% static 'img/default-food.jpg' %}'">
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <div class="modal-info">
-                        <div class="modal-info-item">
-                            <span class="modal-info-value">${nom}</span>
-                        </div>
-                        <div class="modal-info-item">
-                            <span class="modal-info-value price-value">${prix} FCFA</span>
-                        </div>
-                        <div class="modal-info-item">
-                            <span class="modal-info-value category-value">${categorie}</span>
-                        </div>
-                        <div class="modal-info-item description-item">
-                            <span class="modal-info-value description-value">${description}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        // Afficher le modal
-        currentModal = new bootstrap.Modal(document.getElementById('platModal'));
-        currentModal.show();
+<style>
+    .btn-jaune {
+        color: var(--bs-text);
+        background-color: var(--bs-jaune);
+        border-color: var(--bs-jaune);
+        border-radius: 15px;
     }
 
-    // Gestion des événements du modal
-    document.addEventListener('DOMContentLoaded', function() {
-        const modal = document.getElementById('platModal');
-        
-        // Événement quand le modal se ferme
-        modal.addEventListener('hidden.bs.modal', function () {
-            // Nettoyer le contenu du modal
-            document.getElementById('platModalBody').innerHTML = '';
-            document.getElementById('platModalLabel').textContent = 'Détails du plat';
-            currentModal = null;
-            
-            // Rafraîchir automatiquement la page
-            setTimeout(function() {
-                window.location.reload();
-            }, 300);
-        });
+    .btn-jaune:hover {
+        color: var(--bs-jaune);
+        background-color: var(--bs-vert);
+        border-color: var(--bs-vert);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-        // Événement quand le modal s'ouvre
-        modal.addEventListener('shown.bs.modal', function () {
-            // Focus sur le bouton fermer pour l'accessibilité
-            modal.querySelector('.btn-close').focus();
-        });
+    .btn-vert {
+        color: var(--bs-text);
+        background-color: var(--bs-vert);
+        border-color: var(--bs-vert);
+        border-radius: 15px;
+    }
 
-        // Navigation des catégories
-        const categoryTabs = document.querySelectorAll('.category-tab');
-        
-        categoryTabs.forEach(tab => {
-            tab.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Retirer la classe active de tous les onglets
-                categoryTabs.forEach(t => t.classList.remove('active'));
-                
-                // Ajouter la classe active à l'onglet cliqué
-                this.classList.add('active');
-                
-                // Faire défiler vers la section correspondante
-                const targetId = this.getAttribute('href').substring(1);
-                const targetSection = document.getElementById(targetId);
-                if (targetSection) {
-                    targetSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
+    .btn-vert:hover {
+        color: var(--bs-vert);
+        background-color: var(--bs-jaune);
+        border-color: var(--bs-jaune);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-        // Fermer le modal avec la touche Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && currentModal) {
-                currentModal.hide();
-            }
-        });
-    });
-</script>
+    .btn-rouge {
+        color: var(--bs-jaune);
+        background-color: var(--bs-rouge);
+        border-color: var(--bs-rouge);
+        border-radius: 15px;
+    }
+
+    .btn-rouge:hover {
+        color: var(--bs-rouge);
+        background-color: var(--bs-jaune);
+        border-color: var(--bs-jaune);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
 {% endblock %}

@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'avis.apps.AvisConfig',
     'menus.apps.MenusConfig',
     'plats.apps.PlatsConfig',
-    'promotions.apps.PromotionsConfig',
     'structures.apps.StructuresConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,8 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'crispy_forms',
-    #'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +52,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
 ]
 
 ROOT_URLCONF = 'E_Menu.urls'
@@ -142,8 +138,8 @@ STATICFILES_DIRS = [
 ]
 
 # Media files (user-uploaded files)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/photos/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'photos')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -156,10 +152,5 @@ LOGIN_URL = 'login'
 
 LOGOUT_REDIRECT_URL = 'accounts:login'  # Redirection après déconnexion
 
-MEDIA_URL = '/photos/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'photos')
-
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

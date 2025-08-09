@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Avis sur {{ plat.nom }} - {{ block.super }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/avis.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-success text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-0">
+                                <i class="fas fa-star me-2"></i>Avis sur {{ plat.nom }}
+                            </h4>
+                            <small class="text-light">
+                                <i class="fas fa-utensils me-1"></i>{{ plat.get_categorie_display }} - {{ plat.createur.first_name }} {{ plat.createur.last_name }}
+                            </small>
+                        </div>
+                        <div class="text-end">
+                            <div class="rating-display">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= plat.get_note_etoiles %}
+                                        <i class="fas fa-star text-warning"></i>
+                                    {% else %}
+                                        <i class="far fa-star text-light"></i>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="ms-2 fw-bold">{{ plat.get_note_display }}</span>
+                            </div>
+                            <small class="text-light">{{ avis_count }} avis</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Statistiques des avis -->
+                    <div class="avis-stats">
+                        <div class="avis-stats-header"><i class="fas fa-chart-bar me-2"></i>Statistiques des avis</div>
+                        <div class="avis-stats-grid">
+                            <div class="avis-stat-item">
+                                <div class="avis-stat-number">{{ plat.note_moyenne }}</div>
+                                <div class="avis-stat-label">Note moyenne</div>
+                            </div>
+                            <div class="avis-stat-item">
+                                <div class="avis-stat-number">{{ avis_count }}</div>
+                                <div class="avis-stat-label">Nombre d'avis</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bouton pour ajouter un avis -->
+                    {% if user.is_authenticated %}
+                        {% if user_has_avis %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Vous avez déjà laissé un avis pour ce plat.
+                                <a href="{% url 'avis:avis-update' user_avis.pk %}" class="btn btn-sm btn-outline-success ms-2">
+                                    <i class="fas fa-edit me-1"></i>Modifier
+                                </a>
+                            </div>
+                        {% else %}
+                            <div class="text-center mb-4">
+                                <a href="{% url 'avis:avis-create-plat' plat.pk %}" class="btn btn-success">
+                                    <i class="fas fa-star me-2"></i>Laisser un avis
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-warning text-center">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Vous devez être connecté pour laisser un avis.
+                            <a href="{% url 'accounts:login' %}" class="btn btn-sm btn-outline-warning ms-2">
+                                <i class="fas fa-sign-in-alt me-1"></i>Se connecter
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    <!-- Liste des avis -->
+                    {% if page_obj %}
+                        <div class="row">
+                            {% for avis in page_obj %}
+                            <div class="col-12 mb-4">
+                                <div class="avis-card">
+                                    <div class="card-body p-0">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h6 class="mb-1 avis-user-name">
+                                                    <i class="fas fa-user me-2 text-success"></i>
+                                                    {{ avis.user.first_name }} {{ avis.user.last_name }}
+                                                </h6>
+                                                <small class="avis-date">
+                                                    <i class="fas fa-calendar-alt me-1"></i>
+                                                    {{ avis.get_date_relative }}
+                                                </small>
+                                            </div>
+                                            <div class="avis-rating">
+                                                <div class="avis-stars">
+                                                    {% for i in "12345" %}
+                                                        {% if forloop.counter <= avis.note %}
+                                                            <i class="fas fa-star"></i>
+                                                        {% else %}
+                                                            <i class="far fa-star"></i>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                <span class="avis-rating-text ms-2">{{ avis.get_note_display }}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="avis-content">
+                                            <p class="mb-0">{{ avis.commentaire }}</p>
+                                        </div>
+                                        
+                                        <!-- Actions -->
+                                        {% if user.is_authenticated and user != avis.user %}
+                                        <div class="mt-3">
+                                            <form method="POST" action="{% url 'avis:avis-signal' avis.pk %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-avis-primary" onclick="return confirm('Êtes-vous sûr de vouloir signaler cet avis ?')">
+                                                    <i class="fas fa-flag me-1"></i>Signaler
+                                                </button>
+                                            </form>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Pagination -->
+                        {% if page_obj.has_other_pages %}
+                        <nav aria-label="Pagination des avis">
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                
+                                {% for num in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == num %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ num }}</span>
+                                        </li>
+                                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-5">
+                            <div class="empty-state">
+                                <i class="fas fa-star fa-4x text-muted mb-3"></i>
+                                <h4>Aucun avis disponible</h4>
+                                <p class="text-muted">Soyez le premier à laisser un avis sur ce plat !</p>
+                                {% if user.is_authenticated %}
+                                    <a href="{% url 'avis:avis-create-plat' plat.pk %}" class="btn btn-success">
+                                        <i class="fas fa-star me-2"></i>Laisser un avis
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.rating-display {
+    display: flex;
+    align-items: center;
+}
+
+.rating-display i {
+    font-size: 1.2rem;
+    margin-right: 0.1rem;
+}
+
+.commentaire {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+}
+
+.empty-state {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+</style>
+{% endblock %}

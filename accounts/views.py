@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model, authenticate, login, logout, upd
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.db.models import Q
 
 from accounts.forms import UserLoginForm, UserRegistrationForm, UserUpdateForm, CustomPasswordChangeForm, UserDeleteForm
 from accounts.models import UserLoginHistory
@@ -115,6 +116,16 @@ def home_view(request):
     featured_plats = Plats.objects.all().order_by('-id')[:8]
     nom_plats = Plats.objects.values_list('nom', flat=True).distinct()
     plat_categories = Plats.objects.values_list('categorie', flat=True).distinct()
+    
+    # Plats en promotion
+    plats_promotion = Plats.objects.filter(
+        en_promotion=True,
+        disponibilite=True
+    ).filter(
+        Q(date_debut_promotion__lte=timezone.now()) | Q(date_debut_promotion__isnull=True)
+    ).filter(
+        Q(date_fin_promotion__gte=timezone.now()) | Q(date_fin_promotion__isnull=True)
+    ).order_by('-date_creation')[:6]
 
     context = {
         # Structures
@@ -126,6 +137,9 @@ def home_view(request):
         'featured_plats': featured_plats,
         'nom_plats': nom_plats,
         'plat_categories': plat_categories,
+        
+        # Promotions
+        'plats_promotion': plats_promotion,
     }
     return render(request, 'index.html', context)
 
