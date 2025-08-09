@@ -15,12 +15,13 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('role', 'admin')
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Le superuser doit avoir is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Le superuser doit avoir is_superuser=True.')
-
+        
+        # Ajoutez les champs requis si non fournis
+        if 'first_name' not in extra_fields:
+            extra_fields['first_name'] = 'Admin'
+        if 'last_name' not in extra_fields:
+            extra_fields['last_name'] = 'User'
+        
         return self.create_user(email, password, **extra_fields)
 
 class User(AbstractUser):
