@@ -23,8 +23,16 @@ def menu_create(request):
             menu = form.save(commit=False)
             menu.createur = request.user
             # Associer automatiquement à la structure de l'utilisateur
-            menu.structure = request.user.structure.first()
+            user_structure = request.user.structure.first()
+            if not user_structure:
+                messages.error(request, "Vous devez d'abord créer votre structure avant de créer un menu.")
+                return redirect('structures:register-structure')
+            menu.structure = user_structure
             menu.save()
+            # Enregistrer les liaisons de plats si fournies
+            form_plats = form.cleaned_data.get('plats')
+            if form_plats is not None:
+                menu.plats.set(form_plats)
             messages.success(request, 'Menu créé avec succès!')
             return redirect('menus:menus-list')
     else:
@@ -37,11 +45,15 @@ def menu_create(request):
 
 @login_required
 def menu_update(request, pk):
-    menu = get_object_or_404(Menus, pk=pk)
+    menu = get_object_or_404(Menus, pk=pk, createur=request.user)
     if request.method == 'POST':
         form = MenuForm(request.POST, instance=menu, user=request.user)
         if form.is_valid():
             menu = form.save()  # Sauvegarde l'instance principale
+            # Mettre à jour les plats associés
+            form_plats = form.cleaned_data.get('plats')
+            if form_plats is not None:
+                menu.plats.set(form_plats)
             messages.success(request, 'Le menu a été mis à jour avec succès.')
             return redirect('menus:menus-list')
     else:

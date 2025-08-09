@@ -37,8 +37,8 @@ class Structures(models.Model):
 
     def clean(self):
         # Limiter à 1 structure par utilisateur
-        if self.user:
-            qs = Structures.objects.filter(user=self.user)
+        if self.user_id:
+            qs = Structures.objects.filter(user_id=self.user_id)
             if self.pk:
                 qs = qs.exclude(pk=self.pk)
             if qs.exists():

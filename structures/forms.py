@@ -5,6 +5,38 @@ import re
 
 
 class StructuresRegistrationForm(forms.ModelForm):
+    TYPE_CHOICES = (
+        ('restaurant', 'Restaurant'),
+        ('fastfood', 'Fast Food'),
+        ('cafe', 'Café'),
+        ('boulangerie', 'Boulangerie'),
+        ('traiteur', 'Traiteur'),
+        ('autre', 'Autre'),
+    )
+
+    VILLE_CHOICES = (
+        ('Lomé', 'Lomé'),
+        ('Kara', 'Kara'),
+        ('Sokodé', 'Sokodé'),
+        ('Atakpamé', 'Atakpamé'),
+        ('Tsévié', 'Tsévié'),
+        ('Aného', 'Aného'),
+        ('Mango', 'Mango'),
+        ('Dapaong', 'Dapaong'),
+        ('Autre', 'Autre'),
+    )
+
+    type = forms.ChoiceField(
+        choices=TYPE_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label='Type de structure'
+    )
+
+    ville = forms.ChoiceField(
+        choices=VILLE_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label='Ville'
+    )
     heure_ouverture = forms.TimeField(
         widget=forms.TimeInput(attrs={
             'class': 'form-control',
@@ -23,8 +55,7 @@ class StructuresRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = Structures
-        fields = ['nom', 'telephone', 'adresse', 'ville', 'heure_ouverture', 'heure_fermeture', 'description', 'type',
-                  'photo']
+        fields = ['nom', 'telephone', 'adresse', 'ville', 'heure_ouverture', 'heure_fermeture', 'description', 'type', 'photo']
         widgets = {
             'nom': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -41,16 +72,7 @@ class StructuresRegistrationForm(forms.ModelForm):
                 'placeholder': 'Adresse',
                 'aria-describedby': 'adresseHelp'
             }),
-            'type': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Type de structure',
-                'aria-describedby': 'typeHelp'
-            }),
-            'ville': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Ville',
-                'aria-describedby': 'villeHelp'
-            }),
+            # Les champs 'type' et 'ville' sont des ChoiceField définis ci-dessus
             'description': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 3,

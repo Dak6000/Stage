@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from django.apps import apps
+from structures.models import Structures
 
 # Create your models here.
 
@@ -29,7 +29,7 @@ class Plats(models.Model):
     disponibilite = models.BooleanField(default=True)
     photo = models.ImageField(upload_to='plats/', null=True, blank=True)
     createur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Créateur")
-    menu = models.ForeignKey('menus.Menus', on_delete=models.CASCADE, related_name='plats', null=True, blank=True)
+    structure = models.ForeignKey(Structures, on_delete=models.CASCADE, related_name='plats', null=True, blank=True)
     
     # Nouveaux champs
     temps_preparation = models.IntegerField(help_text="Temps de préparation en minutes", default=30)
@@ -61,12 +61,17 @@ class Plats(models.Model):
         return self.nom
 
     def clean(self):
-        # Forcer la cohérence: si un plat est rattaché à un menu,
-        # alors le créateur du plat doit être le même que le créateur du menu,
-        # et le menu appartient à une unique structure.
-        if self.menu is not None:
-            if self.menu.createur_id != self.createur_id:
-                raise ValidationError("Le plat doit appartenir à un menu créé par le même utilisateur.")
+        # S'assurer que le plat est rattaché à la structure du créateur s'il en a une
+        # et empêcher une incohérence createur/structure
+        if self.createur_id:
+            # Récupère éventuellement la structure de l'utilisateur
+            user_structure = getattr(self.createur, 'structure', None)
+            if user_structure is not None:
+                user_structure = user_structure.first()
+            # Si une structure est définie côté plat, elle doit correspondre à celle de l'utilisateur
+            if self.structure_id and user_structure and self.structure_id != user_structure.id:
+                raise ValidationError("La structure du plat doit correspondre à la structure du créateur.")
+        return super().clean()
 
     def get_prix_affichage(self):
         """Retourne le prix formaté pour l'affichage"""

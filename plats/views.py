@@ -61,6 +61,12 @@ def plat_create(request):
             try:
                 plat = form.save(commit=False)
                 plat.createur = request.user
+                # Rattacher la structure du créateur si elle existe
+                user_structure = request.user.structure.first()
+                if not user_structure:
+                    messages.error(request, "Vous devez d'abord créer votre structure avant d'ajouter un plat.")
+                    return redirect('structures:register-structure')
+                plat.structure = user_structure
                 plat.save()
                 messages.success(request, 'Plat créé avec succès!')
                 return redirect('plats:plat-list')
@@ -90,7 +96,10 @@ def plat_update(request, pk):
         form = PlatForm(request.POST, request.FILES, instance=plat)
         if form.is_valid():
             try:
-                form.save()
+                # S'assurer que la structure reste cohérente avec le créateur
+                updated_plat = form.save(commit=False)
+                updated_plat.structure = request.user.structure.first()
+                updated_plat.save()
                 messages.success(request, 'Plat mis à jour avec succès!')
                 return redirect('plats:plat-list')
             except Exception as e:
