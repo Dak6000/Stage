@@ -7,15 +7,15 @@
 {% endblock %}
 
 {% block content %}
-<!-- Structures Listing -->
+<!-- Section Structures -->
 <section class="structures-section">
     <div class="container">
         <div class="section-header">
             <h2 class="section-title">Nos Structures Partenaires</h2>
-            <p class="section-subtitle">Découvrez les meilleures adresses gastronomiques</p>
+            <p class="section-subtitle">Découvrez nos meilleures adresses</p>
         </div>
 
-        <!-- Filter Section -->
+        <!-- Filtres Structures -->
         <div class="filter-section">
             <div class="row">
                 <div class="col-md-4 mb-3">
@@ -43,11 +43,11 @@
         <!-- Cartes Structures -->
         <div class="row" id="structuresContainer">
             {% for structure in featured_structures %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4 structure-card"
+            <div class="col-lg-3 col-md-4 mb-3"
                  data-ville="{{ structure.ville|lower }}"
                  data-categorie="{{ structure.type|lower }}"
                  data-nom="{{ structure.nom|lower }}">
-                <div class="card h-100">
+                <div class="card h-100 promotion-card border-0 shadow-lg">
                     <div class="structure-image">
                         {% if structure.photo %}
                         <img src="{{ structure.photo.url }}" class="card-img-top" alt="{{ structure.nom }}">
@@ -65,7 +65,7 @@
                         <p class="structure-location">
                             <i class="fas fa-map-marker-alt me-2"></i>{{ structure.ville|default:"Lomé" }}
                         </p>
-                        <p class="structure-description">{{ structure.description|default:"Description du restaurant"|truncatechars:100 }}</p>
+                        <p class="structure-description">{{ structure.description|default:"Description du restaurant"|truncatechars:60 }}</p>
                         {% if structure.note_moyenne %}
                         <div class="structure-rating">
                             <i class="fas fa-star me-1"></i>{{ structure.note_moyenne|floatformat:1 }}
@@ -90,71 +90,59 @@
             {% endfor %}
         </div>
 
-        <!-- Pagination -->
-        {% if is_paginated %}
-        <nav class="mt-5">
-            <ul class="pagination justify-content-center">
-                {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                {% endif %}
-
-                {% for num in page_obj.paginator.page_range %}
-                {% if page_obj.number == num %}
-                <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
-                {% else %}
-                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-                {% endif %}
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-        {% endif %}
+        <div class="text-center mt-4">
+            <a href="{% url 'structures:structure' %}" class="cta-btn">
+                Voir toutes les structures <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
     </div>
 </section>
 
 <!-- Section Plats -->
-<section id="plats" class="py-5" style="background: var(--bs-fontSecondary);">
+<section id="menus-section" class="py-5" style="background: var(--bs-font);">
     <div class="container">
         <div class="section-header">
             <h2 class="section-title">Nos Plats Populaires</h2>
             <p class="section-subtitle">Découvrez nos spécialités culinaires</p>
         </div>
 
-        <!-- Filtres Plats -->
+        <!-- Filtres Menus -->
         <div class="filter-section">
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <input type="text" class="form-control filter-input" id="platSearch" placeholder="Rechercher un plat...">
                 </div>
                 <div class="col-md-6 mb-3">
-                    <select class="form-select filter-input" id="platCategoryFilter">
-                        <option value="">Toutes les catégories</option>
-                        {% for categorie in plat_categories %}
-                            <option value="{{ categorie|lower }}">{{ categorie }}</option>
+                    <select class="form-select filter-input" id="menuCategoryFilter">
+                        <option value="">Tous les types</option>
+                        {% for nom in nom_plats %}
+                            <option value="{{ nom|lower }}">{{ nom }}</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
         </div>
 
-        <!-- Cartes Plats -->
+        <!-- Cartes Menus -->
         <div class="row" id="menusContainer">
             {% for plat in featured_plats %}
-            <div class="col-lg-3 col-md-6 mb-4 menu-card"
+            <div class="col-lg-3 col-md-4 mb-3"
                  data-categorie="{{ plat.categorie.nom|lower }}"
                  data-nom="{{ plat.nom|lower }}">
-                <div class="card h-100">
+                <div class="card h-100 promotion-card border-0 shadow-lg">
+                    <div class="promotion-vote">
+                        {% if plat.note_moyenne > 0 %}
+                        <div class="rating-display me-3">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= plat.get_note_etoiles %}
+                                    <i class="fas fa-star text-jaune"></i>
+                                {% else %}
+                                    <i class="far fa-star text-muted"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
                     <div class="structure-image">
                         {% if plat.photo %}
                         <img src="{{ plat.photo.url }}" class="card-img-top" alt="{{ plat.nom }}">
@@ -169,7 +157,7 @@
                     </div>
                     <div class="structure-content">
                         <h5 class="structure-title">{{ plat.nom }}</h5>
-                        <p class="structure-description">{{ plat.description|truncatechars:100 }}</p>
+                        <p class="structure-description">{{ plat.description|truncatechars:60 }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="structure-rating">{{ plat.prix }} FCFA</span>
                             <span class="badge" style="background: var(--bs-vert); color: var(--bs-font);">
@@ -193,6 +181,12 @@
                 </div>
             </div>
             {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'structures:structure' %}" class="cta-btn">
+                Voir tous les menus <i class="fas fa-arrow-right ms-2"></i>
+            </a>
         </div>
     </div>
 </section>
@@ -298,5 +292,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+<style>
+    /* Styles pour la section Promotions */
+    .promotion-vote {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        background: var(--bs-jaune);
+        color: white;
+        padding: 3px 5px;
+        border-radius: 15px;
+        font-size: 0.6rem;
+        font-weight: bold;
+        z-index: 2;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        animation: pulse 1.5s infinite;
+    }
+</style>
 
 {% endblock %}

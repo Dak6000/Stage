@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="{% static 'css/promotions.css' %}">
 {% endblock %}
 
-{% block hero %}
+
+{% block content %}
+    
     <section class="hero-section">
         <!-- Carrousel dynamique amélioré -->
         <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
@@ -67,9 +69,7 @@
             </div>
         </div>
     </section>
-{% endblock %}
 
-{% block content %}
 <!-- Section Promotions -->
 {% if plats_promotion %}
 <section class="promotions-section py-5" style="background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);">
@@ -123,7 +123,7 @@
                     
                     <div class="card-body">
                         <h5 class="card-title fw-bold">{{ plat.nom }}</h5>
-                        <p class="card-text text-muted">{{ plat.description|truncatechars:80 }}</p>
+                        <p class="card-text text-muted">{{ plat.description|truncatechars:60 }}</p>
                         
                         <!-- Prix -->
                         <div class="price-section">
@@ -156,9 +156,9 @@
                         {% endif %}
                     </div>
                     
-                    <div class="card-footer bg-transparent border-0">
+                    <div class="card-footer bg-transparent">
                         <div class="d-grid">
-                            <a href="{% url 'plats:plat-detail' plat.pk %}" class="btn btn-warning">
+                            <a href="{% url 'plats:plat-detail' plat.pk %}" class="structure-btn">
                                 <i class="fas fa-eye me-2"></i>Voir les détails
                             </a>
                         </div>
@@ -169,7 +169,7 @@
         </div>
 
         <div class="text-center mt-4">
-            <a href="{% url 'plats:plats-promotion' %}" class="btn btn-warning">
+            <a href="{% url 'plats:plats-promotion' %}" class="cta-btn">
                 <i class="fas fa-tags me-2"></i>Voir toutes les promotions
             </a>
         </div>
@@ -213,11 +213,11 @@
         <!-- Cartes Structures -->
         <div class="row" id="structuresContainer">
             {% for structure in featured_structures %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4 structure-card"
+            <div class="col-lg-3 col-md-4 mb-3"
                  data-ville="{{ structure.ville|lower }}"
                  data-categorie="{{ structure.type|lower }}"
                  data-nom="{{ structure.nom|lower }}">
-                <div class="card h-100">
+                <div class="card h-100 promotion-card border-0 shadow-lg">
                     <div class="structure-image">
                         {% if structure.photo %}
                         <img src="{{ structure.photo.url }}" class="card-img-top" alt="{{ structure.nom }}">
@@ -235,7 +235,7 @@
                         <p class="structure-location">
                             <i class="fas fa-map-marker-alt me-2"></i>{{ structure.ville|default:"Lomé" }}
                         </p>
-                        <p class="structure-description">{{ structure.description|default:"Description du restaurant"|truncatechars:100 }}</p>
+                        <p class="structure-description">{{ structure.description|default:"Description du restaurant"|truncatechars:60 }}</p>
                         {% if structure.note_moyenne %}
                         <div class="structure-rating">
                             <i class="fas fa-star me-1"></i>{{ structure.note_moyenne|floatformat:1 }}
@@ -296,18 +296,18 @@
         <!-- Cartes Menus -->
         <div class="row" id="menusContainer">
             {% for plat in featured_plats %}
-            <div class="col-lg-3 col-md-6 mb-4 menu-card"
+            <div class="col-lg-3 col-md-4 mb-3"
                  data-categorie="{{ plat.categorie.nom|lower }}"
                  data-nom="{{ plat.nom|lower }}">
-                <div class="card h-100">
+                <div class="card h-100 promotion-card border-0 shadow-lg">
                     <div class="promotion-vote">
                         {% if plat.note_moyenne > 0 %}
                         <div class="rating-display me-3">
                             {% for i in "12345" %}
                                 {% if forloop.counter <= plat.get_note_etoiles %}
-                                    <i class="fas fa-star text-jaune"></i>
+                                    <i class="fas fa-star text-vert"></i>
                                 {% else %}
-                                    <i class="far fa-star text-muted"></i>
+                                    <i class="far fa-star text-text"></i>
                                 {% endif %}
                             {% endfor %}
                         </div>
@@ -327,7 +327,7 @@
                     </div>
                     <div class="structure-content">
                         <h5 class="structure-title">{{ plat.nom }}</h5>
-                        <p class="structure-description">{{ plat.description|truncatechars:50 }}</p>
+                        <p class="structure-description">{{ plat.description|truncatechars:60 }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="structure-rating">{{ plat.prix }} FCFA</span>
                             <span class="badge" style="background: var(--bs-vert); color: var(--bs-font);">
@@ -521,23 +521,5 @@ document.addEventListener('DOMContentLoaded', function() {
     filterMenus();
 });
 </script>
-
-<style>
-/* Styles pour la section Promotions */
-    .promotion-vote {
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        background: var(--bs-jaune);
-        color: white;
-        padding: 3px 5px;
-        border-radius: 15px;
-        font-size: 0.6rem;
-        font-weight: bold;
-        z-index: 2;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        animation: pulse 1.5s infinite;
-    }
-</style>
 
 {% endblock %}
