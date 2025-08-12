@@ -16,40 +16,40 @@
                     <h4 class="mb-0 avis-stats-header">
                         <i class="fas fa-star me-2"></i>Mes Avis
                     </h4>
-                    <span class="badge bg-light text-primary">{{ avis_count }} avis</span>
+                    <span class="badge bg-light text-vert">{{ avis_count }} avis</span>
                 </div>
                 <div class="mt-3">
                     {% if page_obj %}
                         <div class="row">
                             {% for avis in page_obj %}
-                            <div class="col-12 mb-4">
+                            <div class="col-lg-4 col-md-4 mb-3">
                                 <div class="avis-card">
                                     <div class="card-body p-0">
                                         <div class="d-flex justify-content-between align-items-start mb-3">
                                             <div>
                                                 <h6 class="card-title mb-1">
                                                     {% if avis.structure %}
-                                                        <i class="fas fa-building me-2 text-primary"></i>
-                                                        <a href="{% url 'structures:structure-detail' avis.structure.pk %}" class="text-decoration-none">
+                                                        <i class="fas fa-building me-2 text-vert"></i>
+                                                        <a href="{% url 'structures:structure-detail' avis.structure.pk %}" class="text-decoration-none text-text">
                                                             {{ avis.structure.nom }}
                                                         </a>
                                                     {% elif avis.plat %}
-                                                        <i class="fas fa-utensils me-2 text-success"></i>
-                                                        <a href="{% url 'plats:plat-detail' avis.plat.pk %}" class="text-decoration-none">
+                                                        <i class="fas fa-utensils me-2 text-vert"></i>
+                                                        <a href="{% url 'plats:plat-detail' avis.plat.pk %}" class="text-decoration-none text-text">
                                                             {{ avis.plat.nom }}
                                                         </a>
                                                     {% endif %}
                                                 </h6>
-                                                <small class="text-muted">
+                                                <small class="text-vert">
                                                     <i class="fas fa-calendar-alt me-1"></i>
                                                     {{ avis.get_date_relative }}
                                                 </small>
                                             </div>
                                             <div class="d-flex gap-2">
-                                                <a href="{% url 'avis:avis-update' avis.pk %}" class="btn btn-sm btn-avis-secondary">
+                                                <a href="{% url 'avis:avis-update' avis.pk %}" class="btn btn-jaune">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a href="{% url 'avis:avis-delete' avis.pk %}" class="btn btn-sm btn-avis-primary">
+                                                <a href="{% url 'avis:avis-delete' avis.pk %}" class="btn btn-rouge">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                             </div>
@@ -71,7 +71,7 @@
                                         
                                         <!-- Commentaire -->
                                         <div class="avis-content">
-                                            <p class="mb-0">{{ avis.commentaire }}</p>
+                                            <textarea class="form-control" rows="3" style="overflow-y: auto; resize: none;" readonly>{{ avis.commentaire }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -118,7 +118,7 @@
                             <i class="fas fa-star fa-4x mb-3"></i>
                             <h4>Aucun avis publié</h4>
                             <p>Vous n'avez pas encore publié d'avis.</p>
-                            <a href="{% url 'structures:structure' %}" class="btn btn-avis-secondary">
+                            <a href="{% url 'structures:structure' %}" class="btn btn-jaune">
                                 <i class="fas fa-building me-2"></i>Voir les structures
                             </a>
                         </div>

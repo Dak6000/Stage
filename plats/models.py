@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from structures.models import Structures
+from datetime import datetime, time as dt_time
 
 # Create your models here.
 
@@ -48,6 +49,8 @@ class Plats(models.Model):
     en_promotion = models.BooleanField(default=False, verbose_name="En promotion")
     prix_promotionnel = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, verbose_name="Prix promotionnel")
     date_debut_promotion = models.DateTimeField(null=True, blank=True)
+    heure_debut_promotion = models.CharField(max_length=100, blank=True, null=True)
+    heure_fin_promotion = models.CharField(max_length=100, blank=True, null=True)
     date_fin_promotion = models.DateTimeField(null=True, blank=True)
     pourcentage_reduction = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Pourcentage de réduction")
     description_promotion = models.TextField(blank=True, verbose_name="Description de la promotion")
@@ -71,6 +74,26 @@ class Plats(models.Model):
             # Si une structure est définie côté plat, elle doit correspondre à celle de l'utilisateur
             if self.structure_id and user_structure and self.structure_id != user_structure.id:
                 raise ValidationError("La structure du plat doit correspondre à la structure du créateur.")
+        
+        # Validation des dates de promotion
+        if self.en_promotion:
+            if self.date_debut_promotion and self.date_fin_promotion:
+                if self.date_fin_promotion < self.date_debut_promotion:
+                    raise ValidationError("La date de fin de promotion doit être postérieure à la date de début.")
+            
+            # Validation du format des heures si elles sont renseignées
+            if self.heure_debut_promotion:
+                try:
+                    datetime.strptime(self.heure_debut_promotion, '%H:%M')
+                except ValueError:
+                    raise ValidationError("Format d'heure de début invalide. Utilisez HH:MM.")
+            
+            if self.heure_fin_promotion:
+                try:
+                    datetime.strptime(self.heure_fin_promotion, '%H:%M')
+                except ValueError:
+                    raise ValidationError("Format d'heure de fin invalide. Utilisez HH:MM.")
+        
         return super().clean()
 
     def get_prix_affichage(self):
@@ -103,10 +126,41 @@ class Plats(models.Model):
         
         now = timezone.now()
         
-        # Vérification des dates si elles existent
-        if self.date_debut_promotion and self.date_fin_promotion:
-            return self.date_debut_promotion <= now <= self.date_fin_promotion
-        return True
+        # Si aucune date n'est définie, la promotion est toujours active
+        if not self.date_debut_promotion and not self.date_fin_promotion:
+            return True
+        
+        try:
+            # Gestion de la date/heure de début
+            debut_promo = None
+            if self.date_debut_promotion:
+                heure_debut = (datetime.strptime(self.heure_debut_promotion, '%H:%M').time() 
+                            if self.heure_debut_promotion else dt_time.min)
+                debut_promo = timezone.make_aware(
+                    datetime.combine(self.date_debut_promotion, heure_debut)
+                )
+            
+            # Gestion de la date/heure de fin
+            fin_promo = None
+            if self.date_fin_promotion:
+                heure_fin = (datetime.strptime(self.heure_fin_promotion, '%H:%M').time()
+                            if self.heure_fin_promotion else dt_time.max)
+                fin_promo = timezone.make_aware(
+                    datetime.combine(self.date_fin_promotion, heure_fin)
+                )
+            
+            # Vérification de la période de promotion
+            if debut_promo and fin_promo:
+                return debut_promo <= now <= fin_promo
+            elif debut_promo:
+                return now >= debut_promo
+            elif fin_promo:
+                return now <= fin_promo
+            return True
+                
+        except (ValueError, TypeError, AttributeError):
+            # En cas d'erreur (format d'heure invalide, etc.)
+            return False
     
     def get_prix_promotionnel(self):
         """Retourne le prix promotionnel calculé"""

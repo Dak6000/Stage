@@ -15,7 +15,7 @@
                     <a href="{% url 'plats:plats-promotion' %}" class="btn btn-jaune me-2">
                         <i class="fas fa-tags me-2"></i>Voir les promotions
                     </a>
-                    <a href="{% url 'plats:plat-create' %}" class="btn auth-submit-btn">
+                    <a href="{% url 'plats:plat-create' %}" class="btn btn-vert me-2">
                         <i class="fas fa-plus-circle me-2"></i>Ajouter un plat
                     </a>
                 </div>
@@ -26,7 +26,7 @@
             {% if plats %}
             <div class="row">
                 {% for plat in plats %}
-                <div class="col-lg-4 col-md-6 mb-4">
+                <div class="col-lg-3 col-md-4 mb-3">
                     <div class="card h-100 border-0 shadow-sm plat-card" data-bs-toggle="modal" data-bs-target="#platModal">
                         <!-- Badge de promotion -->
                         {% if plat.est_en_promotion %}
@@ -76,13 +76,15 @@
                                 <a href="{% url 'plats:plat-detail' plat.pk %}" class="btn voir-btn" onclick="event.stopPropagation();">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <form method="POST" action="{% url 'plats:toggle-promotion' plat.pk %}" class="btn-jaune" onclick="event.stopPropagation();">
+                                <form method="POST" action="{% url 'plats:toggle-promotion' plat.pk %}" class="d-inline">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn {% if plat.est_en_promotion %}btn-vert{% else %}btn-jaune{% endif %}" title="{% if plat.est_en_promotion %}Désactiver la promotion{% else %}Activer la promotion{% endif %}">
+                                    <button type="submit" class="btn btn-sm {% if plat.est_en_promotion %}btn-vert{% else %}btn-jaune{% endif %}" 
+                                            title="{% if plat.est_en_promotion %}Désactiver la promotion{% else %}Activer la promotion{% endif %}"
+                                            onclick="event.stopPropagation();">
                                         <i class="fas fa-tags"></i>
                                     </button>
                                 </form>
-                                <a href="{% url 'plats:plat-delete' plat.pk %}" class="btn btn-danger" onclick="event.stopPropagation();">
+                                <a href="{% url 'plats:plat-delete' plat.pk %}" class="btn btn-rouge" onclick="event.stopPropagation();">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </div>

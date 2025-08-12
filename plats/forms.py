@@ -1,7 +1,9 @@
+from datetime import datetime  # Ajoutez cette ligne en haut du fichier
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.forms.widgets import SplitDateTimeWidget
 
 from plats.models import Plats
 
@@ -142,33 +144,54 @@ class PlatForm(forms.ModelForm):
         }),
         help_text="Prix promotionnel (laissez vide pour utiliser le pourcentage de réduction)"
     )
-    date_debut_promotion = forms.DateTimeField(
+    
+    # Nouveaux champs combinés date+heure
+    date_heure_debut_promotion = forms.SplitDateTimeField(
         required=False,
-        widget=forms.DateTimeInput(attrs={
-            'class': 'form-control',
-            'type': 'datetime-local',
-            'id': 'date_debut_promotion',
-            'min': timezone.now().strftime('%Y-%m-%dT%H:%M')
-        }),
+        widget=SplitDateTimeWidget(
+            date_attrs={
+                'class': 'form-control',
+                'type': 'date',
+                'id': 'date_debut_promotion',
+                'min': timezone.now().strftime('%Y-%m-%d')
+            },
+            time_attrs={
+                'class': 'form-control',
+                'type': 'time',
+                'id': 'heure_debut_promotion'
+            },
+            date_format='%Y-%m-%d',
+            time_format='%H:%M'
+        ),
         help_text="Date et heure de début de la promotion",
         error_messages={
             'invalid': "Format de date/heure invalide."
         }
     )
 
-    date_fin_promotion = forms.DateTimeField(
+    date_heure_fin_promotion = forms.SplitDateTimeField(
         required=False,
-        widget=forms.DateTimeInput(attrs={
-            'class': 'form-control',
-            'type': 'datetime-local',
-            'id': 'date_fin_promotion',
-            'min': timezone.now().strftime('%Y-%m-%dT%H:%M')
-        }),
+        widget=SplitDateTimeWidget(
+            date_attrs={
+                'class': 'form-control',
+                'type': 'date',
+                'id': 'date_fin_promotion',
+                'min': timezone.now().strftime('%Y-%m-%d')
+            },
+            time_attrs={
+                'class': 'form-control',
+                'type': 'time',
+                'id': 'heure_fin_promotion'
+            },
+            date_format='%Y-%m-%d',
+            time_format='%H:%M'
+        ),
         help_text="Date et heure de fin de la promotion",
         error_messages={
             'invalid': "Format de date/heure invalide."
         }
     )
+
     pourcentage_reduction = forms.DecimalField(
         required=False,
         widget=forms.NumberInput(attrs={
@@ -198,55 +221,43 @@ class PlatForm(forms.ModelForm):
             'nom', 'description', 'prix', 'categorie', 'disponibilite', 'photo',
             'temps_preparation', 'temps_cuisson', 'ingredients', 'allergenes',
             'calories', 'portion', 'difficulte',
-            'en_promotion', 'prix_promotionnel', 'date_debut_promotion', 
-            'date_fin_promotion', 'pourcentage_reduction', 'description_promotion'
+            'en_promotion', 'prix_promotionnel', 'date_heure_debut_promotion',
+            'date_heure_fin_promotion', 'pourcentage_reduction', 'description_promotion'
         ]
 
-    def clean_prix(self):
-        prix = self.cleaned_data.get('prix')
-        if prix < 100:
-            raise ValidationError("Le prix minimum est de 100 Fcfa.")
-        if prix > 1000000:
-            raise ValidationError("Le prix maximum est de 1 000 000 Fcfa.")
-        return prix
-
-    def clean_temps_preparation(self):
-        temps = self.cleaned_data.get('temps_preparation')
-        if temps < 1:
-            raise ValidationError("Le temps de préparation doit être d'au moins 1 minute.")
-        if temps > 1440:  # 24h en minutes
-            raise ValidationError("Le temps de préparation ne peut excéder 24h (1440 minutes).")
-        return temps
-
-    def clean_temps_cuisson(self):
-        temps = self.cleaned_data.get('temps_cuisson')
-        if temps is not None:
-            if temps < 0:
-                raise ValidationError("Le temps de cuisson ne peut pas être négatif.")
-            if temps > 1440:
-                raise ValidationError("Le temps de cuisson ne peut excéder 24h (1440 minutes).")
-        return temps
-
-    def clean_calories(self):
-        calories = self.cleaned_data.get('calories')
-        if calories is not None and calories < 0:
-            raise ValidationError("Les calories ne peuvent pas être négatives.")
-        return calories
-
-    def clean_pourcentage_reduction(self):
-        reduction = self.cleaned_data.get('pourcentage_reduction')
-        if reduction is not None:
-            if reduction <= 0 or reduction >= 100:
-                raise ValidationError("Le pourcentage de réduction doit être entre 0 et 100%.")
-        return reduction
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Si l'instance existe, initialise les champs combinés
+        if self.instance and self.instance.pk:
+            if self.instance.date_debut_promotion and self.instance.heure_debut_promotion:
+                try:
+                    self.initial['date_heure_debut_promotion'] = timezone.make_aware(
+                        datetime.combine(
+                            self.instance.date_debut_promotion,
+                            datetime.strptime(self.instance.heure_debut_promotion, '%H:%M').time()
+                        )
+                    )
+                except (ValueError, TypeError):
+                    pass
+            
+            if self.instance.date_fin_promotion and self.instance.heure_fin_promotion:
+                try:
+                    self.initial['date_heure_fin_promotion'] = timezone.make_aware(
+                        datetime.combine(
+                            self.instance.date_fin_promotion,
+                            datetime.strptime(self.instance.heure_fin_promotion, '%H:%M').time()
+                        )
+                    )
+                except (ValueError, TypeError):
+                    pass
 
     def clean(self):
         cleaned_data = super().clean()
         en_promotion = cleaned_data.get('en_promotion')
         prix_promotionnel = cleaned_data.get('prix_promotionnel')
         pourcentage_reduction = cleaned_data.get('pourcentage_reduction')
-        date_debut_promotion = cleaned_data.get('date_debut_promotion')
-        date_fin_promotion = cleaned_data.get('date_fin_promotion')
+        date_heure_debut = cleaned_data.get('date_heure_debut_promotion')
+        date_heure_fin = cleaned_data.get('date_heure_fin_promotion')
         prix = cleaned_data.get('prix')
         now = timezone.now()
 
@@ -268,33 +279,40 @@ class PlatForm(forms.ModelForm):
                 # Calcul automatique du prix promotionnel si seulement le pourcentage est fourni
                 cleaned_data['prix_promotionnel'] = prix - (prix * pourcentage_reduction / 100)
 
-            # Validation complète des dates
-            if date_debut_promotion or date_fin_promotion:
+            # Validation des dates/heures
+            if date_heure_debut or date_heure_fin:
                 # Si une seule date est renseignée
-                if bool(date_debut_promotion) != bool(date_fin_promotion):
-                    raise ValidationError("Vous devez spécifier à la fois la date de début et de fin de promotion.")
+                if bool(date_heure_debut) != bool(date_heure_fin):
+                    raise ValidationError("Vous devez spécifier à la fois la date/heure de début et de fin de promotion.")
                 
                 # Si les deux dates sont renseignées
-                if date_debut_promotion and date_fin_promotion:
-                    if date_debut_promotion >= date_fin_promotion:
-                        raise ValidationError("La date de fin doit être postérieure à la date de début.")
+                if date_heure_debut and date_heure_fin:
+                    if date_heure_debut >= date_heure_fin:
+                        raise ValidationError("La date/heure de fin doit être postérieure à la date/heure de début.")
                     
-                    if date_debut_promotion < now:
-                        raise ValidationError("La date de début ne peut pas être dans le passé.")
+                    if date_heure_debut < now:
+                        raise ValidationError("La date/heure de début ne peut pas être dans le passé.")
                     
                     # Optionnel : vérifier que la promotion dure au moins 1 heure
-                    if (date_fin_promotion - date_debut_promotion).total_seconds() < 3600:
+                    if (date_heure_fin - date_heure_debut).total_seconds() < 3600:
                         raise ValidationError("La promotion doit durer au moins 1 heure.")
-            else:
-                # Si aucune date n'est renseignée, la promotion est considérée comme permanente
-                pass
+            
+            # Sauvegarde des composants date et heure séparément pour le modèle
+            if date_heure_debut:
+                cleaned_data['date_debut_promotion'] = date_heure_debut.date()
+                cleaned_data['heure_debut_promotion'] = date_heure_debut.time().strftime('%H:%M')
+            if date_heure_fin:
+                cleaned_data['date_fin_promotion'] = date_heure_fin.date()
+                cleaned_data['heure_fin_promotion'] = date_heure_fin.time().strftime('%H:%M')
 
         # Si la promotion est désactivée, on nettoie les champs promotionnels
         if not en_promotion:
             cleaned_data['prix_promotionnel'] = None
             cleaned_data['pourcentage_reduction'] = None
             cleaned_data['date_debut_promotion'] = None
+            cleaned_data['heure_debut_promotion'] = None
             cleaned_data['date_fin_promotion'] = None
+            cleaned_data['heure_fin_promotion'] = None
             cleaned_data['description_promotion'] = ''
 
         # Validation du temps total
@@ -306,3 +324,41 @@ class PlatForm(forms.ModelForm):
             raise ValidationError("Le temps total (préparation + cuisson) ne peut excéder 24h (1440 minutes).")
 
         return cleaned_data
+    
+    def save(self, commit=True):
+        # Sauvegarde d'abord l'instance de base
+        plat = super().save(commit=False)
+        
+        # Récupère les données nettoyées
+        cleaned_data = self.cleaned_data
+        
+        # Gestion des champs de promotion
+        plat.en_promotion = cleaned_data.get('en_promotion', False)
+        plat.prix_promotionnel = cleaned_data.get('prix_promotionnel')
+        plat.pourcentage_reduction = cleaned_data.get('pourcentage_reduction')
+        plat.description_promotion = cleaned_data.get('description_promotion', '')
+        
+        # Gestion des dates/heures de promotion
+        date_heure_debut = cleaned_data.get('date_heure_debut_promotion')
+        date_heure_fin = cleaned_data.get('date_heure_fin_promotion')
+        
+        if date_heure_debut:
+            plat.date_debut_promotion = date_heure_debut.date()
+            plat.heure_debut_promotion = date_heure_debut.time().strftime('%H:%M')
+        else:
+            plat.date_debut_promotion = None
+            plat.heure_debut_promotion = None
+        
+        if date_heure_fin:
+            plat.date_fin_promotion = date_heure_fin.date()
+            plat.heure_fin_promotion = date_heure_fin.time().strftime('%H:%M')
+        else:
+            plat.date_fin_promotion = None
+            plat.heure_fin_promotion = None
+        
+        # Sauvegarde si commit=True
+        if commit:
+            plat.save()
+            self.save_m2m()  # Important pour les relations many-to-many si vous en avez
+        
+        return plat

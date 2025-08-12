@@ -12,7 +12,7 @@
                 <h3 class="card-title mb-0">
                     <i class="fas fa-utensils me-2"></i>{{ plat.nom }}
                     {% if plat.est_en_promotion %}
-                    <span class="badge bg-warning ms-2">
+                    <span class="badge bg-jaune ms-2">
                         <i class="fas fa-fire me-1"></i>EN PROMOTION
                     </span>
                     {% endif %}
@@ -25,11 +25,11 @@
                             {% if forloop.counter <= plat.get_note_etoiles %}
                                 <i class="fas fa-star text-jaune"></i>
                             {% else %}
-                                <i class="far fa-star text-muted"></i>
+                                <i class="far fa-star text-text"></i>
                             {% endif %}
                         {% endfor %}
                         <span class="ms-2 fw-bold">{{ plat.get_note_display }}</span>
-                        <small class="text-muted">({{ plat.nombre_avis }} avis)</small>
+                        <small class="text-text">({{ plat.nombre_avis }} avis)</small>
                     </div>
                     {% endif %}
                     
@@ -46,7 +46,7 @@
             <div class="row align-items-center mb-4">
                 <div class="col-md-8">
                     <h4 class="text-vert mb-2">{{ plat.nom }}</h4>
-                    <p class="text-text mb-3">{{ plat.description }}</p>
+                    <textarea class="form-control" rows="3" style="overflow-y: auto; resize: none;" readonly>{{ plat.description }}</textarea>
                     <div class="mb-3">
                         <span class="badge bg-vert me-2">{{ plat.get_categorie_display }}</span>
                         <span class="badge bg-jaune me-2">{{ plat.get_difficulte_display }}</span>
@@ -189,14 +189,14 @@
                             {% endif %}
                             
                             <div class="promotion-details">
-                                {% if plat.date_debut_promotion and plat.date_fin_promotion %}
+                                {% if plat.date_debut_promotion and plat.heure_debut_promotion and plat.date_fin_promotion and plat.heure_fin_promotion %}
                                 <div class="promotion-dates">
                                     <div class="date-item">
                                         <i class="fas fa-calendar-day text-jaune me-2"></i>
                                         <div>
                                             <small class="text-text">Début</small>
                                             <div class="fw-bold">
-                                                {{ plat.date_debut_promotion|date:"d/m/Y à H:i" }}
+                                                {{ plat.date_debut_promotion|date:"d/m/Y" }} à {{ plat.heure_debut_promotion }}
                                             </div>
                                         </div>
                                     </div>
@@ -206,16 +206,30 @@
                                         <div>
                                             <small class="text-text">Fin</small>
                                             <div class="fw-bold">
-                                                {{ plat.date_fin_promotion|date:"d/m/Y à H:i" }}
+                                                {{ plat.date_fin_promotion|date:"d/m/Y" }} à {{ plat.heure_fin_promotion }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <!-- Compte à rebours -->
                                 <div class="promotion-countdown mt-3">
                                     <small class="text-text">Temps restant :</small>
                                     <div class="countdown-timer">
-                                        <span class="badge bg-jaune text-text" id="countdown-{{ plat.id }}"></span>
+                                        {% if plat.get_jours_restants_promotion > 0 %}
+                                            <span class="badge bg-jaune text-text">
+                                                <i class="fas fa-clock me-1"></i>
+                                                {% if plat.get_jours_restants_promotion == 0 %}
+                                                    Dernier jour!
+                                                {% else %}
+                                                    Plus que {{ plat.get_jours_restants_promotion }} jour{{ plat.get_jours_restants_promotion|pluralize:"s" }}
+                                                {% endif %}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-danger text-font">
+                                                <i class="fas fa-exclamation-circle me-1"></i>Promotion expirée
+                                            </span>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 {% else %}
@@ -276,7 +290,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="mb-0"><i class="fas fa-star me-2 text-warning"></i>Avis récents</h5>
+                            <h5 class="mb-0"><i class="fas fa-star me-2 text-jaune"></i>Avis récents</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -287,10 +301,10 @@
                                             <div class="d-flex justify-content-between align-items-start">
                                                 <div>
                                                     <h6 class="card-title mb-1">
-                                                        <i class="fas fa-user me-2 text-success"></i>
+                                                        <i class="fas fa-user me-2 text-vert"></i>
                                                         {{ avis.user.first_name }} {{ avis.user.last_name }}
                                                     </h6>
-                                                    <small class="text-muted">
+                                                    <small class="text-text">
                                                         <i class="fas fa-calendar-alt me-1"></i>
                                                         {{ avis.get_date_relative }}
                                                     </small>
@@ -298,9 +312,9 @@
                                                 <div class="rating-display">
                                                     {% for i in "12345" %}
                                                         {% if forloop.counter <= avis.note %}
-                                                            <i class="fas fa-star text-warning"></i>
+                                                            <i class="fas fa-star text-jaune"></i>
                                                         {% else %}
-                                                            <i class="far fa-star text-muted"></i>
+                                                            <i class="far fa-star text-text"></i>
                                                         {% endif %}
                                                     {% endfor %}
                                                 </div>
@@ -314,7 +328,7 @@
                                 {% endfor %}
                             </div>
                             <div class="text-center">
-                                <a href="{% url 'avis:avis-plat-public' plat.pk %}" class="btn btn-outline-success">
+                                <a href="{% url 'avis:avis-plat-public' plat.pk %}" class="btn btn-vert">
                                     <i class="fas fa-star me-2"></i>Voir tous les avis
                                 </a>
                             </div>
@@ -328,11 +342,15 @@
             <div class="d-flex justify-content-between mt-4">
                 {% if plat.est_en_promotion %}
                     <a href="{% url 'plats:plats-promotion' %}" class="btn btn-rouge">
-                        <i class="fas fa-arrow-left me-2"></i>Retour
+                        <i class="fas fa-arrow-left me-2"></i>Retour sur promotion
                     </a>
                 {% elif user.is_authenticated and user == plat.createur %}
                     <a href="{% url 'plats:plat-list' %}" class="btn btn-rouge">
-                        <i class="fas fa-arrow-left me-2"></i>Retour
+                        <i class="fas fa-arrow-left me-2"></i>Retour sur list
+                    </a>
+                {% elif menu_parent %}
+                    <a href="{% url 'menus:menu-detail' menu_parent.pk %}" class="btn btn-rouge">
+                        <i class="fas fa-utensils"></i> Retour au menu
                     </a>
                 {% else %}
                     <a href="{% url 'structures:structure' %}" class="btn btn-rouge">
@@ -358,7 +376,7 @@
                     <a href="{% url 'plats:plat-update' plat.pk %}" class="btn btn-vert me-2">
                         <i class="fas fa-edit me-2"></i>Modifier
                     </a>
-                    <a href="{% url 'plats:plat-delete' plat.pk %}" class="btn btn-danger">
+                    <a href="{% url 'plats:plat-delete' plat.pk %}" class="btn btn-rouge">
                         <i class="fas fa-trash me-2"></i>Supprimer
                     </a>
                     {% endif %}
@@ -370,16 +388,28 @@
 
 
 
-{% if plat.date_fin_promotion %}
+{% if plat.date_fin_promotion and plat.heure_fin_promotion %}
 <script>
+    // Fonction pour formater la date et heure de fin
+    function getEndDateTime(dateStr, timeStr) {
+        const [day, month, year] = dateStr.split('/');
+        const [hours, minutes] = timeStr.split(':');
+        return new Date(year, month-1, day, hours, minutes);
+    }
+
     // Compte à rebours pour la promotion
-    function updateCountdown(endDateStr, elementId) {
+    function updateCountdown() {
+        const endDate = getEndDateTime(
+            "{{ plat.date_fin_promotion|date:'d/m/Y' }}", 
+            "{{ plat.heure_fin_promotion }}"
+        );
         const now = new Date();
-        const end = new Date(endDateStr.replace(' ', 'T'));
-        const diff = end - now;
+        const diff = endDate - now;
         
         if (diff <= 0) {
-            document.getElementById(elementId).textContent = "Promotion terminée";
+            document.querySelector('.countdown-timer span').innerHTML = 
+                '<i class="fas fa-exclamation-circle me-1"></i>Promotion expirée';
+            document.querySelector('.countdown-timer span').className = 'badge bg-danger text-font';
             return;
         }
         
@@ -389,16 +419,15 @@
         
         let text = "";
         if (days > 0) text += `${days}j `;
-        text += `${hours}h ${minutes}m`;
+        text += `${hours}h ${Math.round(minutes)}m`;
         
-        document.getElementById(elementId).textContent = text;
+        document.querySelector('.countdown-timer span').innerHTML = 
+            `<i class="fas fa-clock me-1"></i>${text}`;
     }
     
     // Mise à jour toutes les minutes
-    updateCountdown("{{ plat.date_fin_promotion|date:'Y-m-d H:i:s' }}", "countdown-{{ plat.id }}");
-    setInterval(function() {
-        updateCountdown("{{ plat.date_fin_promotion|date:'Y-m-d H:i:s' }}", "countdown-{{ plat.id }}");
-    }, 60000);
+    updateCountdown();
+    setInterval(updateCountdown, 60000);
 </script>
 {% endif %}
 {% endblock %}

@@ -12,10 +12,10 @@
     <div class="row">
         <div class="col-12">
             <div class="promotion-header text-center mb-5">
-                <h1 class="display-4 fw-bold text-vert">
+                <h1 class="display-4 fw-bold text-jaune">
                     <i class="fas fa-tags me-3"></i>Plats en Promotion
                 </h1>
-                <p class="lead text-muted">Découvrez nos offres spéciales et économisez sur vos plats préférés !</p>
+                <p class="lead text-text">Découvrez nos offres spéciales et économisez sur vos plats préférés !</p>
             </div>
         </div>
     </div>
@@ -23,8 +23,8 @@
     {% if plats_promotion %}
     <div class="row">
         {% for plat in plats_promotion %}
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100 promotion-card border-0 shadow-lg">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card h-100 promotion-card border-0">
                 <!-- Badge de promotion -->
                 <div class="promotion-badge">
                     <i class="fas fa-fire"></i>
@@ -49,7 +49,7 @@
                 
                 <div class="card-body">
                     <h5 class="card-title fw-bold">{{ plat.nom }}</h5>
-                    <p class="card-text text-muted">{{ plat.description|truncatechars:100 }}</p>
+                    <p class="card-text text-muted">{{ plat.description|truncatechars:60 }}</p>
                     
                     <!-- Prix -->
                     <div class="price-section">

@@ -4,7 +4,7 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-10">
         <div class="auth-card card border-0 shadow-lg">
             <div class="card-header py-3 auth-card-header">
                 <h3 class="card-title mb-0">
@@ -176,7 +176,6 @@
                                         {% endfor %}
                                     </div>
                                 {% endif %}
-                                <small class="form-text text-muted">{{ form.photo.help_text }}</small>
                                 {% if form.instance.photo %}
                                 <div class="mt-2">
                                     <img src="{{ form.instance.photo.url }}" alt="Photo actuelle" class="img-thumbnail" style="max-height: 100px;">
@@ -256,17 +255,18 @@
                         <small class="form-text text-muted">{{ form.allergenes.help_text }}</small>
                     </div>
 
-                    <!-- Section Promotion -->
+                    <!-- Section Promotion (modifié) -->
                     <div class="promotion-section border rounded p-4 mt-4" style="background: linear-gradient(135deg, #fff8e1 0%, #fff3e0 100%);">
                         <h5 class="mb-3">
                             <i class="fas fa-tags me-2 text-warning"></i>Options de Promotion
                         </h5>
 
+                        <!-- On garde la checkbox mais sans la logique de masquage -->
                         <div class="mb-3">
                             <div class="form-check form-switch">
                                 <input type="checkbox" name="{{ form.en_promotion.name }}" id="{{ form.en_promotion.id_for_label }}"
-                                       class="form-check-input {% if form.en_promotion.errors %}is-invalid{% endif %}"
-                                       {% if form.en_promotion.value %}checked{% endif %}>
+                                    class="form-check-input {% if form.en_promotion.errors %}is-invalid{% endif %}"
+                                    {% if form.en_promotion.value %}checked{% endif %}>
                                 <label class="form-check-label fw-bold" for="{{ form.en_promotion.id_for_label }}">
                                     {{ form.en_promotion.label }}
                                 </label>
@@ -280,13 +280,16 @@
                             </div>
                         </div>
 
-                        <div id="promotion-fields" class="row" style="display: none;">
+                        <div id="promotion-fields" class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="{{ form.prix_promotionnel.id_for_label }}" class="form-label">
                                         {{ form.prix_promotionnel.label }}
                                     </label>
-                                    {{ form.prix_promotionnel }}
+                                    <div class="input-group">
+                                        <span class="input-group-text">FCFA</span>
+                                        {{ form.prix_promotionnel }}
+                                    </div>
                                     {% if form.prix_promotionnel.errors %}
                                         <div class="invalid-feedback">
                                             {% for error in form.prix_promotionnel.errors %}
@@ -301,7 +304,10 @@
                                     <label for="{{ form.pourcentage_reduction.id_for_label }}" class="form-label">
                                         {{ form.pourcentage_reduction.label }}
                                     </label>
-                                    {{ form.pourcentage_reduction }}
+                                    <div class="input-group">
+                                        {{ form.pourcentage_reduction }}
+                                        <span class="input-group-text">%</span>
+                                    </div>
                                     {% if form.pourcentage_reduction.errors %}
                                         <div class="invalid-feedback">
                                             {% for error in form.pourcentage_reduction.errors %}
@@ -311,36 +317,51 @@
                                     {% endif %}
                                 </div>
                             </div>
+                            
+                            <!-- Date et heure de début de promotion -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="{{ form.date_debut_promotion.id_for_label }}" class="form-label">
-                                        {{ form.date_debut_promotion.label }}
+                                    <label for="{{ form.date_heure_debut_promotion.id_for_label }}" class="form-label">
+                                        Date et heure de début
                                     </label>
-                                    {{ form.date_debut_promotion }}
-                                    {% if form.date_debut_promotion.errors %}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.date_debut_promotion.errors %}
+                                    <div class="input-group">
+                                        {{ form.date_heure_debut_promotion.subwidgets.0 }}
+                                    </div>
+                                    <div class="input-group">
+                                        {{ form.date_heure_debut_promotion.subwidgets.1 }}
+                                    </div>
+                                    {% if form.date_heure_debut_promotion.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.date_heure_debut_promotion.errors %}
                                                 {{ error }}
                                             {% endfor %}
                                         </div>
                                     {% endif %}
                                 </div>
                             </div>
+                            
+                            <!-- Date et heure de fin de promotion -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="{{ form.date_fin_promotion.id_for_label }}" class="form-label">
-                                        {{ form.date_fin_promotion.label }}
+                                    <label for="{{ form.date_heure_fin_promotion.id_for_label }}" class="form-label">
+                                        Date et heure de fin
                                     </label>
-                                    {{ form.date_fin_promotion }}
-                                    {% if form.date_fin_promotion.errors %}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.date_fin_promotion.errors %}
+                                    <div class="input-group">
+                                        {{ form.date_heure_fin_promotion.subwidgets.0 }}
+                                    </div>
+                                    <div class="input-group">
+                                        {{ form.date_heure_fin_promotion.subwidgets.1 }}
+                                    </div>
+                                    {% if form.date_heure_fin_promotion.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.date_heure_fin_promotion.errors %}
                                                 {{ error }}
                                             {% endfor %}
                                         </div>
                                     {% endif %}
                                 </div>
                             </div>
+                            
                             <div class="col-12">
                                 <div class="mb-3">
                                     <label for="{{ form.description_promotion.id_for_label }}" class="form-label">
@@ -398,15 +419,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const promotionFields = document.getElementById('promotion-fields');
     const prixPromoField = document.getElementById('{{ form.prix_promotionnel.id_for_label }}');
     const pourcentageField = document.getElementById('{{ form.pourcentage_reduction.id_for_label }}');
-    const dateDebutField = document.getElementById('{{ form.date_debut_promotion.id_for_label }}');
-    const dateFinField = document.getElementById('{{ form.date_fin_promotion.id_for_label }}');
 
     // Fonction pour initialiser l'état des champs de promotion
     function initPromotionFields() {
         // Vérifie si la promotion est déjà activée (pour les modifications)
         const isPromoActive = promotionCheckbox.checked || 
-                             dateDebutField.value || 
-                             dateFinField.value || 
                              prixPromoField.value || 
                              pourcentageField.value;
         
@@ -447,6 +464,12 @@ document.addEventListener('DOMContentLoaded', function() {
     promotionCheckbox.addEventListener('change', togglePromotionFields);
     prixPromoField.addEventListener('input', handleExclusiveFields);
     pourcentageField.addEventListener('input', handleExclusiveFields);
+    
+    // Définir la date minimale pour les champs de date
+    const today = new Date().toISOString().split('T')[0];
+    document.querySelectorAll('input[type="date"]').forEach(input => {
+        input.min = today;
+    });
 });
 </script>
 
@@ -485,6 +508,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     #promotion-fields {
         transition: all 0.3s ease;
+    }
+    
+    /* Style pour les champs de date/heure */
+    .row.g-2 .col-6 {
+        padding-right: 5px;
+        padding-left: 5px;
     }
 </style>
 {% endblock %}

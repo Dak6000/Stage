@@ -15,6 +15,23 @@ def menu_list(request):
     return render(request, 'menus/list.html', {'menus': menus})
 
 
+def menu_detail(request, pk):
+    menu = get_object_or_404(Menus, pk=pk)  # Supprimez le filtre par createur
+    plats = menu.plats.all().order_by('categorie', 'nom')
+    
+    # Grouper les plats par catégorie
+    categories = {}
+    for plat in plats:
+        if plat.categorie not in categories:
+            categories[plat.categorie] = []
+        categories[plat.categorie].append(plat)
+    
+    return render(request, 'menus/menu_detail.html', {
+        'menu': menu,
+        'categories': categories,
+    })
+
+
 @login_required
 def menu_create(request):
     if request.method == 'POST':

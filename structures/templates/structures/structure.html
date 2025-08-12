@@ -4,223 +4,247 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/promotions.css' %}">
 {% endblock %}
 
 {% block content %}
 <!-- Section Structures -->
-<section class="structures-section">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Nos Structures Partenaires</h2>
-            <p class="section-subtitle">Découvrez nos meilleures adresses</p>
-        </div>
-
-        <!-- Filtres Structures -->
-        <div class="filter-section">
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <input type="text" class="form-control filter-input" id="structureSearch" placeholder="Rechercher une structure...">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <select class="form-select filter-input" id="villeFilter">
-                        <option value="">Toutes les villes</option>
-                        {% for ville in villes %}
-                            <option value="{{ ville|lower }}">{{ ville }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <select class="form-select filter-input" id="structureCategoryFilter">
-                        <option value="">Toutes catégories</option>
-                        {% for categorie in categories %}
-                            <option value="{{ categorie|lower }}">{{ categorie }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+    <section class="structures-section py-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%);">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="text-vert">
+                    <i class="fas fa-store-alt text-vert me-3"></i>Nos Structures Partenaires
+                </h2>
+                <p class="text-text">Découvrez nos meilleures adresses</p>
             </div>
-        </div>
 
-        <!-- Cartes Structures -->
-        <div class="row" id="structuresContainer">
-            {% for structure in featured_structures %}
-            <div class="col-lg-3 col-md-4 mb-3"
-                 data-ville="{{ structure.ville|lower }}"
-                 data-categorie="{{ structure.type|lower }}"
-                 data-nom="{{ structure.nom|lower }}">
-                <div class="card h-100 promotion-card border-0 shadow-lg">
-                    <div class="structure-image">
-                        {% if structure.photo %}
-                        <img src="{{ structure.photo.url }}" class="card-img-top" alt="{{ structure.nom }}">
-                        {% else %}
-                        <div class="d-flex align-items-center justify-content-center h-100" style="background: var(--bs-jaune)">
-                            <i class="fas fa-utensils fa-3x text-white"></i>
-                        </div>
-                        {% endif %}
-                        <div class="structure-badge">
-                            {{ structure.get_type_display }}
-                        </div>
+            <!-- Filtres Structures -->
+            <div class="filter-section mb-4">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <input type="text" class="form-control filter-input" id="structureSearch" placeholder="Rechercher une structure...">
                     </div>
-                    <div class="structure-content">
-                        <h5 class="structure-title">{{ structure.nom|default:"Nom du restaurant" }}</h5>
-                        <p class="structure-location">
-                            <i class="fas fa-map-marker-alt me-2"></i>{{ structure.ville|default:"Lomé" }}
-                        </p>
-                        <p class="structure-description">{{ structure.description|default:"Description du restaurant"|truncatechars:60 }}</p>
-                        {% if structure.note_moyenne %}
-                        <div class="structure-rating">
-                            <i class="fas fa-star me-1"></i>{{ structure.note_moyenne|floatformat:1 }}
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div class="card-footer bg-transparent">
-                        <a href="{% url 'structures:detail' structure.pk %}" class="structure-btn">
-                            <i class="fas fa-eye me-2"></i>Voir détails
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-12 text-center">
-                <div class="guide-card">
-                    <i class="fas fa-info-circle fa-3x mb-3" style="color: var(--bs-jaune);"></i>
-                    <h4>Aucun restaurant disponible</h4>
-                    <p>Revenez bientôt pour découvrir de nouvelles adresses !</p>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
-        <div class="text-center mt-4">
-            <a href="{% url 'structures:structure' %}" class="cta-btn">
-                Voir toutes les structures <i class="fas fa-arrow-right ms-2"></i>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- Section Plats -->
-<section id="menus-section" class="py-5" style="background: var(--bs-font);">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Nos Plats Populaires</h2>
-            <p class="section-subtitle">Découvrez nos spécialités culinaires</p>
-        </div>
-
-        <!-- Filtres Menus -->
-        <div class="filter-section">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <input type="text" class="form-control filter-input" id="platSearch" placeholder="Rechercher un plat...">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <select class="form-select filter-input" id="menuCategoryFilter">
-                        <option value="">Tous les types</option>
-                        {% for nom in nom_plats %}
-                            <option value="{{ nom|lower }}">{{ nom }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Cartes Menus -->
-        <div class="row" id="menusContainer">
-            {% for plat in featured_plats %}
-            <div class="col-lg-3 col-md-4 mb-3"
-                 data-categorie="{{ plat.categorie.nom|lower }}"
-                 data-nom="{{ plat.nom|lower }}">
-                <div class="card h-100 promotion-card border-0 shadow-lg">
-                    <div class="promotion-vote">
-                        {% if plat.note_moyenne > 0 %}
-                        <div class="rating-display me-3">
-                            {% for i in "12345" %}
-                                {% if forloop.counter <= plat.get_note_etoiles %}
-                                    <i class="fas fa-star text-jaune"></i>
-                                {% else %}
-                                    <i class="far fa-star text-muted"></i>
-                                {% endif %}
+                    <div class="col-md-4 mb-3">
+                        <select class="form-select filter-input" id="villeFilter">
+                            <option value="">Toutes les villes</option>
+                            {% for ville in villes %}
+                                <option value="{{ ville|lower }}">{{ ville }}</option>
                             {% endfor %}
-                        </div>
-                        {% endif %}
+                        </select>
                     </div>
-                    <div class="structure-image">
-                        {% if plat.photo %}
-                        <img src="{{ plat.photo.url }}" class="card-img-top" alt="{{ plat.nom }}">
-                        {% else %}
-                        <div class="d-flex align-items-center justify-content-center h-100" style="background: var(--bs-jaune)">
-                            <i class="fas fa-utensils fa-3x text-white"></i>
-                        </div>
-                        {% endif %}
-                        <div class="structure-badge">
-                            {{ plat.categorie.nom }}
-                        </div>
-                    </div>
-                    <div class="structure-content">
-                        <h5 class="structure-title">{{ plat.nom }}</h5>
-                        <p class="structure-description">{{ plat.description|truncatechars:60 }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="structure-rating">{{ plat.prix }} FCFA</span>
-                            <span class="badge" style="background: var(--bs-vert); color: var(--bs-font);">
-                                <i class="fas fa-clock me-1"></i>{{ plat.temps_preparation|default:"15" }} min
-                            </span>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-transparent">
-                        <a href="{% url 'plats:plat-detail' plat.pk %}" class="structure-btn">
-                            <i class="fas fa-eye me-2"></i>Détails
-                        </a>
+                    <div class="col-md-4 mb-3">
+                        <select class="form-select filter-input" id="structureCategoryFilter">
+                            <option value="">Toutes catégories</option>
+                            {% for categorie in categories %}
+                                <option value="{{ categorie|lower }}">{{ categorie }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center">
-                <div class="guide-card">
-                    <i class="fas fa-utensils fa-3x mb-3" style="color: var(--bs-jaune);"></i>
-                    <h4>Aucun menu disponible</h4>
-                    <p>Découvrez bientôt nos délicieuses spécialités !</p>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
 
-        <div class="text-center mt-4">
-            <a href="{% url 'structures:structure' %}" class="cta-btn">
-                Voir tous les menus <i class="fas fa-arrow-right ms-2"></i>
-            </a>
+            <!-- Cartes Structures -->
+            <div class="row" id="structuresContainer">
+                {% for structure in featured_structures %}
+                <div class="col-lg-3 col-md-4 mb-3"
+                    data-ville="{{ structure.ville|lower }}"
+                    data-categorie="{{ structure.type|lower }}"
+                    data-nom="{{ structure.nom|lower }}">
+                    <div class="card h-100 promotion-card border-0 shadow-lg">
+                        
+                        <!-- Image de la structure -->
+                        <div class="promotion-image-container">
+                            {% if structure.photo %}
+                            <img src="{{ structure.photo.url }}" class="card-img-top promotion-image" alt="{{ structure.nom }}">
+                            {% else %}
+                            <div class="promotion-placeholder">
+                                <i class="fas fa-store-alt fa-3x"></i>
+                                <p>Aucune image</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">{{ structure.nom }}</h5>
+                            <p class="card-text text-muted">{{ structure.description|truncatechars:60 }}</p>
+                            
+                            <!-- Localisation et note -->
+                            <div class="price-section">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span class="structure-location">
+                                            <i class="fas fa-map-marker-alt me-1"></i>
+                                            {{ structure.ville }}
+                                        </span>
+                                    </div>
+                                    {% if structure.note_moyenne %}
+                                    <div class="economy-badge">
+                                        <span class="badge bg-vert">
+                                            <i class="fas fa-star me-1"></i>
+                                            {{ structure.note_moyenne|floatformat:1 }}
+                                        </span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer bg-transparent">
+                            <div class="d-grid">
+                                <a href="{% url 'structures:detail' structure.pk %}" class="btn btn-jaune">
+                                    <i class="fas fa-eye me-2"></i>Voir les détails
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <div class="guide-card">
+                        <i class="fas fa-info-circle fa-3x mb-3 text-jaune"></i>
+                        <h4>Aucun restaurant disponible</h4>
+                        <p>Revenez bientôt pour découvrir de nouvelles adresses !</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    <!-- Section Plats -->
+    <section id="menus-section" class="py-5">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="text-vert">
+                    <i class="fas fa-utensils text-vert me-3"></i>Nos Plats Populaires
+                </h2>
+                <p class="text-text">Découvrez nos spécialités culinaires</p>
+            </div>
+
+            <!-- Filtres Menus -->
+            <div class="filter-section mb-4">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <input type="text" class="form-control filter-input" id="platSearch" placeholder="Rechercher un plat...">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <select class="form-select filter-input" id="menuCategoryFilter">
+                            <option value="">Tous les types</option>
+                            {% for nom in nom_plats %}
+                                <option value="{{ nom|lower }}">{{ nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cartes Menus -->
+            <div class="row" id="menusContainer">
+                {% for plat in featured_plats %}
+                <div class="col-lg-3 col-md-4 mb-3"
+                    data-categorie="{{ plat.categorie.nom|lower }}"
+                    data-nom="{{ plat.nom|lower }}">
+                    <div class="card h-100 promotion-card border-0 shadow-lg">
+                        <div class="promotion-vote">
+                            {% if plat.note_moyenne > 0 %}
+                            <div class="rating-display me-3">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= plat.get_note_etoiles %}
+                                        <i class="fas fa-star text-vert"></i>
+                                    {% else %}
+                                        <i class="far fa-star text-text"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Badge de promotion -->
+                        <div class="promotion-badge">
+                            {% if plat.pourcentage_reduction %}
+                                -{{ plat.pourcentage_reduction }}%
+                                <i class="fas fa-fire"></i>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Image du plat -->
+                        <div class="promotion-image-container">
+                            {% if plat.photo %}
+                            <img src="{{ plat.photo.url }}" class="card-img-top promotion-image" alt="{{ plat.nom }}">
+                            {% else %}
+                            <div class="promotion-placeholder">
+                                <i class="fas fa-utensils fa-3x"></i>
+                                <p>Aucune image</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">{{ plat.nom }}</h5>
+                            <p class="card-text text-text">{{ plat.description|truncatechars:60 }}</p>
+                            
+                            <!-- Prix et temps de préparation -->
+                            <div class="price-section">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span class="promotion-price fw-bold fs-6">
+                                            {{ plat.prix }} FCFA
+                                        </span>
+                                    </div>
+                                    <div class="economy-badge">
+                                        <span class="badge bg-vert">
+                                            <i class="fas fa-clock me-1"></i>
+                                            {{ plat.temps_preparation|default:"15" }} min
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer bg-transparent">
+                            <div class="d-grid">
+                                <a href="{% url 'plats:plat-detail' plat.pk %}" class="btn btn-jaune">
+                                    <i class="fas fa-eye me-2"></i>Voir les détails
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center">
+                    <div class="guide-card">
+                        <i class="fas fa-utensils fa-3x mb-3 text-jaune"></i>
+                        <h4>Aucun menu disponible</h4>
+                        <p>Découvrez bientôt nos délicieuses spécialités !</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
 
 <!-- Call to Action -->
-{% with has_structure=user.structure.exists %}
-    {% if has_structure %}
-    <section class="cta-section">
-        <div class="container text-center">
-            <h2 class="cta-title">Besoin d'aide ?</h2>
-            <p class="cta-description">Consultez notre guide d'utilisation pour une expérience optimale</p>
-            <a href="{% url 'guide' %}" class="cta-btn">
-                <i class="fas fa-book me-2"></i>Consulter le guide
-            </a>
-        </div>
-    </section>
-    {% else %}
-    <section class="cta-section">
-        <div class="container text-center">
-            <h2 class="cta-title">Vous êtes un restaurant ?</h2>
-            <p class="cta-description">Rejoignez notre plateforme et augmentez votre visibilité</p>
-            {% if user.is_authenticated and user.structure.exists %}
-            <a href="{% url 'structures:structure-update' user.structure.first.pk %}" class="cta-btn">
-                <i class="fas fa-edit me-2"></i>Modifier votre établissement
-            </a>
-            {% else %}
-            <a href="{% url 'structures:register_structure' %}" class="cta-btn">
-                <i class="fas fa-store me-2"></i>Inscrivez votre établissement
-            </a>
-            {% endif %}
-        </div>
-    </section>
-    {% endif %}
-{% endwith %}
+    {% with has_structure=user.structure.exists %}
+        <section class="py-5 text-center">
+        {% if has_structure %}
+            <div class="container">
+                <h2 class="text-vert">Besoin d'aide ?</h2>
+                <p class="cta-description">Consultez notre guide d'utilisation pour une expérience optimale</p>
+                <a href="{% url 'guide' %}" class="btn btn-jaune">
+                    <i class="fas fa-book me-2"></i>Consulter le guide
+                </a>
+            </div>
+        {% else %}
+            <div class="container text-center">
+                <h2 class="text-vert">Vous êtes un restaurant ?</h2>
+                <p class="cta-description">Rejoignez notre plateforme et augmentez votre visibilité</p>
+                <a href="{% url 'structures:register_structure' %}" class="btn btn-jaune">
+                    <i class="fas fa-store me-2"></i>Inscrivez votre établissement
+                </a>
+            </div>
+        {% endif %}
+        </section>
+    {% endwith %}
 
 <script>
 // Script pour le filtrage des structures

@@ -11,13 +11,13 @@
     <div class="row">
         <div class="col-12">
             <div class="card border-0 shadow-lg">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-vert text-jaune">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h4 class="mb-0">
                                 <i class="fas fa-star me-2"></i>Avis sur {{ structure.nom }}
                             </h4>
-                            <small class="text-light">
+                            <small class="text-text">
                                 <i class="fas fa-building me-1"></i>{{ structure.type|title }} - {{ structure.ville }}
                             </small>
                         </div>
@@ -25,14 +25,14 @@
                             <div class="rating-display">
                                 {% for i in "12345" %}
                                     {% if forloop.counter <= structure.get_note_etoiles %}
-                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-vert"></i>
                                     {% else %}
-                                        <i class="far fa-star text-light"></i>
+                                        <i class="far fa-star text-jaune"></i>
                                     {% endif %}
                                 {% endfor %}
                                 <span class="ms-2 fw-bold">{{ structure.get_note_display }}</span>
                             </div>
-                            <small class="text-light">{{ avis_count }} avis</small>
+                            <small class="text-jaune">{{ avis_count }} avis</small>
                         </div>
                     </div>
                 </div>
@@ -58,22 +58,22 @@
                             <div class="alert alert-info">
                                 <i class="fas fa-info-circle me-2"></i>
                                 Vous avez déjà laissé un avis pour cette structure.
-                                <a href="{% url 'avis:avis-update' user_avis.pk %}" class="btn btn-sm btn-outline-primary ms-2">
+                                <a href="{% url 'avis:avis-update' user_avis.pk %}" class="btn btn-sm btn-jaune ms-2">
                                     <i class="fas fa-edit me-1"></i>Modifier
                                 </a>
                             </div>
                         {% else %}
                             <div class="text-center mb-4">
-                                <a href="{% url 'avis:avis-create-structure' structure.pk %}" class="btn btn-primary">
+                                <a href="{% url 'avis:avis-create-structure' structure.pk %}" class="btn btn-vert">
                                     <i class="fas fa-star me-2"></i>Laisser un avis
                                 </a>
                             </div>
                         {% endif %}
                     {% else %}
-                        <div class="alert alert-warning text-center">
+                        <div class="alert text-text text-center">
                             <i class="fas fa-exclamation-triangle me-2"></i>
                             Vous devez être connecté pour laisser un avis.
-                            <a href="{% url 'accounts:login' %}" class="btn btn-sm btn-outline-warning ms-2">
+                            <a href="{% url 'accounts:login' %}" class="btn btn-sm btn-vert ms-2">
                                 <i class="fas fa-sign-in-alt me-1"></i>Se connecter
                             </a>
                         </div>
@@ -83,13 +83,13 @@
                     {% if page_obj %}
                         <div class="row">
                             {% for avis in page_obj %}
-                            <div class="col-12 mb-4">
+                            <div class="col-lg-4 col-md-4 mb-3">
                                 <div class="avis-card">
                                     <div class="card-body p-0">
                                         <div class="d-flex justify-content-between align-items-start mb-3">
                                             <div>
                                                 <h6 class="mb-1 avis-user-name">
-                                                    <i class="fas fa-user me-2 text-primary"></i>
+                                                    <i class="fas fa-user me-2 text-vert"></i>
                                                     {{ avis.user.first_name }} {{ avis.user.last_name }}
                                                 </h6>
                                                 <small class="avis-date">
@@ -112,14 +112,14 @@
                                         </div>
                                         
                                         <div class="avis-content">
-                                            <p class="mb-0">{{ avis.commentaire }}</p>
+                                            <textarea class="form-control" rows="3" style="overflow-y: auto; resize: none;" readonly>{{ avis.commentaire }}</textarea>
                                         </div>
                                         
                                         {% if user.is_authenticated and user != avis.user %}
                                         <div class="mt-3">
                                             <form method="POST" action="{% url 'avis:avis-signal' avis.pk %}" class="d-inline">
                                                 {% csrf_token %}
-                                                <button type="submit" class="btn btn-sm btn-avis-primary" onclick="return confirm('Êtes-vous sûr de vouloir signaler cet avis ?')">
+                                                <button type="submit" class="btn btn-sm btn-rouge" onclick="return confirm('Êtes-vous sûr de vouloir signaler cet avis ?')">
                                                     <i class="fas fa-flag me-1"></i>Signaler
                                                 </button>
                                             </form>
@@ -168,11 +168,11 @@
                     {% else %}
                         <div class="text-center py-5">
                             <div class="empty-state">
-                                <i class="fas fa-star fa-4x text-muted mb-3"></i>
+                                <i class="fas fa-star fa-4x text-text mb-3"></i>
                                 <h4>Aucun avis disponible</h4>
-                                <p class="text-muted">Soyez le premier à laisser un avis sur cette structure !</p>
+                                <p class="text-text">Soyez le premier à laisser un avis sur cette structure !</p>
                                 {% if user.is_authenticated %}
-                                    <a href="{% url 'avis:avis-create-structure' structure.pk %}" class="btn btn-primary">
+                                    <a href="{% url 'avis:avis-create-structure' structure.pk %}" class="btn btn-vert">
                                         <i class="fas fa-star me-2"></i>Laisser un avis
                                     </a>
                                 {% endif %}
