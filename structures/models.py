@@ -8,15 +8,36 @@ from accounts.models import User
 
 class Structures(models.Model):
 
+    TYPE_CHOICES = (
+        ('restaurant', 'Restaurant'),
+        ('fastfood', 'Fast Food'),
+        ('cafe', 'Café'),
+        ('boulangerie', 'Boulangerie'),
+        ('traiteur', 'Traiteur'),
+        ('autre', 'Autre'),
+    )
+
+    VILLE_CHOICES = (
+        ('Lomé', 'Lomé'),
+        ('Kara', 'Kara'),
+        ('Sokodé', 'Sokodé'),
+        ('Atakpamé', 'Atakpamé'),
+        ('Tsévié', 'Tsévié'),
+        ('Aného', 'Aného'),
+        ('Mango', 'Mango'),
+        ('Dapaong', 'Dapaong'),
+        ('Autre', 'Autre'),
+    )
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='structure')
     nom = models.CharField(max_length=100)
     telephone = models.CharField(max_length=20)
     adresse = models.CharField(max_length=255)
-    ville = models.CharField(max_length=100)
+    ville = models.CharField(max_length=100, choices=VILLE_CHOICES)
     heure_ouverture = models.CharField(max_length=100, blank=True, null=True)
     heure_fermeture = models.CharField(max_length=100, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    type = models.CharField(max_length=100)
+    type = models.CharField(max_length=100, choices=TYPE_CHOICES)
     photo = models.ImageField(upload_to='structures/', blank=True, null=True)
     date_creation = models.DateTimeField(auto_now_add=True)
 

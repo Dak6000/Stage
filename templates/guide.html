@@ -1,309 +1,476 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Guide d'utilisation - {{ block.super }}{% endblock %}
-
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock %}
+{% block title %}Guide d'utilisation - E-Menu{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section" style="min-height: 60vh;">
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/promotions.css' %}">
+
+<!-- Hero Section, même thème que index.html -->
+<section class="hero-section" style="min-height: 40vh;">
     <div class="carousel-overlay"></div>
-    <img src="{% static 'images/restaurant-bg1.jpg' %}" alt="Guide d'utilisation" class="d-block w-100">
+    <img src="{% static 'images/restaurant-bg2.jpg' %}" alt="Guide d'utilisation" class="d-block w-100">
     <div class="hero-content">
         <h1 class="hero-title">Guide d'utilisation</h1>
-        <p class="hero-subtitle">Découvrez comment utiliser E-Menu Togo pour trouver les meilleurs restaurants</p>
-    </div>
-</section>
-
-<!-- Guide Section -->
-<section class="guide-section">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Comment utiliser E-Menu Togo</h2>
-            <p class="section-subtitle">Suivez ce guide étape par étape pour une expérience optimale</p>
-        </div>
-
-        <div class="row">
-            <!-- Étape 1 -->
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="guide-card">
-                    <div class="guide-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <h3 class="guide-title">1. Rechercher un restaurant</h3>
-                    <p class="guide-description">
-                        Utilisez la barre de recherche en haut de la page d'accueil pour trouver un restaurant par nom, 
-                        type de cuisine ou localisation. Vous pouvez également filtrer par ville et catégorie.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Étape 2 -->
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="guide-card">
-                    <div class="guide-icon">
-                        <i class="fas fa-utensils"></i>
-                    </div>
-                    <h3 class="guide-title">2. Consulter le menu</h3>
-                    <p class="guide-description">
-                        Cliquez sur "Voir détails" pour accéder au menu complet du restaurant. 
-                        Vous y trouverez tous les plats disponibles avec leurs descriptions et prix.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Étape 3 -->
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="guide-card">
-                    <div class="guide-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h3 class="guide-title">3. Lire les avis</h3>
-                    <p class="guide-description">
-                        Consultez les avis et notes des autres clients pour faire le meilleur choix. 
-                        Les restaurants sont classés par popularité et qualité de service.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Étape 4 -->
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="guide-card">
-                    <div class="guide-icon">
-                        <i class="fas fa-phone"></i>
-                    </div>
-                    <h3 class="guide-title">4. Contacter le restaurant</h3>
-                    <p class="guide-description">
-                        Utilisez les informations de contact fournies pour appeler le restaurant 
-                        et passer votre commande ou faire une réservation.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Étape 5 -->
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="guide-card">
-                    <div class="guide-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                    </div>
-                    <h3 class="guide-title">5. Se rendre au restaurant</h3>
-                    <p class="guide-description">
-                        Utilisez l'adresse et les informations de localisation pour vous rendre 
-                        au restaurant et profiter de votre repas.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Étape 6 -->
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="guide-card">
-                    <div class="guide-icon">
-                        <i class="fas fa-comment"></i>
-                    </div>
-                    <h3 class="guide-title">6. Laisser un avis</h3>
-                    <p class="guide-description">
-                        Après votre visite, n'oubliez pas de laisser un avis pour aider 
-                        d'autres clients à faire leur choix.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Fonctionnalités Section -->
-<section class="py-5" style="background: var(--bs-fontSecondary);">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Fonctionnalités principales</h2>
-            <p class="section-subtitle">Découvrez toutes les fonctionnalités disponibles sur E-Menu Togo</p>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-6 mb-4">
-                <div class="guide-card">
-                    <h3 class="guide-title">
-                        <i class="fas fa-filter me-2" style="color: var(--bs-vert);"></i>
-                        Filtres avancés
-                    </h3>
-                    <p class="guide-description">
-                        Filtrez les restaurants par type de cuisine, ville, note moyenne, 
-                        prix et autres critères pour trouver exactement ce que vous cherchez.
-                    </p>
-                </div>
-            </div>
-
-            <div class="col-lg-6 mb-4">
-                <div class="guide-card">
-                    <h3 class="guide-title">
-                        <i class="fas fa-mobile-alt me-2" style="color: var(--bs-vert);"></i>
-                        Interface responsive
-                    </h3>
-                    <p class="guide-description">
-                        Notre site s'adapte parfaitement à tous les écrans : ordinateur, 
-                        tablette et smartphone pour une expérience optimale.
-                    </p>
-                </div>
-            </div>
-
-            <div class="col-lg-6 mb-4">
-                <div class="guide-card">
-                    <h3 class="guide-title">
-                        <i class="fas fa-clock me-2" style="color: var(--bs-vert);"></i>
-                        Informations en temps réel
-                    </h3>
-                    <p class="guide-description">
-                        Accédez aux horaires d'ouverture, menus du jour et promotions 
-                        en temps réel pour planifier votre visite.
-                    </p>
-                </div>
-            </div>
-
-            <div class="col-lg-6 mb-4">
-                <div class="guide-card">
-                    <h3 class="guide-title">
-                        <i class="fas fa-users me-2" style="color: var(--bs-vert);"></i>
-                        Communauté active
-                    </h3>
-                    <p class="guide-description">
-                        Rejoignez notre communauté d'amateurs de gastronomie et partagez 
-                        vos découvertes culinaires avec d'autres passionnés.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Conseils Section -->
-<section class="py-5">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Conseils d'utilisation</h2>
-            <p class="section-subtitle">Maximisez votre expérience avec ces conseils pratiques</p>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="guide-card">
-                    <h4 class="guide-title">
-                        <i class="fas fa-lightbulb me-2" style="color: var(--bs-jaune);"></i>
-                        Conseils pour les clients
-                    </h4>
-                    <ul class="guide-description" style="text-align: left;">
-                        <li>Lisez attentivement les descriptions des plats</li>
-                        <li>Consultez les photos pour vous faire une idée</li>
-                        <li>Vérifiez les horaires d'ouverture</li>
-                        <li>Appelez à l'avance pour les réservations</li>
-                        <li>Laissez des avis constructifs</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-md-6 mb-4">
-                <div class="guide-card">
-                    <h4 class="guide-title">
-                        <i class="fas fa-store me-2" style="color: var(--bs-jaune);"></i>
-                        Conseils pour les restaurateurs
-                    </h4>
-                    <ul class="guide-description" style="text-align: left;">
-                        <li>Mettez à jour régulièrement vos menus</li>
-                        <li>Ajoutez des photos de qualité</li>
-                        <li>Répondez aux avis clients</li>
-                        <li>Mettez en avant vos spécialités</li>
-                        <li>Utilisez les promotions pour attirer les clients</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- FAQ Section -->
-<section class="py-5" style="background: var(--bs-fontSecondary);">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Questions fréquentes</h2>
-            <p class="section-subtitle">Trouvez rapidement les réponses à vos questions</p>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-8 mx-auto">
-                <div class="accordion" id="faqAccordion">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="faq1">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
-                                Comment puis-je ajouter mon restaurant ?
-                            </button>
-                        </h2>
-                        <div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                Pour ajouter votre restaurant, créez un compte, puis cliquez sur "Inscrire votre établissement" 
-                                dans la section "Vous êtes un restaurant ?" sur la page d'accueil.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="faq2">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
-                                Les prix sont-ils à jour ?
-                            </button>
-                        </h2>
-                        <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                Nous encourageons les restaurateurs à maintenir leurs prix à jour, mais nous recommandons 
-                                de vérifier directement auprès du restaurant avant de commander.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="faq3">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
-                                Comment fonctionne le système de notation ?
-                            </button>
-                        </h2>
-                        <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                Les notes sont basées sur les avis des clients. Chaque utilisateur peut noter de 1 à 5 étoiles 
-                                et laisser un commentaire détaillé sur son expérience.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="faq4">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
-                                Puis-je commander directement sur le site ?
-                            </button>
-                        </h2>
-                        <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                Actuellement, le site sert de guide pour découvrir les restaurants. Pour passer commande, 
-                                utilisez les informations de contact fournies pour appeler directement le restaurant.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Contact Section -->
-<section class="cta-section">
-    <div class="container">
-        <h2 class="cta-title">Besoin d'aide ?</h2>
-        <p class="cta-description">
-            Notre équipe est là pour vous accompagner dans l'utilisation d'E-Menu Togo
-        </p>
-        <a href="mailto:dakshadow@gmail.com" class="cta-btn">
-            <i class="fas fa-envelope me-2"></i>Nous contacter
+        <p class="hero-subtitle">Découvrez comment utiliser efficacement notre plateforme de gestion de restaurants</p>
+        <a href="#guide-sections" class="btn btn-jaune">
+            <i class="fas fa-arrow-down me-2"></i>Commencer
         </a>
     </div>
 </section>
+
+<div id="guide-sections" class="container mt-4">
+
+    <!-- Guide contextuel selon le statut de l'utilisateur -->
+    {% if user.is_authenticated %}
+        <!-- Utilisateur connecté -->
+        <div class="guide-section mb-5">
+            <h2 class="guide-section-title">
+                <i class="fas fa-user-check me-2"></i>Bienvenue {{ user.first_name }} !
+            </h2>
+            
+            {% if not user.structure.exists %}
+                <!-- Utilisateur sans structure -->
+                <div class="guide-card priority-card">
+                    <div class="card-header bg-vert text-white">
+                        <h3 class="h5 mb-0">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Première étape : Créer votre structure
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-3">Pour commencer à utiliser E-Menu, vous devez d'abord créer votre restaurant ou établissement.</p>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h6 class="fw-bold">Ce que vous pourrez faire ensuite :</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success me-2"></i>Ajouter vos plats et menus</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Gérer vos promotions</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Suivre vos statistiques</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <a href="{% url 'structures:register_structure' %}" class="btn btn-vert btn-lg">
+                                    <i class="fas fa-plus-circle me-2"></i>Créer ma structure
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <!-- Utilisateur avec structure -->
+                <div class="guide-card success-card">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="h5 mb-0">
+                            <i class="fas fa-building me-2"></i>Structure : {{ user.structure.first.nom }}
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-success mb-3">
+                            <i class="fas fa-check-circle me-2"></i>Votre structure est configurée !
+                        </p>
+                        
+                        {% if not plats_count or plats_count == 0 %}
+                            <!-- Pas de plats -->
+                            <div class="alert alert-info">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-info-circle me-2"></i>Prochaine étape : Ajouter vos premiers plats
+                                </h6>
+                                <p class="mb-2">Commencez par créer vos plats pour constituer votre carte.</p>
+                                <a href="{% url 'plats:plat-create' %}" class="btn btn-info">
+                                    <i class="fas fa-plus me-2"></i>Ajouter mon premier plat
+                                </a>
+                            </div>
+                        {% endif %}
+                        
+                        {% if not menus_count or menus_count == 0 %}
+                            <!-- Pas de menus -->
+                            <div class="alert alert-warning">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-clipboard-list me-2"></i>Créer vos menus
+                                </h6>
+                                <p class="mb-2">Organisez vos plats en menus pour une meilleure présentation.</p>
+                                <a href="{% url 'menus:menus-create' %}" class="btn btn-warning">
+                                    <i class="fas fa-plus me-2"></i>Créer mon premier menu
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Actions rapides -->
+        <div class="guide-section mb-5">
+            <h2 class="guide-section-title">
+                <i class="fas fa-bolt me-2"></i>Actions rapides
+            </h2>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="action-card">
+                        <div class="action-icon bg-vert">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <h5>Gérer mes plats</h5>
+                        <p>Ajouter, modifier ou supprimer vos plats</p>
+                        <a href="{% url 'plats:plat-list' %}" class="btn btn-outline-vert">Accéder</a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="action-card">
+                        <div class="action-icon bg-jaune">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <h5>Promotions</h5>
+                        <p>Gérer vos offres et réductions</p>
+                        <a href="{% url 'plats:plats-promotion' %}" class="btn btn-outline-jaune">Accéder</a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="action-card">
+                        <div class="action-icon bg-rouge">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <h5>Mes menus</h5>
+                        <p>Organiser vos plats en menus</p>
+                        <a href="{% url 'menus:menus-list' %}" class="btn btn-outline-rouge">Accéder</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <!-- Utilisateur non connecté -->
+        <div class="guide-section mb-5">
+            <h2 class="guide-section-title">
+                <i class="fas fa-user-plus me-2"></i>Commencez votre aventure E-Menu
+            </h2>
+            
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="guide-card">
+                        <div class="card-header bg-vert text-white">
+                            <h3 class="h5 mb-0">
+                                <i class="fas fa-user-plus me-2"></i>Nouveau sur E-Menu ?
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-3">Rejoignez notre communauté de restaurateurs et gérez votre établissement en ligne.</p>
+                            <ul class="list-unstyled mb-3">
+                                <li><i class="fas fa-check text-success me-2"></i>Création de compte gratuite</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Interface intuitive et moderne</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Support client disponible</li>
+                            </ul>
+                            <a href="{% url 'accounts:register' %}" class="btn btn-vert">
+                                <i class="fas fa-user-plus me-2"></i>Créer mon compte
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <div class="guide-card">
+                        <div class="card-header bg-jaune text-dark">
+                            <h3 class="h5 mb-0">
+                                <i class="fas fa-sign-in-alt me-2"></i>Déjà un compte ?
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-3">Connectez-vous pour accéder à votre tableau de bord et gérer votre restaurant.</p>
+                            <ul class="list-unstyled mb-3">
+                                <li><i class="fas fa-check text-success me-2"></i>Accès à vos données</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Gestion des plats et menus</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Suivi des promotions</li>
+                            </ul>
+                            <a href="{% url 'accounts:login' %}" class="btn btn-jaune">
+                                <i class="fas fa-sign-in-alt me-2"></i>Se connecter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Guide général des fonctionnalités -->
+    <div class="guide-section mb-5">
+        <h2 class="guide-section-title">
+            <i class="fas fa-book me-2"></i>Fonctionnalités principales
+        </h2>
+        
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-utensils fa-3x text-vert"></i>
+                    </div>
+                    <h4>Gestion des plats</h4>
+                    <ul class="feature-list">
+                        <li>Ajout et modification de plats</li>
+                        <li>Catégorisation automatique</li>
+                        <li>Gestion des photos et descriptions</li>
+                        <li>Contrôle de la disponibilité</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tags fa-3x text-jaune"></i>
+                    </div>
+                    <h4>Système de promotions</h4>
+                    <ul class="feature-list">
+                        <li>Création de réductions</li>
+                        <li>Gestion des dates de validité</li>
+                        <li>Calcul automatique des prix</li>
+                        <li>Suivi des promotions actives</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clipboard-list fa-3x text-rouge"></i>
+                    </div>
+                    <h4>Organisation des menus</h4>
+                    <ul class="feature-list">
+                        <li>Création de menus personnalisés</li>
+                        <li>Regroupement par catégories</li>
+                        <li>Gestion des statuts</li>
+                        <li>Présentation professionnelle</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conseils et astuces -->
+    <div class="guide-section mb-5">
+        <h2 class="guide-section-title">
+            <i class="fas fa-lightbulb me-2"></i>Conseils et astuces
+        </h2>
+        
+        <div class="tips-container">
+            <div class="tip-item">
+                <div class="tip-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <div class="tip-content">
+                    <h5>Photos de qualité</h5>
+                    <p>Utilisez des photos nettes et attrayantes de vos plats pour attirer plus de clients.</p>
+                </div>
+            </div>
+            
+            <div class="tip-item">
+                <div class="tip-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="tip-content">
+                    <h5>Promotions saisonnières</h5>
+                    <p>Planifiez vos promotions à l'avance pour les périodes de forte affluence.</p>
+                </div>
+            </div>
+            
+            <div class="tip-item">
+                <div class="tip-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="tip-content">
+                    <h5>Suivi des performances</h5>
+                    <p>Consultez régulièrement votre tableau de bord pour analyser vos performances.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support et contact -->
+    <div class="guide-section mb-5">
+        <h2 class="guide-section-title">
+            <i class="fas fa-headset me-2"></i>Besoin d'aide ?
+        </h2>
+        
+        <div class="support-card text-center">
+            <div class="support-icon mb-3">
+                <i class="fas fa-headset fa-3x text-vert"></i>
+            </div>
+            <h4>Notre équipe est là pour vous aider</h4>
+            <p class="text-muted mb-4">
+                Si vous avez des questions ou rencontrez des difficultés, n'hésitez pas à nous contacter.
+            </p>
+            <div class="row justify-content-center">
+                <div class="col-md-4 mb-2">
+                    <a href="mailto:support@emenu.com" class="btn btn-outline-vert">
+                        <i class="fas fa-envelope me-2"></i>Email support
+                    </a>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <a href="tel:+1234567890" class="btn btn-outline-jaune">
+                        <i class="fas fa-phone me-2"></i>Appeler
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.guide-header {
+    background: linear-gradient(135deg, var(--bs-vert) 0%, var(--bs-jaune) 100%);
+    color: white;
+    padding: 3rem 2rem;
+    border-radius: 15px;
+    margin-bottom: 3rem;
+}
+
+.guide-header h1 {
+    color: white !important;
+}
+
+.guide-section-title {
+    color: var(--bs-vert);
+    border-bottom: 3px solid var(--bs-vert);
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.guide-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.guide-card:hover {
+    transform: translateY(-5px);
+}
+
+.priority-card {
+    border-left: 5px solid var(--bs-rouge);
+}
+
+.success-card {
+    border-left: 5px solid var(--bs-vert);
+}
+
+.action-card {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    height: 100%;
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+}
+
+.action-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    color: white;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    height: 100%;
+}
+
+.feature-icon {
+    margin-bottom: 1.5rem;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+.feature-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.feature-list li:before {
+    content: "✓";
+    color: var(--bs-vert);
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.tips-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.tip-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border-left: 4px solid var(--bs-jaune);
+}
+
+.tip-icon {
+    background: var(--bs-jaune);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.support-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 3rem;
+    border-radius: 15px;
+    border: 2px solid var(--bs-vert);
+}
+
+.btn-outline-vert {
+    color: var(--bs-vert);
+    border-color: var(--bs-vert);
+}
+
+.btn-outline-vert:hover {
+    background-color: var(--bs-vert);
+    color: white;
+}
+
+.btn-outline-jaune {
+    color: var(--bs-jaune);
+    border-color: var(--bs-jaune);
+}
+
+.btn-outline-jaune:hover {
+    background-color: var(--bs-jaune);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .guide-header {
+        padding: 2rem 1rem;
+    }
+    
+    .tips-container {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 {% endblock %}

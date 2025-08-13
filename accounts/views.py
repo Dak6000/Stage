@@ -9,6 +9,7 @@ from accounts.forms import UserLoginForm, UserRegistrationForm, UserUpdateForm, 
 from accounts.models import UserLoginHistory
 from plats.models import Plats
 from structures.models import Structures
+from menus.models import Menus
 
 # Récupère le modèle User personnalisé
 User = get_user_model()
@@ -91,15 +92,43 @@ def register_user(request):
 @login_required
 def dashboard(request):
     structures = Structures.objects.filter(user=request.user)
+    plats = Plats.objects.filter(createur=request.user)
+    plats_promotion = [plat for plat in plats if plat.est_en_promotion()]
+    menus = Menus.objects.filter(createur=request.user)
+    
+    # Statistiques avancées
+    plats_disponibles = plats.filter(disponibilite=True).count()
+    plats_indisponibles = plats.filter(disponibilite=False).count()
+    plats_par_categorie = {}
+    for code, nom in Plats.CATEGORIES:
+        plats_par_categorie[nom] = plats.filter(categorie=code).count()
+    
+    # Historique des connexions
     login_history = UserLoginHistory.objects.filter(
         user=request.user,
         login_time__gte=timezone.now() - timezone.timedelta(days=10)
     ).order_by('-login_time')
+    
+    # Connexions par jour (7 derniers jours)
+    from datetime import timedelta
+    connexions_par_jour = {}
+    for i in range(7):
+        date = timezone.now().date() - timedelta(days=i)
+        connexions_par_jour[date.strftime('%d/%m')] = login_history.filter(
+            login_time__date=date
+        ).count()
 
     context = {
         'structures': structures,
         'structures_count': structures.count(),
+        'plats_count': plats.count(),
+        'plats_disponibles': plats_disponibles,
+        'plats_indisponibles': plats_indisponibles,
+        'plats_par_categorie': plats_par_categorie,
+        'promotions_count': len(plats_promotion),
+        'menus_count': menus.count(),
         'login_history': login_history,
+        'connexions_par_jour': connexions_par_jour,
     }
 
     # Chemin du template: accounts/templates/accounts/dashboard.html
@@ -115,17 +144,16 @@ def home_view(request):
     # Plats
     featured_plats = Plats.objects.all().order_by('-id')[:8]
     nom_plats = Plats.objects.values_list('nom', flat=True).distinct()
-    plat_categories = Plats.objects.values_list('categorie', flat=True).distinct()
+    # Catégories uniques (code, label)
+    unique_codes = list(Plats.objects.values_list('categorie', flat=True).distinct())
+    label_map = dict(Plats.CATEGORIES)
+    plat_categories = [(code, label_map.get(code, code)) for code in unique_codes]
     
     # Plats en promotion
-    plats_promotion = Plats.objects.filter(
-        en_promotion=True,
-        disponibilite=True
-    ).filter(
-        Q(date_debut_promotion__lte=timezone.now()) | Q(date_debut_promotion__isnull=True)
-    ).filter(
-        Q(date_fin_promotion__gte=timezone.now()) | Q(date_fin_promotion__isnull=True)
-    ).order_by('-date_creation')[:6]
+    plats = Plats.objects.filter(disponibilite=True)
+    plats_promotion = [plat for plat in plats if plat.est_en_promotion()]
+    plats_promotion.sort(key=lambda x: (x.date_modification or x.date_creation), reverse=True)
+    plats_promotion = plats_promotion[:6]
 
     context = {
         # Structures

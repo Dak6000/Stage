@@ -45,10 +45,10 @@
                 <h3 class="section-title">{{ categorie }}</h3>
                 <div class="row">
                     {% for plat in plats %}
-                    <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="col-lg-3 col-md-4 mb-3">
                         <div class="card h-100 promotion-card border-0 shadow-lg">
                             <!-- Badge de promotion si applicable -->
-                            {% if plat.en_promotion %}
+                            {% if plat.est_en_promotion %}
                             <div class="promotion-badge">
                                 <i class="fas fa-fire"></i>
                                 PROMO
@@ -74,21 +74,21 @@
                                 <!-- Prix -->
                                 <div class="price-section">
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <div>
-                                            {% if plat.en_promotion %}
-                                            <span class="original-price text-text text-decoration-line-through">
-                                                {{ plat.prix }} FCFA
-                                            </span>
-                                            <br>
-                                            <span class="promotion-price fw-bold text-rouge fs-6">
-                                                {{ plat.get_prix_promotionnel|floatformat:2 }} FCFA
-                                            </span>
-                                            {% else %}
-                                            <span class="promotion-price fw-bold fs-6">
-                                                {{ plat.prix }} FCFA
-                                            </span>
-                                            {% endif %}
-                                        </div>
+                                                                                 <div>
+                                             {% if plat.est_en_promotion %}
+                                             <span class="original-price text-text text-decoration-line-through">
+                                                 {{ plat.prix }} FCFA
+                                             </span>
+                                             <br>
+                                             <span class="promotion-price fw-bold text-rouge fs-6">
+                                                 {{ plat.get_prix_promotionnel|floatformat:2 }} FCFA
+                                             </span>
+                                             {% else %}
+                                             <span class="promotion-price fw-bold fs-6">
+                                                 {{ plat.prix }} FCFA
+                                             </span>
+                                             {% endif %}
+                                         </div>
                                         <span class="badge bg-vert text-font">
                                             <i class="fas fa-clock me-1"></i>{{ plat.temps_preparation|default:"15" }} min
                                         </span>

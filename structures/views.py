@@ -53,7 +53,10 @@ def list_structures(request):
 
     # Plats
     featured_plats = Plats.objects.all().order_by('-id')
-    plat_categories = Plats.objects.order_by('categorie').values_list('categorie', flat=True).distinct()
+    # Catégories uniques (code, label)
+    unique_codes = list(Plats.objects.values_list('categorie', flat=True).distinct())
+    label_map = dict(Plats.CATEGORIES)
+    plat_categories = [(code, label_map.get(code, code)) for code in unique_codes]
 
 
     context = {

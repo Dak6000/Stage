@@ -5,35 +5,15 @@ import re
 
 
 class StructuresRegistrationForm(forms.ModelForm):
-    TYPE_CHOICES = (
-        ('restaurant', 'Restaurant'),
-        ('fastfood', 'Fast Food'),
-        ('cafe', 'Café'),
-        ('boulangerie', 'Boulangerie'),
-        ('traiteur', 'Traiteur'),
-        ('autre', 'Autre'),
-    )
-
-    VILLE_CHOICES = (
-        ('Lomé', 'Lomé'),
-        ('Kara', 'Kara'),
-        ('Sokodé', 'Sokodé'),
-        ('Atakpamé', 'Atakpamé'),
-        ('Tsévié', 'Tsévié'),
-        ('Aného', 'Aného'),
-        ('Mango', 'Mango'),
-        ('Dapaong', 'Dapaong'),
-        ('Autre', 'Autre'),
-    )
-
+    # Choices déplacés au modèle; le widget reste stylé ici
     type = forms.ChoiceField(
-        choices=TYPE_CHOICES,
+        choices=Structures.TYPE_CHOICES,
         widget=forms.Select(attrs={'class': 'form-control'}),
         label='Type de structure'
     )
 
     ville = forms.ChoiceField(
-        choices=VILLE_CHOICES,
+        choices=Structures.VILLE_CHOICES,
         widget=forms.Select(attrs={'class': 'form-control'}),
         label='Ville'
     )

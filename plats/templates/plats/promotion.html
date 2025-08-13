@@ -20,6 +20,15 @@
         </div>
     </div>
 
+    <!-- Bouton de retour -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <a href="{% url 'plats:plat-list' %}" class="btn btn-outline-jaune">
+                <i class="fas fa-arrow-left me-2"></i>Retour à la liste des plats
+            </a>
+        </div>
+    </div>
+
     {% if plats_promotion %}
     <div class="row">
         {% for plat in plats_promotion %}

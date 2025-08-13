@@ -121,18 +121,36 @@
                 <p class="text-text">Découvrez nos spécialités culinaires</p>
             </div>
 
-            <!-- Filtres Menus -->
+            <!-- Filtres Plats (recherche en direct + options avancées) -->
             <div class="filter-section mb-4">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <input type="text" class="form-control filter-input" id="platSearch" placeholder="Rechercher un plat...">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label for="platSearch" class="form-label">Recherche</label>
+                        <input type="text" class="form-control filter-input" id="platSearch" placeholder="Rechercher un plat par nom...">
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <select class="form-select filter-input" id="menuCategoryFilter">
-                            <option value="">Tous les types</option>
-                            {% for nom in nom_plats %}
-                                <option value="{{ nom|lower }}">{{ nom }}</option>
+                    <div class="col-md-3">
+                        <label for="platCategorieFilter" class="form-label">Catégorie</label>
+                        <select class="form-select filter-input" id="platCategorieFilter">
+                            <option value="">Toutes catégories</option>
+                            {% for code, label in plat_categories %}
+                                <option value="{{ code|lower }}">{{ label }}</option>
                             {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="platDisponibiliteFilter" class="form-label">Disponibilité</label>
+                        <select class="form-select filter-input" id="platDisponibiliteFilter">
+                            <option value="">Tous</option>
+                            <option value="true">Disponible</option>
+                            <option value="false">Indisponible</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="platPromotionFilter" class="form-label">Promotion</label>
+                        <select class="form-select filter-input" id="platPromotionFilter">
+                            <option value="">Tous</option>
+                            <option value="true">En promotion</option>
+                            <option value="false">Sans promotion</option>
                         </select>
                     </div>
                 </div>
@@ -141,9 +159,11 @@
             <!-- Cartes Menus -->
             <div class="row" id="menusContainer">
                 {% for plat in featured_plats %}
-                <div class="col-lg-3 col-md-4 mb-3"
-                    data-categorie="{{ plat.categorie.nom|lower }}"
-                    data-nom="{{ plat.nom|lower }}">
+                <div class="col-lg-3 col-md-4 mb-3 menu-card"
+                    data-categorie="{{ plat.categorie|lower }}"
+                    data-nom="{{ plat.nom|lower }}"
+                    data-disponibilite="{% if plat.disponibilite %}true{% else %}false{% endif %}"
+                    data-promotion="{% if plat.en_promotion %}true{% else %}false{% endif %}">
                     <div class="card h-100 promotion-card border-0 shadow-lg">
                         <div class="promotion-vote">
                             {% if plat.note_moyenne > 0 %}
@@ -282,38 +302,39 @@ document.addEventListener('DOMContentLoaded', function() {
     structureCategoryFilter.addEventListener('change', filterStructures);
 });
 
-// Script pour le filtrage des plats
+// Script pour le filtrage des plats (structures)
 document.addEventListener('DOMContentLoaded', function() {
     const platSearch = document.getElementById('platSearch');
-    const platCategoryFilter = document.getElementById('platCategoryFilter');
-    const menusContainer = document.getElementById('menusContainer');
-    const menuCards = menusContainer.querySelectorAll('.menu-card');
+    const platCategorieFilter = document.getElementById('platCategorieFilter');
+    const platDisponibiliteFilter = document.getElementById('platDisponibiliteFilter');
+    const platPromotionFilter = document.getElementById('platPromotionFilter');
+    const menuCards = document.querySelectorAll('.menu-card');
 
     function filterPlats() {
-        const searchTerm = platSearch.value.toLowerCase();
-        const selectedCategory = platCategoryFilter.value.toLowerCase();
+        const term = platSearch ? platSearch.value.toLowerCase() : '';
+        const selectedCat = platCategorieFilter ? platCategorieFilter.value.toLowerCase() : '';
+        const selectedDisp = platDisponibiliteFilter ? platDisponibiliteFilter.value : '';
+        const selectedPromo = platPromotionFilter ? platPromotionFilter.value : '';
 
         menuCards.forEach(card => {
-            const categorie = card.dataset.categorie;
-            const nom = card.dataset.nom;
+            const nom = card.dataset.nom ? card.dataset.nom.toLowerCase() : '';
+            const categorie = card.dataset.categorie ? card.dataset.categorie.toLowerCase() : '';
+            const dispo = card.dataset.disponibilite || '';
+            const promo = card.dataset.promotion || '';
 
-            const matchesSearch = nom.includes(searchTerm);
-            const matchesCategory = !selectedCategory || categorie.includes(selectedCategory);
+            const matchesTerm = !term || nom.includes(term);
+            const matchesCat = !selectedCat || categorie === selectedCat;
+            const matchesDisp = !selectedDisp || dispo === selectedDisp;
+            const matchesPromo = !selectedPromo || promo === selectedPromo;
 
-            if (matchesSearch && matchesCategory) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
+            card.style.display = (matchesTerm && matchesCat && matchesDisp && matchesPromo) ? 'block' : 'none';
         });
     }
 
-    if (platSearch) {
-        platSearch.addEventListener('input', filterPlats);
-    }
-    if (platCategoryFilter) {
-        platCategoryFilter.addEventListener('change', filterPlats);
-    }
+    if (platSearch) platSearch.addEventListener('input', filterPlats);
+    if (platCategorieFilter) platCategorieFilter.addEventListener('change', filterPlats);
+    if (platDisponibiliteFilter) platDisponibiliteFilter.addEventListener('change', filterPlats);
+    if (platPromotionFilter) platPromotionFilter.addEventListener('change', filterPlats);
 });
 </script>
 

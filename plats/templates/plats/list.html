@@ -23,6 +23,74 @@
         </div>
 
         <div class="card-body p-4">
+            <!-- Barre de recherche et filtres -->
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <form method="GET" class="row g-3" id="searchFilterForm">
+                        <!-- Recherche par nom -->
+                         <div class="col-md-4">
+                             <input type="text" name="search" class="form-control" id="searchInput"
+                                   placeholder="Rechercher un plat..." 
+                                   value="{{ search_query|default:'' }}">
+                        </div>
+                        
+                        <!-- Filtre par catégorie -->
+                         <div class="col-md-2">
+                             <select name="categorie" class="form-select" id="categorieSelect">
+                                <option value="">Toutes catégories</option>
+                                {% for code, nom in categories %}
+                                <option value="{{ code }}" {% if categorie_filter == code %}selected{% endif %}>
+                                    {{ nom }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <!-- Filtre par disponibilité -->
+                         <div class="col-md-2">
+                             <select name="disponibilite" class="form-select" id="disponibiliteSelect">
+                                <option value="">Tous</option>
+                                <option value="True" {% if disponibilite_filter == 'True' %}selected{% endif %}>Disponible</option>
+                                <option value="False" {% if disponibilite_filter == 'False' %}selected{% endif %}>Indisponible</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Filtre par promotion -->
+                         <div class="col-md-2">
+                             <select name="promotion" class="form-select" id="promotionSelect">
+                                <option value="">Tous</option>
+                                <option value="True" {% if promotion_filter == 'True' %}selected{% endif %}>En promotion</option>
+                                <option value="False" {% if promotion_filter == 'False' %}selected{% endif %}>Sans promotion</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Boutons d'action -->
+                        <div class="col-md-2">
+                            <div class="d-flex">
+                                <button type="submit" class="btn btn-vert me-2">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                {% if search_query or categorie_filter or disponibilite_filter or promotion_filter %}
+                                <a href="{% url 'plats:plat-list' %}" class="btn btn-secondary" title="Réinitialiser les filtres">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Compteur de résultats -->
+                <div class="col-md-4 text-end">
+                    {% if search_query or categorie_filter or disponibilite_filter or promotion_filter %}
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-filter me-1"></i>
+                        {{ plats.count }} résultat{{ plats.count|pluralize }} trouvé{{ plats.count|pluralize }}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            
             {% if plats %}
             <div class="row">
                 {% for plat in plats %}
@@ -55,18 +123,18 @@
                         <div class="card-body">
                             <h5 class="text-vert">{{ plat.nom }}</h5>
                             <p class="card-text text-gray">{{ plat.description|truncatechars:80 }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                {% if plat.est_en_promotion %}
-                                <div>
-                                    <span class="text-rouge text-decoration-line-through">{{ plat.prix }} FCFA</span>
-                                    <br>
-                                    <span class="text-vert fw-bold">{{ plat.get_prix_promotionnel }} FCFA</span>
-                                </div>
-                                {% else %}
-                                <span class="text-vert fw-bold">{{ plat.prix }} FCFA</span>
-                                {% endif %}
-                                <span class="badge bg-jaune">{{ plat.temps_preparation|default:"15" }} min</span>
-                            </div>
+                                                         <div class="d-flex justify-content-between align-items-center">
+                                 {% if plat.est_en_promotion %}
+                                 <div>
+                                     <span class="text-rouge text-decoration-line-through">{{ plat.prix }} FCFA</span>
+                                     <br>
+                                     <span class="text-vert fw-bold">{{ plat.get_prix_promotionnel }} FCFA</span>
+                                 </div>
+                                 {% else %}
+                                 <span class="text-vert fw-bold">{{ plat.prix }} FCFA</span>
+                                 {% endif %}
+                                 <span class="badge bg-jaune">{{ plat.temps_preparation|default:"15" }} min</span>
+                             </div>
                         </div>
                         <div class="card-footer bg-transparent">
                             <div class="btn-group btn-group-sm w-100">
@@ -76,14 +144,11 @@
                                 <a href="{% url 'plats:plat-detail' plat.pk %}" class="btn voir-btn" onclick="event.stopPropagation();">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <form method="POST" action="{% url 'plats:toggle-promotion' plat.pk %}" class="d-inline">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-sm {% if plat.est_en_promotion %}btn-vert{% else %}btn-jaune{% endif %}" 
-                                            title="{% if plat.est_en_promotion %}Désactiver la promotion{% else %}Activer la promotion{% endif %}"
-                                            onclick="event.stopPropagation();">
-                                        <i class="fas fa-tags"></i>
-                                    </button>
-                                </form>
+                                                                 <a href="{% url 'plats:promotion-form' plat.pk %}" class="btn btn-sm btn-jaune" 
+                                    title="{% if plat.est_en_promotion %}Modifier la promotion{% else %}Configurer la promotion{% endif %}"
+                                    onclick="event.stopPropagation();">
+                                     <i class="fas fa-tags"></i>
+                                 </a>
                                 <a href="{% url 'plats:plat-delete' plat.pk %}" class="btn btn-rouge" onclick="event.stopPropagation();">
                                     <i class="fas fa-trash"></i>
                                 </a>
@@ -347,4 +412,33 @@
         margin: 0 auto;
     }
 </style>
+<script>
+// Soumission auto du formulaire au fil de la saisie / des changements
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('searchFilterForm');
+    if (!form) return;
+
+    const searchInput = document.getElementById('searchInput');
+    const categorieSelect = document.getElementById('categorieSelect');
+    const disponibiliteSelect = document.getElementById('disponibiliteSelect');
+    const promotionSelect = document.getElementById('promotionSelect');
+
+    let typingTimer;
+    const doneTypingInterval = 400; // ms
+
+    function submitForm() {
+        if (form.requestSubmit) form.requestSubmit(); else form.submit();
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(submitForm, doneTypingInterval);
+        });
+    }
+    if (categorieSelect) categorieSelect.addEventListener('change', submitForm);
+    if (disponibiliteSelect) disponibiliteSelect.addEventListener('change', submitForm);
+    if (promotionSelect) promotionSelect.addEventListener('change', submitForm);
+});
+</script>
 {% endblock %}

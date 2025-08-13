@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="auth-card card border-0 shadow-lg">
+            <div class="card-header py-3 auth-card-header">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-tags me-2"></i>Configuration de la Promotion
+                </h3>
+            </div>
+            <div class="card-body p-4">
+                <!-- Affichage des erreurs non-field -->
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger mb-4">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Note explicative -->
+                <div class="alert alert-info mb-4">
+                    <h6 class="alert-heading">
+                        <i class="fas fa-info-circle me-2"></i>Comment configurer la promotion
+                    </h6>
+                    <ul class="mb-0">
+                        <li><strong>Prix promotionnel</strong> : Saisissez le nouveau prix, le pourcentage sera calculé automatiquement</li>
+                        <li><strong>Pourcentage de réduction</strong> : Saisissez le pourcentage, le prix sera calculé automatiquement</li>
+                        <li><strong>Dates</strong> : Optionnelles, la promotion sera active immédiatement si non définies</li>
+                        <li><strong>Description</strong> : Optionnelle, pour décrire votre promotion</li>
+                    </ul>
+                </div>
+
+                <!-- Informations du plat -->
+                <div class="plat-info mb-4 p-3 bg-light rounded">
+                    <h5 class="text-vert mb-2">{{ plat.nom }}</h5>
+                    <p class="text-muted mb-1">{{ plat.description|truncatechars:100 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-vert">{{ plat.prix }} FCFA</span>
+                        <span class="badge bg-jaune">{{ plat.get_categorie_display }}</span>
+                    </div>
+                </div>
+
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.prix_promotionnel.id_for_label }}" class="form-label">
+                                    {{ form.prix_promotionnel.label }}
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">FCFA</span>
+                                    {{ form.prix_promotionnel }}
+                                </div>
+                                {% if form.prix_promotionnel.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {% for error in form.prix_promotionnel.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">{{ form.prix_promotionnel.help_text }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.pourcentage_reduction.id_for_label }}" class="form-label">
+                                    {{ form.pourcentage_reduction.label }}
+                                </label>
+                                <div class="input-group">
+                                    {{ form.pourcentage_reduction }}
+                                    <span class="input-group-text">%</span>
+                                </div>
+                                {% if form.pourcentage_reduction.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {% for error in form.pourcentage_reduction.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">{{ form.pourcentage_reduction.help_text }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.date_heure_debut_promotion.id_for_label }}" class="form-label">
+                                    Date et heure de début
+                                </label>
+                                <div class="input-group mb-2">
+                                    {{ form.date_heure_debut_promotion.subwidgets.0 }}
+                                </div>
+                                <div class="input-group">
+                                    {{ form.date_heure_debut_promotion.subwidgets.1 }}
+                                </div>
+                                {% if form.date_heure_debut_promotion.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {% for error in form.date_heure_debut_promotion.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">{{ form.date_heure_debut_promotion.help_text }}</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.date_heure_fin_promotion.id_for_label }}" class="form-label">
+                                    Date et heure de fin
+                                </label>
+                                <div class="input-group mb-2">
+                                    {{ form.date_heure_fin_promotion.subwidgets.0 }}
+                                </div>
+                                <div class="input-group">
+                                    {{ form.date_heure_fin_promotion.subwidgets.1 }}
+                                </div>
+                                {% if form.date_heure_fin_promotion.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        {% for error in form.date_heure_fin_promotion.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">{{ form.date_heure_fin_promotion.help_text }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.description_promotion.id_for_label }}" class="form-label">
+                            {{ form.description_promotion.label }}
+                        </label>
+                        {{ form.description_promotion }}
+                        {% if form.description_promotion.errors %}
+                            <div class="invalid-feedback d-block">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                {% for error in form.description_promotion.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">{{ form.description_promotion.help_text }}</small>
+                    </div>
+
+                                         <div class="d-flex justify-content-between mt-4">
+                         <a href="{% url 'plats:plat-list' %}" class="btn btn-secondary">
+                             <i class="fas fa-times me-2"></i>Annuler
+                         </a>
+                         <div>
+                             {% if plat.est_en_promotion %}
+                             <a href="{% url 'plats:toggle-promotion' plat.pk %}" class="btn btn-rouge me-2" 
+                                onclick="return confirm('Êtes-vous sûr de vouloir désactiver la promotion ?')">
+                                 <i class="fas fa-times me-2"></i>Désactiver la Promotion
+                             </a>
+                             {% endif %}
+                             <button type="submit" class="btn auth-submit-btn">
+                                 <i class="fas fa-save me-2"></i>{% if plat.est_en_promotion %}Modifier{% else %}Activer{% endif %} la Promotion
+                             </button>
+                         </div>
+                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const prixPromoField = document.getElementById('{{ form.prix_promotionnel.id_for_label }}');
+    const pourcentageField = document.getElementById('{{ form.pourcentage_reduction.id_for_label }}');
+
+    // Fonction pour gérer l'exclusivité entre les champs
+    function handleExclusiveFields() {
+        if (prixPromoField.value) {
+            pourcentageField.disabled = true;
+            pourcentageField.value = '';
+        } else if (pourcentageField.value) {
+            prixPromoField.disabled = true;
+            prixPromoField.value = '';
+        } else {
+            prixPromoField.disabled = false;
+            pourcentageField.disabled = false;
+        }
+    }
+
+    // Initialisation
+    handleExclusiveFields();
+
+    // Écouteurs d'événements
+    prixPromoField.addEventListener('input', handleExclusiveFields);
+    pourcentageField.addEventListener('input', handleExclusiveFields);
+    
+    // Définir la date minimale pour les champs de date
+    const today = new Date().toISOString().split('T')[0];
+    document.querySelectorAll('input[type="date"]').forEach(input => {
+        input.min = today;
+    });
+});
+</script>
+
+<style>
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        transition: all 0.3s ease;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: var(--bs-vert);
+        box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+    }
+    .is-invalid {
+        border-color: var(--bs-rouge);
+    }
+    .invalid-feedback {
+        color: var(--bs-rouge);
+        font-size: 0.875em;
+    }
+    input:disabled, select:disabled, textarea:disabled {
+        background-color: #f8f9fa;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+    
+    /* Style pour les champs de date/heure */
+    .row.g-2 .col-6 {
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+    
+    .plat-info {
+        border-left: 4px solid var(--bs-vert);
+    }
+</style>
+{% endblock %}

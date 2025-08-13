@@ -120,15 +120,19 @@ class Plats(models.Model):
         return dict(self.CATEGORIES)[self.categorie]
     
     def est_en_promotion(self):
-        """Vérifie si le plat est actuellement en promotion"""
+        """Vérifie si le plat est configuré pour être en promotion"""
+        return self.en_promotion
+    
+    def promotion_est_active(self):
+        """Vérifie si la promotion est actuellement active selon les dates"""
         if not self.en_promotion:
             return False
-        
-        now = timezone.now()
         
         # Si aucune date n'est définie, la promotion est toujours active
         if not self.date_debut_promotion and not self.date_fin_promotion:
             return True
+        
+        now = timezone.now()
         
         try:
             # Gestion de la date/heure de début
@@ -160,11 +164,11 @@ class Plats(models.Model):
                 
         except (ValueError, TypeError, AttributeError):
             # En cas d'erreur (format d'heure invalide, etc.)
-            return False
+            return True  # Si erreur, on considère que la promotion est active
     
     def get_prix_promotionnel(self):
         """Retourne le prix promotionnel calculé"""
-        if not self.est_en_promotion():
+        if not self.en_promotion:
             return self.prix
         
         if self.prix_promotionnel:
@@ -178,7 +182,7 @@ class Plats(models.Model):
     
     def get_economie(self):
         """Calcule le montant économisé"""
-        if not self.est_en_promotion():
+        if not self.en_promotion:
             return 0
         
         prix_promo = self.get_prix_promotionnel()
@@ -186,7 +190,7 @@ class Plats(models.Model):
     
     def get_pourcentage_economie(self):
         """Calcule le pourcentage d'économie"""
-        if not self.est_en_promotion() or self.prix == 0:
+        if not self.en_promotion or self.prix == 0:
             return 0
         
         economie = self.get_economie()
@@ -194,7 +198,7 @@ class Plats(models.Model):
     
     def get_jours_restants_promotion(self):
         """Calcule le nombre de jours restants pour la promotion"""
-        if not self.est_en_promotion() or not self.date_fin_promotion:
+        if not self.promotion_est_active() or not self.date_fin_promotion:
             return 0
         
         now = timezone.now()

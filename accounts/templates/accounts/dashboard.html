@@ -17,14 +17,16 @@
     </div>
 
     <!-- Cartes de statistiques -->
+    {% if structures_count or plats_count or promotions_count or menus_count %}
     <div class="row mb-4">
         <!-- Carte Structures -->
-        <div class="col-xl-4 col-md-6 mb-4">
+        {% if structures_count %}
+        <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-start h-100 py-2 stats-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs fw-bold mb-1 stats-title">Structures enregistrées</div>
+                            <div class="text-xs fw-bold mb-1 stats-title">Structures</div>
                             <div class="h5 mb-0 fw-bold stats-value">{{ structures_count }}</div>
                         </div>
                         <div class="col-auto">
@@ -34,9 +36,71 @@
                 </div>
             </div>
         </div>
+        {% endif %}
 
+        <!-- Carte Plats -->
+        {% if plats_count %}
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start h-100 py-2 stats-card">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs fw-bold mb-1 stats-title">Plats</div>
+                            <div class="h5 mb-0 fw-bold stats-value">{{ plats_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-utensils fa-2x stats-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Carte Promotions -->
+        {% if promotions_count %}
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start h-100 py-2 stats-card">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs fw-bold mb-1 stats-title">Promotions</div>
+                            <div class="h5 mb-0 fw-bold stats-value">{{ promotions_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-tags fa-2x stats-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Carte Menus -->
+        {% if menus_count %}
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start h-100 py-2 stats-card">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs fw-bold mb-1 stats-title">Menus</div>
+                            <div class="h5 mb-0 fw-bold stats-value">{{ menus_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x stats-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Cartes d'information -->
+    <div class="row mb-4">
         <!-- Carte Dernière connexion -->
-        <div class="col-xl-4 col-md-6 mb-4">
+        <div class="col-xl-6 col-md-6 mb-4">
             <div class="card border-start h-100 py-2 stats-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -54,13 +118,13 @@
             </div>
         </div>
 
-        <!-- Nouvelle carte pour historique des connexions -->
-        <div class="col-xl-4 col-md-6 mb-4">
+        <!-- Carte Historique des connexions -->
+        <div class="col-xl-6 col-md-6 mb-4">
             <div class="card border-start h-100 py-2 stats-card">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs fw-bold mb-1 login-history-title">Connexions (30j)</div>
+                            <div class="text-xs fw-bold mb-1 login-history-title">Connexions (10j)</div>
                             <div class="h5 mb-0 fw-bold stats-value">{{ login_history.count }}</div>
                         </div>
                         <div class="col-auto">
@@ -71,6 +135,73 @@
             </div>
         </div>
     </div>
+
+    {% if plats_count %}
+    <!-- Section des statistiques détaillées -->
+    <div class="row mb-4">
+        <!-- Statistiques des plats par catégorie -->
+        <div class="col-lg-6 mb-4">
+            <div class="card main-card">
+                <div class="card-header py-3 card-header-style">
+                    <h6 class="m-0 fw-bold card-title">
+                        <i class="fas fa-chart-pie me-2"></i>Plats par catégorie
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% if plats_par_categorie %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <tbody>
+                                    {% for categorie, count in plats_par_categorie.items %}
+                                    {% if count > 0 %}
+                                    <tr>
+                                        <td>{{ categorie }}</td>
+                                        <td class="text-end">
+                                            <span class="badge bg-vert">{{ count }}</span>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center mb-0">Aucun plat créé</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistiques de disponibilité -->
+        <div class="col-lg-6 mb-4">
+            <div class="card main-card">
+                <div class="card-header py-3 card-header-style">
+                    <h6 class="m-0 fw-bold card-title">
+                        <i class="fas fa-toggle-on me-2"></i>Disponibilité des plats
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="text-success">
+                                <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                <div class="h4 mb-0">{{ plats_disponibles }}</div>
+                                <small>Disponibles</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-warning">
+                                <i class="fas fa-times-circle fa-2x mb-2"></i>
+                                <div class="h4 mb-0">{{ plats_indisponibles }}</div>
+                                <small>Indisponibles</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Section principale -->
     <div class="row">

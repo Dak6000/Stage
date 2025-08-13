@@ -14,4 +14,5 @@ urlpatterns = [
     # Promotions
     path('promotions/', views.plats_promotion, name='plats-promotion'),
     path('plats/<int:pk>/toggle-promotion/', views.toggle_promotion, name='toggle-promotion'),
+    path('plats/<int:pk>/promotion/', views.promotion_form, name='promotion-form'),
 ]
