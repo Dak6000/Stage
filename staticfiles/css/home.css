@@ -1,0 +1,281 @@
+/* ===== CSS SPÉCIFIQUE À LA PAGE D'ACCUEIL ===== */
+
+/* Hero Section avec Carrousel - 65% de l'écran */
+.hero-section {
+    position: relative;
+    height: 65vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: linear-gradient(150deg, var(--bs-vert) 50%, #3d8b40 50%);
+    border-radius: 0 0 30px 30px;
+    margin-bottom: 2rem;
+}
+
+/* Section Structures - Espacement réduit */
+.structures-section {
+    padding: 2rem 0 !important;
+    background: var(--bs-fontSecondary);
+    margin: 1rem 0;
+    border-top: 1px solid rgba(76, 175, 80, 0.1);
+    border-bottom: 1px solid rgba(76, 175, 80, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+}
+
+.structures-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(76, 175, 80, 0.3), transparent);
+}
+
+.structures-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(76, 175, 80, 0.3), transparent);
+}
+
+.structures-section .section-header {
+    margin-bottom: 1.5rem;
+}
+
+.structures-section .section-title {
+    margin-bottom: 0.5rem;
+    font-size: 2.2rem;
+}
+
+.structures-section .section-subtitle {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+/* Carrousel amélioré avec 65% de l'écran */
+.carousel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    border-radius: 0 0 30px 30px;
+    overflow: hidden;
+}
+
+.carousel-item {
+    height: 65vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 0 0 30px 30px;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8) contrast(1.2);
+    border-radius: 0 0 30px 30px;
+}
+
+.carousel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.8) 50%, rgba(61, 139, 64, 0.8) 50%);
+    z-index: 2;
+    border-radius: 0 0 30px 30px;
+}
+
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+    color: var(--bs-font);
+    max-width: 700px;
+    width: 90%;
+    padding: 2.5rem 3rem;
+    border-radius: 25px;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+    animation: fadeInUp 1s ease-out;
+    color: #FFD700;
+    letter-spacing: 1px;
+}
+
+.hero-subtitle {
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+    opacity: 1;
+    animation: fadeInUp 1s ease-out 0.3s both;
+    color: #E6E6FA;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    font-weight: 500;
+}
+
+
+/* Guide Section */
+.guide-section {
+    background: var(--bs-font);
+    padding: 4rem 0;
+}
+
+.guide-card {
+    background: var(--bs-fontSecondary);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    height: 100%;
+}
+
+.guide-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--bs-vert);
+    box-shadow: 0 15px 35px rgba(76, 175, 80, 0.2);
+}
+
+.guide-icon {
+    font-size: 3rem;
+    color: var(--bs-vert);
+    margin-bottom: 1rem;
+}
+
+.guide-title {
+    color: var(--bs-text);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.guide-description {
+    color: var(--bs-text);
+    opacity: 0.8;
+    line-height: 1.6;
+}
+
+/* Sections améliorées */
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-title {
+    color: var(--bs-vert);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    color: var(--bs-text);
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+/* Filtres modernes */
+.filter-section {
+    background: var(--bs-fontSecondary);
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.filter-input {
+    border: 2px solid var(--bs-vert);
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.filter-input:focus {
+    border-color: var(--bs-rouge);
+    box-shadow: 0 0 0 0.2rem rgba(215, 38, 61, 0.25);
+}
+
+/* Catégories */
+.category-card {
+    background: var(--bs-font);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    text-decoration: none;
+    color: var(--bs-text);
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--bs-vert);
+    box-shadow: 0 10px 25px rgba(76, 175, 80, 0.2);
+    text-decoration: none;
+    color: var(--bs-text);
+}
+
+.category-icon {
+    font-size: 3rem;
+    color: var(--bs-vert);
+    margin-bottom: 1rem;
+}
+
+.category-title {
+    font-weight: 700;
+    color: var(--bs-text);
+}
+
+/* Call to Action */
+.cta-btn {
+    background: var(--bs-jaune);
+    color: var(--bs-rouge);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.cta-btn:hover {
+    background: var(--bs-rouge);
+    color: var(--bs-font);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(215, 38, 61, 0.3);
+    text-decoration: none;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive - Remplacé par responsive.css */
+/* Les règles responsive sont maintenant dans static/css/responsive.css */

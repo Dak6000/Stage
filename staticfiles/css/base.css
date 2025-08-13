@@ -1,0 +1,142 @@
+/* Variables CSS */
+:root {
+    /* Couleurs principales */
+    --bs-vert: #4CAF50;
+    --bs-jaune: #F4B400;
+    --bs-rouge: #D7263D;
+    --bs-font: #FAF3E0;
+    --bs-text: #333333;
+    --bs-fontSecondary: #EEEEEE;
+}
+
+/* Styles généraux */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bs-font);
+    padding-top: 50px; /* Pour compenser la navbar fixe */
+}
+
+.structures {
+    background: var(--bs-vert);
+    border: 1px solid var(--bs-rouge);
+}
+
+/* Navbar */
+.main-navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1030;
+    background-color: var(--bs-jaune) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.main-navbar .navbar-brand {
+    color: var(--bs-rouge);
+}
+
+.main-navbar .nav-link {
+    color: var(--bs-rouge);
+    font-weight: bold;
+    text-decoration: none;
+    margin: 0 5px;
+    padding: 8px 0 !important;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.main-navbar .nav-link:hover {
+    color: var(--bs-vert) !important;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.main-navbar .nav-link.active {
+    color: var(--bs-vert);
+}
+
+.dropdown-menu {
+    background-color: var(--bs-font) !important;
+}
+
+.dropdown-item {
+    color: var(--bs-rouge);
+    font-weight: bold;
+    text-decoration: none;
+    padding: 8px 15px !important;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+    color: var(--bs-vert) !important;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+/* Boutons spéciaux */
+.signup-btn {
+    background-color: var(--bs-jaune) !important;
+    color: var(--bs-text) !important;
+}
+
+.logout-btn {
+    background-color: var(--bs-rouge) !important;
+    color: var(--bs-jaune) !important;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    color: var(--bs-font);
+}
+
+/* Footer */
+footer {
+    background-color: var(--bs-fontSecondary);
+    color: var(--bs-text);
+}
+
+footer .navbar-brand {
+    color: var(--bs-vert) !important;
+}
+
+footer h5 {
+    color: var(--bs-vert);
+}
+
+.footer-icons {
+    color: var(--bs-vert) !important;
+    margin: 5px;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.footer-icons:hover {
+    color: var(--bs-rouge) !important;
+}
+
+.liens-rapide {
+    text-decoration: none;
+    color: var(--bs-text) !important;
+    transition: color 0.3s ease;
+}
+
+.liens-rapide:hover {
+    color: var(--bs-vert) !important;
+}
+
+footer hr {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+footer .fa-map-marker-alt,
+footer .fa-phone-alt,
+footer .fa-envelope {
+    color: var(--bs-vert);
+}
+
+/* Responsive - Remplacé par responsive.css */
+/* Les règles responsive sont maintenant dans static/css/responsive.css */

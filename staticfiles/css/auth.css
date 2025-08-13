@@ -1,0 +1,214 @@
+/* ===== CSS SPÉCIFIQUE À L'AUTHENTIFICATION ===== */
+
+/* Variables CSS */
+:root {
+    /* Couleurs principales */
+    --bs-vert: #4CAF50;
+    --bs-jaune: #F4B400;
+    --bs-rouge: #D7263D;
+    --bs-font: #FAF3E0;
+    --bs-text: #333333;
+    --bs-gray: #6e6c6c;
+    --bs-fontSecondary: #EEEEEE;
+}
+
+body {
+    background-color: var(--bs-font);
+}
+
+
+/* Styles pour les cartes d'authentification */
+.auth-card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.auth-card-header {
+    background: var(--bs-fontSecondary) !important;
+    color: var(--bs-vert) !important;
+}
+
+.auth-card-title {
+    color: var(--bs-vert) !important;
+    font-weight: bold;
+}
+
+/* Styles pour les formulaires */
+.needs-validation .form-label {
+    font-weight: 500;
+    color: var(--bs-text);
+}
+
+.needs-validation .form-control {
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.needs-validation .form-control:focus {
+    border-color: var(--bs-vert) !important;
+    box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+}
+
+.invalid-feedback {
+    color: var(--bs-rouge);
+}
+
+.text-muted {
+    color: var(--bs-text) !important;
+}
+
+/* Boutons */
+.auth-submit-btn {
+    background: var(--bs-jaune) !important;
+    color: var(--bs-vert) !important;
+    border: none;
+    padding: 6px;
+    font-weight: 300;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.auth-submit-btn:hover {
+    color: var(--bs-jaune) !important;
+    background: var(--bs-vert) !important;
+    transform: translateY(-2px);
+}
+
+.btn-secondary-btn {
+    background: var(--bs-font) !important;
+    color: var(--bs-vert) !important;
+    border: none;
+    padding: 6px;
+    font-weight: 300;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary-btn:hover {
+    color: var(--bs-font) !important;
+    background: var(--bs-vert) !important;
+    transform: translateY(-2px);
+}
+
+.btn-danger-btn {
+    background: var(--bs-rouge) !important;
+    color: var(--bs-font) !important;
+    border: none;
+    padding: 6px;
+    font-weight: 300;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-danger-btn:hover {
+    color: var(--bs-rouge) !important;
+    background: var(--bs-font) !important;
+    transform: translateY(-2px);
+}
+
+.voir-btn {
+    background: var(--bs-vert) !important;
+    color: var(--bs-jaune) !important;
+    border: none;
+    padding: 6px;
+    font-weight: 300;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.voir-btn:hover {
+    color: var(--bs-vert) !important;
+    background: var(--bs-jaune) !important;
+    transform: translateY(-2px);
+}
+
+.btn-warning-btn {
+    background: var(--bs-rouge) !important;
+    color: var(--bs-jaune) !important;
+    border: none;
+    padding: 6px;
+    font-weight: 300;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.btn-warning-btn:hover {
+    color: var(--bs-rouge) !important;
+    background: var(--bs-jaune) !important;
+    transform: translateY(-2px);
+}
+
+/* Liens */
+.auth-link {
+    color: var(--bs-vert) !important;
+    font-weight: 300;
+    transition: all 0.3s ease;
+}
+
+.auth-link:hover {
+    color: var(--bs-jaune) !important;
+    text-decoration: underline;
+}
+
+/* Titres de section */
+.section-title {
+    color: var(--bs-vert) !important;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--bs-vert) !important;
+}
+
+/* Alertes */
+.alert {
+    border-radius: 8px;
+    animation: fadeOut 5s ease-in forwards;
+}
+
+/* Animation pour faire disparaître les messages après 5 secondes */
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}
+
+/* Styles pour la page de profil */
+.profile-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid var(--bs-vert) !important;
+}
+
+.profile-image-placeholder {
+    width: 150px;
+    height: 150px;
+    background-color: var(--bs-jaune) !important;
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    border: 3px solid var(--bs-vert);
+}
+
+.profile-name {
+    color: var(--bs-vert) !important;
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+.profile-email {
+    color: var(--bs-text);
+    font-size: 0.8rem;
+}
+
+.form-control-static {
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    background-color: var(--bs-font);
+    min-height: calc(1.5em + 0.75rem + 2px);
+    display: block;
+    width: 100%;
+}
+
+/* Responsive - Remplacé par responsive.css */
+/* Les règles responsive sont maintenant dans static/css/responsive.css */

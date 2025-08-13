@@ -1,0 +1,252 @@
+/* ===== CSS SPÉCIFIQUE AUX AVIS (Modernisé) ===== */
+
+/* Styles pour les cartes d'avis */
+.avis-card {
+    background: var(--bs-font);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    padding: 1rem 1rem;
+    margin-bottom: 0.7rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.avis-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(215, 38, 61, 0.18);
+}
+
+.avis-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.avis-user-info {
+    flex: 1;
+}
+
+.avis-user-name {
+    color: var(--bs-text);
+    font-weight: 500;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.avis-date {
+    color: var(--bs-text);
+    opacity: 0.7;
+    font-size: 0.8rem;
+}
+
+.avis-rating {
+    display: flex;
+    align-items: center;
+}
+
+.avis-stars {
+    color: var(--bs-jaune);
+    font-size: 1rem;
+    margin-right: 0.2rem;
+}
+
+.avis-rating-text {
+    color: var(--bs-text);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.avis-content {
+    color: var(--bs-text);
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.avis-structure {
+    color: var(--bs-vert);
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+/* Formulaire d'avis */
+.avis-form {
+    background: var(--bs-font);
+    border-radius: 18px;
+    padding: 1rem;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+.avis-form .form-control {
+    border-radius: 12px;
+    padding: 0.5rem 0.6rem;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    background: var(--bs-font);
+}
+
+.avis-form .form-control:focus {
+    border-color: var(--bs-vert);
+    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+}
+
+.avis-form .form-label {
+    color: var(--bs-text);
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+/* Système de notation */
+.rating-system {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.rating-label {
+    color: var(--bs-text);
+    font-weight: 600;
+    margin-right: 0.5rem;
+}
+
+.rating-stars {
+    display: inline-flex;
+    gap: 0.35rem;
+}
+
+.rating-star {
+    font-size: 1.5rem;
+    color: #cfd3d7;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.12s ease;
+    background: transparent;
+    border: 0;
+}
+
+.rating-star:hover,
+.rating-star.active {
+    color: var(--bs-jaune);
+    transform: translateY(-1px) scale(1.02);
+}
+
+.rating-star:focus-visible {
+    outline: 2px solid rgba(244, 180, 0, 0.45);
+    border-radius: 6px;
+}
+
+/* Boutons pour les avis */
+.btn-avis-primary {
+    background-color: var(--bs-rouge);
+    color: var(--bs-font);
+    border: none;
+    border-radius: 12px;
+    padding: 0.5rem 0.8rem;
+    font-weight: 700;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-avis-primary:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 14px rgba(215, 38, 61, 0.28);
+}
+
+.btn-avis-secondary {
+    background-color: var(--bs-jaune);
+    color: var(--bs-text);
+    border: none;
+    border-radius: 12px;
+    padding: 0.5rem 0.8rem;
+    font-weight: 700;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-avis-secondary:hover {
+    background-color: #e0a800;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 14px rgba(244, 180, 0, 0.28);
+}
+
+/* Statistiques des avis */
+.avis-stats {
+    background: var(--bs-font);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    padding: 1rem 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.avis-stats-header {
+    color: var(--bs-rouge);
+    font-weight: 800;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    text-align: left;
+}
+
+.avis-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 0.5rem;
+}
+
+.avis-stat-item {
+    text-align: center;
+    padding: 0.5rem;
+    background: rgba(215, 38, 61, 0.08);
+    border-radius: 12px;
+}
+
+.avis-stat-number {
+    color: var(--bs-rouge);
+    font-weight: 800;
+    font-size: 1.2rem;
+    margin-bottom: 0.25rem;
+}
+
+.avis-stat-label {
+    color: var(--bs-text);
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+/* État vide */
+.avis-empty-state {
+    text-align: center;
+    padding: 1rem 1rem;
+    color: var(--bs-text);
+}
+
+.avis-empty-state i {
+    color: var(--bs-rouge);
+    margin-bottom: 0.5rem;
+}
+
+/* Pagination (seulement sur pages avis) */
+.pagination .page-link {
+    border-radius: 8px;
+}
+.pagination .page-item.active .page-link {
+    background-color: var(--bs-rouge);
+}
+
+/* Meta chips */
+.avis-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.4rem;
+    background: rgba(244, 180, 0, 0.12);
+    color: var(--bs-text);
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* Utility: subtle separator */
+.avis-separator {
+    height: 1px;
+    background: rgba(0,0,0,0.06);
+    margin: 0.5rem 0 0.5rem 0;
+}
+
+/* Responsive - Remplacé par responsive.css */
+/* Les règles responsive sont maintenant dans static/css/responsive.css */

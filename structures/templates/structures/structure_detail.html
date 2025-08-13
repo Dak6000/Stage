@@ -19,18 +19,18 @@
                         <div class="rating-display me-3">
                             {% for i in "12345" %}
                                 {% if forloop.counter <= structure.get_note_etoiles %}
-                                    <i class="fas fa-star text-warning"></i>
+                                    <i class="fas fa-star text-jaune"></i>
                                 {% else %}
-                                    <i class="far fa-star text-muted"></i>
+                                    <i class="far fa-star text-text"></i>
                                 {% endif %}
                             {% endfor %}
                             <span class="ms-2 fw-bold">{{ structure.get_note_display }}</span>
-                            <small class="text-muted">({{ structure.nombre_avis }} avis)</small>
+                            <small class="text-text">({{ structure.nombre_avis }} avis)</small>
                         </div>
                         {% endif %}
                         
                         <!-- Bouton pour voir les avis -->
-                        <a href="{% url 'avis:avis-structure-public' structure.pk %}" class="btn btn-outline-primary btn-sm">
+                        <a href="{% url 'avis:avis-structure-public' structure.pk %}" class="btn btn-jaune btn-sm">
                             <i class="fas fa-star me-1"></i>Voir les avis
                         </a>
                     </div>
@@ -53,15 +53,6 @@
                                 <i class="fas fa-tags me-2"></i>Type
                             </label>
                             <p class="form-control-static">{{ structure.get_type_display }}</p>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">
-                                <i class="fas fa-star me-2"></i>Statut
-                            </label>
-                            <span class="badge bg-{% if structure.featured %}success{% else %}secondary{% endif %}">
-                                {% if structure.featured %}Mise en avant{% else %}Standard{% endif %}
-                            </span>
                         </div>
                     </div>
 
@@ -109,10 +100,10 @@
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div>
                                             <h6 class="card-title mb-1">
-                                                <i class="fas fa-user me-2 text-primary"></i>
+                                                <i class="fas fa-user me-2 text-vert"></i>
                                                 {{ avis.user.first_name }} {{ avis.user.last_name }}
                                             </h6>
-                                            <small class="text-muted">
+                                            <small class="text-text">
                                                 <i class="fas fa-calendar-alt me-1"></i>
                                                 {{ avis.get_date_relative }}
                                             </small>
@@ -120,9 +111,9 @@
                                         <div class="rating-display">
                                             {% for i in "12345" %}
                                                 {% if forloop.counter <= avis.note %}
-                                                    <i class="fas fa-star text-warning"></i>
+                                                    <i class="fas fa-star text-jaune"></i>
                                                 {% else %}
-                                                    <i class="far fa-star text-muted"></i>
+                                                    <i class="far fa-star text-text"></i>
                                                 {% endif %}
                                             {% endfor %}
                                         </div>
@@ -136,7 +127,7 @@
                         {% endfor %}
                     </div>
                     <div class="text-center">
-                        <a href="{% url 'avis:avis-structure-public' structure.pk %}" class="btn btn-outline-primary">
+                        <a href="{% url 'avis:avis-structure-public' structure.pk %}" class="btn btn-vert">
                             <i class="fas fa-star me-2"></i>Voir tous les avis
                         </a>
                     </div>
@@ -153,26 +144,26 @@
                         <!-- Bouton pour ajouter un avis -->
                         {% if user.is_authenticated %}
                             {% if user_has_avis %}
-                                <a href="{% url 'avis:avis-update' user_avis.pk %}" class="btn btn-warning btn-sm me-2">
+                                <a href="{% url 'avis:avis-update' user_avis.pk %}" class="btn btn-jaune btn-sm me-2">
                                     <i class="fas fa-edit me-1"></i>Modifier mon avis
                                 </a>
                             {% else %}
-                                <a href="{% url 'avis:avis-create-structure' structure.pk %}" class="btn btn-warning btn-sm me-2">
+                                <a href="{% url 'avis:avis-create-structure' structure.pk %}" class="btn btn-vert btn-sm me-2">
                                     <i class="fas fa-star me-1"></i>Laisser un avis
                                 </a>
                             {% endif %}
                         {% endif %}
                         
-                        <a href="{% url 'plats:plat-create' %}" class="btn auth-submit-btn me-2">
+                        <a href="{% url 'plats:plat-create' %}" class="btn btn-jaune btn-sm me-2">
                             <i class="fas fa-utensils me-2"></i>Plats
                         </a>
-                        <a href="{% url 'menus:menus-create' %}" class="btn auth-submit-btn me-2">
+                        <a href="{% url 'menus:menus-create' %}" class="btn btn-vert btn-sm me-2">
                             <i class="fas fa-utensils me-2"></i>Menu
                         </a>
-                        <a href="{% url 'structures:structure-update' structure.pk %}" class="btn auth-submit-btn me-2">
+                        <a href="{% url 'structures:structure-update' structure.pk %}" class="btn btn-jaune btn-sm me-2">
                             <i class="fas fa-edit me-2"></i>Modifier
                         </a>
-                        <a href="{% url 'structures:structure-delete' structure.pk %}" class="btn btn-danger-btn me-2">
+                        <a href="{% url 'structures:structure-delete' structure.pk %}" class="btn btn-rouge btn-sm me-2">
                             <i class="fas fa-trash me-2"></i>Supprimer
                         </a>
                     </div>

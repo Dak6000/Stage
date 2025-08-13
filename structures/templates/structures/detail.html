@@ -26,13 +26,6 @@
                 <i class="fas fa-clock"></i>
                 <span>{{ structure.heure_ouverture|default:"--" }} - {{ structure.heure_fermeture|default:"--" }}</span>
             </div>
-            <div class="restaurant-info-item">
-                {% if structure.note_moyenne %}
-                <div class="structure-rating">
-                    <i class="fas fa-star me-1"></i>{{ structure.note_moyenne|floatformat:1 }}
-                </div>
-                {% endif %}
-            </div>
         </div>
     </div>
 </section>
@@ -152,9 +145,9 @@
                             <i class="fas fa-star"></i>
                         </div>
                         <div class="detail-content">
-                            <div class="detail-label">Statut</div>
+                            <div class="detail-label">Note</div>
                             <div class="detail-value">
-                                {% if structure.featured %}Mise en avant{% else %}Standard{% endif %}
+                                {% if structure.note_moyenne %}{{ structure.note_moyenne|floatformat:1 }} {% else %}Non disponible{% endif %}
                             </div>
                         </div>
                     </div>
