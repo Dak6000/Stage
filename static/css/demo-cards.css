@@ -1,0 +1,116 @@
+/* ===== DÉMONSTRATION DES CARTES UNIFORMES ===== */
+
+/* Styles de démonstration pour tester les cartes */
+.demo-section {
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%);
+}
+
+.demo-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--bs-vert);
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.demo-subtitle {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--bs-text);
+    font-size: 1.2rem;
+}
+
+/* Grille de démonstration */
+.demo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Variantes de cartes */
+.demo-card-promotion {
+    --card-accent-color: #ff6b6b;
+}
+
+.demo-card-structure {
+    --card-accent-color: #4CAF50;
+}
+
+.demo-card-plat {
+    --card-accent-color: #F4B400;
+}
+
+/* Effets de démonstration */
+.demo-card-promotion .uniform-badge {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+}
+
+.demo-card-structure .uniform-badge {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+}
+
+.demo-card-plat .uniform-badge {
+    background: linear-gradient(45deg, #F4B400, #e6ac00);
+}
+
+/* Animations de démonstration */
+.demo-card-promotion:hover {
+    transform: translateY(-8px) rotate(1deg);
+}
+
+.demo-card-structure:hover {
+    transform: translateY(-8px) scale(1.02);
+}
+
+.demo-card-plat:hover {
+    transform: translateY(-8px) skew(-1deg);
+}
+
+/* Responsive pour la démonstration */
+@media (max-width: 768px) {
+    .demo-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 0 0.5rem;
+    }
+    
+    .demo-title {
+        font-size: 2rem;
+    }
+    
+    .demo-subtitle {
+        font-size: 1rem;
+    }
+}
+
+/* Classes utilitaires pour la démonstration */
+.demo-highlight {
+    background: linear-gradient(45deg, var(--bs-jaune), var(--bs-vert));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: bold;
+}
+
+.demo-info {
+    background: rgba(76, 175, 80, 0.1);
+    border: 2px solid var(--bs-vert);
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.demo-info h4 {
+    color: var(--bs-vert);
+    margin-bottom: 0.5rem;
+}
+
+.demo-info p {
+    color: var(--bs-text);
+    margin: 0;
+}

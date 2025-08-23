@@ -1,102 +1,279 @@
-/* ===== CSS PROMOTIONS COMPACT ===== */
+/* ===== CSS PROMOTIONS UNIFORME ===== */
 
+/* Variables spécifiques aux promotions */
+:root {
+    --promotion-card-width: 280px;
+    --promotion-card-height: 420px;
+    --promotion-image-height: 200px;
+    --promotion-border-radius: 12px;
+    --promotion-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --promotion-shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+    --promotion-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --promotion-margin: 1rem;
+}
+
+/* ===== CARTES DE PROMOTION UNIFORMES ===== */
 .promotion-card {
-    transition: transform 0.2s ease;
+    width: var(--promotion-card-width);
+    height: var(--promotion-card-height);
+    margin: var(--promotion-margin);
+    border-radius: var(--promotion-border-radius);
+    box-shadow: var(--promotion-shadow);
+    transition: var(--promotion-transition);
     position: relative;
     overflow: hidden;
-    border: 1px solid #ffc107;
-    border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    background: white;
+    border: 2px solid var(--bs-jaune);
+    display: flex;
+    flex-direction: column;
 }
 
 .promotion-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    transform: translateY(-8px);
+    box-shadow: var(--promotion-shadow-hover);
+    border-color: var(--bs-vert);
 }
 
-.promotion-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-    color: white;
-    padding: 5px 8px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    z-index: 2;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    animation: pulse 1.5s infinite;
-}
-
+/* ===== CONTENEUR D'IMAGE DE PROMOTION ===== */
 .promotion-image-container {
-    height: 180px;
+    width: 100%;
+    height: var(--promotion-image-height);
     overflow: hidden;
+    position: relative;
+    border-radius: var(--promotion-border-radius) var(--promotion-border-radius) 0 0;
 }
 
 .promotion-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.5s ease;
+}
+
+.promotion-card:hover .promotion-image {
+    transform: scale(1.1);
 }
 
 .promotion-placeholder {
+    width: 100%;
     height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
+}
+
+.promotion-placeholder i {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
 }
 
 .promotion-placeholder p {
     margin: 0;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* ===== BADGES DE PROMOTION ===== */
+.promotion-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    animation: pulse 2s infinite;
+}
+
+.promotion-vote {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--bs-jaune);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== CORPS DE LA CARTE DE PROMOTION ===== */
+.promotion-card-body {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.promotion-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--bs-text);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.promotion-card-description {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ===== INFORMATIONS DE PRIX ===== */
+.promotion-price-section {
+    margin-bottom: 1rem;
 }
 
 .original-price {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     text-decoration: line-through;
-    color: #6c757d;
+    color: #999;
+    margin-right: 0.5rem;
 }
 
 .promotion-price {
-    color: #e74c3c;
+    font-size: 1.1rem;
     font-weight: bold;
-    font-size: 1rem;
+    color: #e74c3c;
 }
 
 .economy-badge {
+    background: var(--bs-vert);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
     font-size: 0.75rem;
-    padding: 3px 6px;
-    border-radius: 10px;
+    font-weight: 500;
+}
+
+/* ===== INFORMATIONS DE PROMOTION ===== */
+.promotion-duration {
+    margin-bottom: 0.75rem;
+}
+
+.promotion-duration .text-small {
+    font-size: 0.8rem;
 }
 
 .days-remaining {
-    padding: 5px;
-    font-size: 0.75rem;
-    border-radius: 6px;
+    margin-top: 0.5rem;
 }
 
-/* Animations simplifiées */
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
+.days-remaining small {
+    font-size: 0.8rem;
+    font-weight: 500;
 }
 
-@keyframes fadeInOut {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
+/* ===== FOOTER DE LA CARTE DE PROMOTION ===== */
+.promotion-card-footer {
+    padding: 1rem;
+    background: transparent;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-/* Boutons compacts */
-.btn-promotion {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
+.promotion-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
     border-radius: 8px;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    background: var(--bs-jaune);
+    color: var(--bs-text);
+    text-decoration: none;
+    display: inline-block;
 }
 
-/* Responsive - Remplacé par responsive.css */
-/* Les règles responsive sont maintenant dans static/css/responsive.css */
+.promotion-btn:hover {
+    background: var(--bs-vert);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* ===== RESPONSIVE DES CARTES DE PROMOTION ===== */
+@media (max-width: 768px) {
+    :root {
+        --promotion-card-width: 280px;
+        --promotion-card-height: 420px;
+        --promotion-image-height: 200px;
+        --promotion-margin: 0.5rem;
+    }
+    
+    .promotion-card {
+        margin-bottom: 1rem;
+        height: 420px;
+    }
+    
+    .promotion-image-container {
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    :root {
+        --promotion-card-width: 280px;
+        --promotion-card-height: 420px;
+        --promotion-image-height: 200px;
+    }
+    
+    .promotion-image-container {
+        height: 200px;
+    }
+    
+    .promotion-card {
+        margin-bottom: 1.5rem;
+        height: 420px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --promotion-card-width: 280px;
+        --promotion-card-height: 420px;
+        --promotion-image-height: 200px;
+    }
+    
+    .promotion-image-container {
+        height: 200px;
+    }
+    
+    .promotion-card {
+        height: 420px;
+    }
+}

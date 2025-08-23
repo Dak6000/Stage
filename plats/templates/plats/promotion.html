@@ -30,12 +30,12 @@
     </div>
 
     {% if plats_promotion %}
-    <div class="row">
+    <div class="row justify-content-center">
         {% for plat in plats_promotion %}
-        <div class="col-lg-3 col-md-6 mb-3">
-            <div class="card h-100 promotion-card border-0">
+                 <div class="col-lg-3 col-md-6 col-sm-12 mb-3 d-flex justify-content-center">
+             <div class="uniform-card promotion-card" style="width: 300px; height: 450px;">
                 <!-- Badge de promotion -->
-                <div class="promotion-badge">
+                <div class="uniform-badge">
                     <i class="fas fa-fire"></i>
                     {% if plat.pourcentage_reduction %}
                         -{{ plat.pourcentage_reduction }}%
@@ -45,20 +45,20 @@
                 </div>
                 
                 <!-- Image du plat -->
-                <div class="promotion-image-container">
+                <div class="uniform-image-container">
                     {% if plat.photo %}
-                    <img src="{{ plat.photo.url }}" class="card-img-top promotion-image" alt="{{ plat.nom }}">
+                    <img src="{{ plat.photo.url }}" class="uniform-image" alt="{{ plat.nom }}">
                     {% else %}
-                    <div class="promotion-placeholder">
-                        <i class="fas fa-utensils fa-3x"></i>
+                    <div class="uniform-placeholder">
+                        <i class="fas fa-utensils"></i>
                         <p>Aucune image</p>
                     </div>
                     {% endif %}
                 </div>
                 
-                <div class="card-body">
-                    <h5 class="card-title fw-bold">{{ plat.nom }}</h5>
-                    <p class="card-text text-muted">{{ plat.description|truncatechars:60 }}</p>
+                <div class="uniform-card-body">
+                    <h5 class="uniform-card-title">{{ plat.nom }}</h5>
+                    <p class="uniform-card-description">{{ plat.description|truncatechars:60 }}</p>
                     
                     <!-- Prix -->
                     <div class="price-section">
@@ -113,9 +113,9 @@
                     {% endif %}
                 </div>
                 
-                <div class="card-footer bg-transparent border-0">
+                <div class="uniform-card-footer">
                     <div class="d-grid">
-                        <a href="{% url 'plats:plat-detail' plat.pk %}" class="btn btn-jaune">
+                        <a href="{% url 'plats:plat-detail' plat.pk %}" class="uniform-btn uniform-btn-primary">
                             <i class="fas fa-eye me-2"></i>Voir les détails
                         </a>
                     </div>
@@ -171,63 +171,77 @@
     border-color: var(--bs-vert);
 }
 
-.promotion-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
+ .promotion-card {
+     border: 2px solid var(--bs-jaune);
+     position: relative;
+     width: 300px !important;
+     height: 450px !important;
+ }
 
-.promotion-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-}
+ .promotion-card:hover {
+     border-color: var(--bs-vert);
+     transform: translateY(-8px);
+     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+ }
 
-.promotion-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: var(--bs-vert);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 0.8rem;
-    z-index: 10;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
+ .promotion-card .uniform-image-container {
+     height: 220px !important;
+ }
 
-.promotion-image-container {
-    position: relative;
-    height: 250px;
-    overflow: hidden;
-}
+ .promotion-card .uniform-badge {
+     background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+     animation: pulse 2s infinite;
+ }
 
-.promotion-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
+ .promotion-card .original-price {
+     font-size: 0.9rem;
+     text-decoration: line-through;
+     color: #999;
+     margin-right: 0.5rem;
+ }
 
-.promotion-card:hover .promotion-image {
-    transform: scale(1.05);
-}
+ .promotion-card .promotion-price {
+     font-size: 1.1rem;
+     font-weight: bold;
+     color: #e74c3c;
+ }
 
-.promotion-placeholder {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
+ .promotion-card .economy-badge {
+     background: var(--bs-vert);
+     color: white;
+     padding: 4px 8px;
+     border-radius: 12px;
+     font-size: 0.75rem;
+     font-weight: 500;
+ }
 
-.promotion-placeholder p {
-    margin: 0;
-    font-size: 0.9rem;
-}
+ .promotion-card .promotion-duration {
+     margin-bottom: 0.75rem;
+ }
+
+ .promotion-card .promotion-duration .text-small {
+     font-size: 0.8rem;
+ }
+
+ .promotion-card .days-remaining {
+     margin-top: 0.5rem;
+ }
+
+ .promotion-card .days-remaining small {
+     font-size: 0.8rem;
+     font-weight: 500;
+ }
+
+ @keyframes pulse {
+     0%, 100% {
+         transform: scale(1);
+         opacity: 1;
+     }
+     50% {
+         transform: scale(1.05);
+         opacity: 0.9;
+     }
+ }
 
 .original-price {
     font-size: 0.9rem;
@@ -254,9 +268,32 @@
     border: 1px solid #ffeaa7;
 }
 
-.empty-state {
-    max-width: 500px;
-    margin: 0 auto;
-}
+ .empty-state {
+     max-width: 500px;
+     margin: 0 auto;
+ }
+
+ /* ===== RESPONSIVE POUR LES CARTES DE PROMOTION ===== */
+ @media (max-width: 768px) {
+     .promotion-card {
+         width: 280px !important;
+         height: 420px !important;
+     }
+     
+     .promotion-card .uniform-image-container {
+         height: 200px !important;
+     }
+ }
+
+ @media (max-width: 480px) {
+     .promotion-card {
+         width: 280px !important;
+         height: 420px !important;
+     }
+     
+     .promotion-card .uniform-image-container {
+         height: 200px !important;
+     }
+ }
 </style>
 {% endblock %}

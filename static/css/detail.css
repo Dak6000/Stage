@@ -4,14 +4,16 @@
 .restaurant-hero {
     position: relative;
     height: 60vh;
+    min-height: 400px;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--bs-font);
+    color: white;
     margin-bottom: 2rem;
+    overflow: hidden;
 }
 
 .restaurant-hero::before {
@@ -21,7 +23,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%);
     z-index: 1;
 }
 
@@ -31,19 +33,24 @@
     text-align: center;
     max-width: 800px;
     padding: 2rem;
+    width: 100%;
 }
 
 .restaurant-name {
     font-size: 3.5rem;
     font-weight: 800;
     margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    line-height: 1.2;
+    word-wrap: break-word;
 }
 
 .restaurant-subtitle {
     font-size: 1.3rem;
     margin-bottom: 2rem;
-    opacity: 0.9;
+    opacity: 0.95;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    line-height: 1.4;
 }
 
 .restaurant-info {
@@ -51,21 +58,36 @@
     justify-content: center;
     gap: 2rem;
     flex-wrap: wrap;
+    margin-top: 1.5rem;
 }
 
 .restaurant-info-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     padding: 0.75rem 1.5rem;
     border-radius: 25px;
     backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.restaurant-info-item:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
 }
 
 .restaurant-info-item i {
     color: var(--bs-jaune);
     font-size: 1.2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.restaurant-info-item span {
+    font-weight: 500;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Menu Container */
@@ -510,3 +532,140 @@
 
 /* Responsive - Remplacé par responsive.css */
 /* Les règles responsive sont maintenant dans static/css/responsive.css */
+
+/* ===== RESPONSIVE SPÉCIFIQUE POUR RESTAURANT-HERO ===== */
+@media (max-width: 768px) {
+    .restaurant-hero {
+        height: 50vh !important;
+        min-height: 350px !important;
+    }
+    
+    .restaurant-hero-content {
+        padding: 1.5rem !important;
+    }
+    
+    .restaurant-name {
+        font-size: 2.5rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .restaurant-subtitle {
+        font-size: 1.1rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+    
+    .restaurant-info {
+        gap: 1rem !important;
+        margin-top: 1rem !important;
+    }
+    
+    .restaurant-info-item {
+        padding: 0.6rem 1.2rem !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .restaurant-info-item i {
+        font-size: 1rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .restaurant-hero {
+        height: 45vh !important;
+        min-height: 300px !important;
+    }
+    
+    .restaurant-hero-content {
+        padding: 1rem !important;
+    }
+    
+    .restaurant-name {
+        font-size: 2rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .restaurant-subtitle {
+        font-size: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .restaurant-info {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0.75rem !important;
+        margin-top: 0.75rem !important;
+    }
+    
+    .restaurant-info-item {
+        padding: 0.5rem 1rem !important;
+        font-size: 0.85rem !important;
+        width: 100% !important;
+        max-width: 280px !important;
+        justify-content: center !important;
+    }
+    
+    .restaurant-info-item i {
+        font-size: 0.9rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .restaurant-hero {
+        height: 40vh !important;
+        min-height: 250px !important;
+    }
+    
+    .restaurant-hero-content {
+        padding: 0.75rem !important;
+    }
+    
+    .restaurant-name {
+        font-size: 1.8rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .restaurant-subtitle {
+        font-size: 0.9rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .restaurant-info {
+        gap: 0.5rem !important;
+        margin-top: 0.5rem !important;
+    }
+    
+    .restaurant-info-item {
+        padding: 0.4rem 0.8rem !important;
+        font-size: 0.8rem !important;
+        max-width: 250px !important;
+    }
+    
+    .restaurant-info-item i {
+        font-size: 0.8rem !important;
+    }
+}
+
+@media (max-width: 360px) {
+    .restaurant-hero {
+        height: 35vh !important;
+        min-height: 200px !important;
+    }
+    
+    .restaurant-name {
+        font-size: 1.5rem !important;
+    }
+    
+    .restaurant-subtitle {
+        font-size: 0.85rem !important;
+    }
+    
+    .restaurant-info-item {
+        padding: 0.3rem 0.6rem !important;
+        font-size: 0.75rem !important;
+        max-width: 220px !important;
+    }
+    
+    .restaurant-info-item i {
+        font-size: 0.75rem !important;
+    }
+}

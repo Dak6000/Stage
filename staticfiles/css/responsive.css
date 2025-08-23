@@ -268,13 +268,57 @@
     }
 
     /* ===== IMAGES ===== */
-    .promotion-image-container {
-        height: 160px !important;
-    }
+.promotion-image-container {
+    height: 200px !important;
+}
 
-    .structure-image {
-        height: 160px !important;
-    }
+.structure-image {
+    height: 200px !important;
+}
+
+/* ===== CARTES UNIFORMES ===== */
+.uniform-card {
+    width: 100% !important;
+    max-width: 280px !important;
+    height: 420px !important;
+    margin: 0.5rem !important;
+}
+
+.uniform-image-container {
+    height: 200px !important;
+}
+
+/* ===== CARTES DE PROMOTION ===== */
+.promotion-card {
+    width: 100% !important;
+    max-width: 280px !important;
+    height: 420px !important;
+    margin: 0.5rem !important;
+}
+
+.promotion-image-container {
+    height: 200px !important;
+}
+
+/* ===== CARTES DE STRUCTURE ===== */
+.structure-card {
+    width: 100% !important;
+    max-width: 280px !important;
+    height: 420px !important;
+    margin: 0.5rem !important;
+}
+
+/* ===== CARTES DE PLATS ===== */
+.plat-card {
+    width: 100% !important;
+    max-width: 280px !important;
+    height: 420px !important;
+    margin: 0.5rem !important;
+}
+
+.square-img-container {
+    height: 200px !important;
+}
 
     /* ===== FOOTER ===== */
     footer {
@@ -319,23 +363,6 @@
     .table th,
     .table td {
         padding: 0.375rem 0.5rem !important;
-    }
-
-    /* ===== MODALES ===== */
-    .modal-header {
-        padding: 0.75rem !important;
-    }
-
-    .modal-body {
-        padding: 0.75rem !important;
-    }
-
-    .modal-footer {
-        padding: 0.5rem 0.75rem !important;
-    }
-
-    .modal-title {
-        font-size: 1.125rem !important;
     }
 
     /* ===== PAGINATION ===== */
@@ -516,31 +543,6 @@
         font-size: 0.875rem !important;
     }
 
-    /* ===== SPÉCIFIQUE AUX MODALES ===== */
-    .modal-dialog {
-        margin: 0.5rem !important;
-    }
-
-    .modal-header {
-        padding: 0.75rem !important;
-    }
-
-    .modal-body {
-        padding: 0.75rem !important;
-    }
-
-    .modal-footer {
-        padding: 0.5rem 0.75rem !important;
-    }
-
-    .modal-title {
-        font-size: 1.125rem !important;
-    }
-
-    .modal-img {
-        height: 160px !important;
-    }
-
     /* ===== SPÉCIFIQUE AUX FORMULAIRES ===== */
     .menu-form,
     .plat-form,
@@ -596,7 +598,7 @@
 
     /* ===== SPÉCIFIQUE AUX DÉTAILS ===== */
     .restaurant-hero {
-        height: 40vh !important;
+        height: 60vh !important;
     }
 
     .restaurant-name {
@@ -791,7 +793,24 @@
     .promotion-image-container,
     .structure-image,
     .plat-image {
-        height: 100px !important;
+        height: 180px !important;
+    }
+    
+    /* ===== CARTES SUR TRÈS PETITS ÉCRANS ===== */
+    .uniform-card,
+    .promotion-card,
+    .structure-card,
+    .plat-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        margin: 0.25rem !important;
+    }
+    
+    .uniform-image-container,
+    .promotion-image-container,
+    .square-img-container {
+        height: 180px !important;
     }
 
     .hero-content {
@@ -891,18 +910,6 @@
 
     .restaurant-subtitle {
         font-size: 0.875rem !important;
-    }
-
-    .modal-title {
-        font-size: 1rem !important;
-    }
-
-    .modal-info-label {
-        font-size: 0.75rem !important;
-    }
-
-    .modal-info-value {
-        font-size: 0.8125rem !important;
     }
 
     .navbar-brand {
@@ -1103,6 +1110,10 @@
     
     .section-title {
         font-size: 1.3rem !important;
+    }
+
+    .restaurant-hero {
+        height: 60vh !important;
     }
     
     .restaurant-details {
@@ -1363,5 +1374,93 @@
     
     .form-control, .form-select {
         border: 2px solid currentColor !important;
+    }
+}
+
+/* ===== ENHANCED RESPONSIVE BUTTONS ===== */
+@media (max-width: 768px) {
+    /* Apply consistent sizing to all custom buttons on small screens */
+    .uniform-btn,
+    .action-btn,
+    .auth-submit-btn,
+    .add-btn,
+    .view-btn,
+    .edit-btn,
+    .delete-btn,
+    .logout-btn,
+    .new-structure-btn,
+    .toggle-history-btn,
+    .btn-plat,
+    .btn-promotion,
+    .btn-menu-primary,
+    .btn-menu-secondary,
+    .btn-secondary-action,
+    .btn-primary-action,
+    .btn-danger-action,
+    .btn-avis-primary,
+    .btn-avis-secondary {
+        padding: var(--mobile-btn-padding) !important;
+        font-size: 0.875rem !important;
+        border-radius: 0.375rem !important;
+    }
+
+    /* Ensure adequate touch targets and centered content */
+    .uniform-btn,
+    .action-btn,
+    .auth-submit-btn,
+    .add-btn,
+    .view-btn,
+    .edit-btn,
+    .delete-btn,
+    .logout-btn,
+    .new-structure-btn,
+    .toggle-history-btn,
+    .btn-plat,
+    .btn-promotion,
+    .btn-menu-primary,
+    .btn-menu-secondary,
+    .btn-secondary-action,
+    .btn-primary-action,
+    .btn-danger-action,
+    .btn-avis-primary,
+    .btn-avis-secondary {
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* Compact button groups */
+    .btn-group .btn {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 0.8125rem !important;
+        line-height: 1.2 !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    /* Further compact sizing on extra small screens */
+    .uniform-btn,
+    .action-btn,
+    .auth-submit-btn,
+    .add-btn,
+    .view-btn,
+    .edit-btn,
+    .delete-btn,
+    .logout-btn,
+    .new-structure-btn,
+    .toggle-history-btn,
+    .btn-plat,
+    .btn-promotion,
+    .btn-menu-primary,
+    .btn-menu-secondary,
+    .btn-secondary-action,
+    .btn-primary-action,
+    .btn-danger-action,
+    .btn-avis-primary,
+    .btn-avis-secondary {
+        padding: var(--mobile-btn-padding) !important;
+        font-size: 0.8125rem !important;
+        border-radius: 0.375rem !important;
     }
 }

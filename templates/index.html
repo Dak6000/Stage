@@ -77,11 +77,11 @@
                 <p class="text-text">Découvrez nos promotions exclusives et économisez sur vos plats préférés !</p>
             </div>
 
-            <div class="row">
+            <div class="row justify-content-center">
                 {% for plat in plats_promotion|slice:":4" %}
-                <div class="col-lg-3 col-md-4 mb-3">
-                    <div class="card h-100 promotion-card border-0 shadow-lg">
-                        <div class="promotion-vote">
+                <div class="col-lg-3 col-md-6 col-sm-12 mb-3 d-flex justify-content-center">
+                    <div class="uniform-card promotion-card" style="width: 300px; height: 450px;">
+                        <div class="uniform-vote-badge">
                             {% if plat.note_moyenne > 0 %}
                             <div class="rating-display me-3">
                                 {% for i in "12345" %}
@@ -96,7 +96,7 @@
                         </div>
                         
                         <!-- Badge de promotion -->
-                        <div class="promotion-badge">
+                        <div class="uniform-badge">
                             <i class="fas fa-fire"></i>
                             {% if plat.pourcentage_reduction %}
                                 -{{ plat.pourcentage_reduction }}%
@@ -106,20 +106,20 @@
                         </div>
                         
                         <!-- Image du plat -->
-                        <div class="promotion-image-container">
+                        <div class="uniform-image-container">
                             {% if plat.photo %}
-                            <img src="{{ plat.photo.url }}" class="card-img-top promotion-image" alt="{{ plat.nom }}">
+                            <img src="{{ plat.photo.url }}" class="uniform-image" alt="{{ plat.nom }}">
                             {% else %}
-                            <div class="promotion-placeholder">
-                                <i class="fas fa-utensils fa-3x"></i>
+                            <div class="uniform-placeholder">
+                                <i class="fas fa-utensils"></i>
                                 <p>Aucune image</p>
                             </div>
                             {% endif %}
                         </div>
                         
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">{{ plat.nom }}</h5>
-                            <p class="card-text text-muted">{{ plat.description|truncatechars:60 }}</p>
+                        <div class="uniform-card-body">
+                            <h5 class="uniform-card-title">{{ plat.nom }}</h5>
+                            <p class="uniform-card-description">{{ plat.description|truncatechars:60 }}</p>
                             
                             <!-- Prix -->
                             <div class="price-section">
@@ -177,9 +177,9 @@
                             {% endif %}
                         </div>
                         
-                        <div class="card-footer bg-transparent">
+                        <div class="uniform-card-footer">
                             <div class="d-grid">
-                                <a href="{% url 'plats:plat-detail' plat.pk %}" class="btn btn-jaune">
+                                <a href="{% url 'plats:plat-detail' plat.pk %}" class="uniform-btn uniform-btn-primary">
                                     <i class="fas fa-eye me-2"></i>Voir les détails
                                 </a>
                             </div>
@@ -234,29 +234,29 @@
             </div>
 
             <!-- Cartes Structures -->
-            <div class="row" id="structuresContainer">
+            <div class="row justify-content-center" id="structuresContainer">
                 {% for structure in featured_structures %}
-                <div class="col-lg-3 col-md-4 mb-3"
+                <div class="col-lg-3 col-md-6 col-sm-12 mb-3 d-flex justify-content-center"
                     data-ville="{{ structure.ville|lower }}"
                     data-categorie="{{ structure.type|lower }}"
                     data-nom="{{ structure.nom|lower }}">
-                    <div class="card h-100 promotion-card border-0 shadow-lg">
+                    <div class="uniform-card structure-card">
                         
                         <!-- Image de la structure -->
-                        <div class="promotion-image-container">
+                        <div class="uniform-image-container">
                             {% if structure.photo %}
-                            <img src="{{ structure.photo.url }}" class="card-img-top promotion-image" alt="{{ structure.nom }}">
+                            <img src="{{ structure.photo.url }}" class="uniform-image" alt="{{ structure.nom }}">
                             {% else %}
-                            <div class="promotion-placeholder">
-                                <i class="fas fa-store-alt fa-3x"></i>
+                            <div class="uniform-placeholder">
+                                <i class="fas fa-store-alt"></i>
                                 <p>Aucune image</p>
                             </div>
                             {% endif %}
                         </div>
                         
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">{{ structure.nom }}</h5>
-                            <p class="card-text text-muted">{{ structure.description|truncatechars:60 }}</p>
+                        <div class="uniform-card-body">
+                            <h5 class="uniform-card-title">{{ structure.nom }}</h5>
+                            <p class="uniform-card-description">{{ structure.description|truncatechars:60 }}</p>
                             
                             <!-- Localisation et note -->
                             <div class="price-section">
@@ -279,9 +279,9 @@
                             </div>
                         </div>
                         
-                        <div class="card-footer bg-transparent">
+                        <div class="uniform-card-footer">
                             <div class="d-grid">
-                                <a href="{% url 'structures:detail' structure.pk %}" class="btn btn-jaune">
+                                <a href="{% url 'structures:detail' structure.pk %}" class="uniform-btn uniform-btn-primary">
                                     <i class="fas fa-eye me-2"></i>Voir les détails
                                 </a>
                             </div>
@@ -353,15 +353,15 @@
             </div>
 
             <!-- Cartes Menus -->
-            <div class="row" id="menusContainer">
+            <div class="row justify-content-center" id="menusContainer">
                 {% for plat in featured_plats %}
-                <div class="col-lg-3 col-md-4 mb-3 menu-card"
+                <div class="col-lg-3 col-md-6 col-sm-12 mb-3 menu-card d-flex justify-content-center"
                     data-categorie="{{ plat.categorie|lower }}"
                     data-nom="{{ plat.nom|lower }}"
                     data-disponibilite="{% if plat.disponibilite %}true{% else %}false{% endif %}"
                     data-promotion="{% if plat.en_promotion %}true{% else %}false{% endif %}">
-                    <div class="card h-100 promotion-card border-0 shadow-lg">
-                        <div class="promotion-vote">
+                    <div class="uniform-card plat-card">
+                        <div class="uniform-vote-badge">
                             {% if plat.note_moyenne > 0 %}
                             <div class="rating-display me-3">
                                 {% for i in "12345" %}
@@ -376,7 +376,7 @@
                         </div>
                         
                         <!-- Badge de promotion -->
-                        <div class="promotion-badge">
+                        <div class="uniform-badge">
                             {% if plat.pourcentage_reduction %}
                                 -{{ plat.pourcentage_reduction }}%
                                 <i class="fas fa-fire"></i>
@@ -384,20 +384,20 @@
                         </div>
                         
                         <!-- Image du plat -->
-                        <div class="promotion-image-container">
+                        <div class="uniform-image-container">
                             {% if plat.photo %}
-                            <img src="{{ plat.photo.url }}" class="card-img-top promotion-image" alt="{{ plat.nom }}">
+                            <img src="{{ plat.photo.url }}" class="uniform-image" alt="{{ plat.nom }}">
                             {% else %}
-                            <div class="promotion-placeholder">
-                                <i class="fas fa-utensils fa-3x"></i>
+                            <div class="uniform-placeholder">
+                                <i class="fas fa-utensils"></i>
                                 <p>Aucune image</p>
                             </div>
                             {% endif %}
                         </div>
                         
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">{{ plat.nom }}</h5>
-                            <p class="card-text text-text">{{ plat.description|truncatechars:60 }}</p>
+                        <div class="uniform-card-body">
+                            <h5 class="uniform-card-title">{{ plat.nom }}</h5>
+                            <p class="uniform-card-description">{{ plat.description|truncatechars:60 }}</p>
                             
                             <!-- Prix et temps de préparation -->
                             <div class="price-section">
@@ -417,9 +417,9 @@
                             </div>
                         </div>
                         
-                        <div class="card-footer bg-transparent">
+                        <div class="uniform-card-footer">
                             <div class="d-grid">
-                                <a href="{% url 'plats:plat-detail' plat.pk %}" class="btn btn-jaune">
+                                <a href="{% url 'plats:plat-detail' plat.pk %}" class="uniform-btn uniform-btn-primary">
                                     <i class="fas fa-eye me-2"></i>Voir les détails
                                 </a>
                             </div>
@@ -516,7 +516,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const platSearch = document.getElementById('platSearch');
     const villeFilter = document.getElementById('villeFilter');
     const structureCategoryFilter = document.getElementById('structureCategoryFilter');
-    const structureCards = document.querySelectorAll('.structure-card');
 
     // Filtres pour les plats (index)
     const platCategorieFilter = document.getElementById('platCategorieFilter');
@@ -526,22 +525,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function filterStructures() {
         const searchTerm = structureSearch ? structureSearch.value.toLowerCase() : '';
-        const platTerm = platSearch ? platSearch.value.toLowerCase() : '';
         const selectedVille = villeFilter ? villeFilter.value.toLowerCase() : '';
         const selectedCategory = structureCategoryFilter ? structureCategoryFilter.value.toLowerCase() : '';
 
+        // Sélectionner les cartes de structures (pas les cartes de plats)
+        const structureCards = document.querySelectorAll('#structuresContainer .col-lg-3.col-md-4.mb-3');
+        
         structureCards.forEach(card => {
             const nom = card.dataset.nom ? card.dataset.nom.toLowerCase() : '';
             const ville = card.dataset.ville ? card.dataset.ville.toLowerCase() : '';
             const categorie = card.dataset.categorie ? card.dataset.categorie.toLowerCase() : '';
-            const plats = card.dataset.plats ? card.dataset.plats.toLowerCase() : '';
 
             const matchesSearch = !searchTerm || nom.includes(searchTerm);
-            const matchesPlat = !platTerm || plats.includes(platTerm);
             const matchesVille = !selectedVille || ville === selectedVille;
             const matchesCategory = !selectedCategory || categorie === selectedCategory;
 
-            if (matchesSearch && matchesPlat && matchesVille && matchesCategory) {
+            if (matchesSearch && matchesVille && matchesCategory) {
                 card.style.display = 'block';
             } else {
                 card.style.display = 'none';
@@ -575,10 +574,7 @@ document.addEventListener('DOMContentLoaded', function() {
         structureSearch.addEventListener('input', filterStructures);
     }
     if (platSearch) {
-        platSearch.addEventListener('input', function() {
-            filterStructures();
-            filterMenus();
-        });
+        platSearch.addEventListener('input', filterMenus);
     }
     if (villeFilter) {
         villeFilter.addEventListener('change', filterStructures);

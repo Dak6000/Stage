@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'Emenu',                  # Nom de votre base de données
         'USER': 'postgres',                # Utilisateur PostgreSQL (par défaut 'postgres')
-        'PASSWORD': 'dak',                  # Mot de passe de l'utilisateur
+        'PASSWORD': 'Dak123456',                  # Mot de passe de l'utilisateur
         'HOST': '127.0.0.1',               # Ou 'localhost'
         'PORT': '5432',                    # Port par défaut de PostgreSQL
         'OPTIONS': {

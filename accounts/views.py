@@ -215,7 +215,7 @@ def change_password(request):
             # Met à jour la session pour ne pas déconnecter l'utilisateur
             update_session_auth_hash(request, user)
             messages.success(request, 'Votre mot de passe a été changé avec succès!')
-            return redirect('accounts:profile')
+            return redirect('accounts:login')
     else:
         form = CustomPasswordChangeForm(request.user)
 

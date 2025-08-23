@@ -95,11 +95,11 @@
             <div class="row">
                 {% for plat in plats %}
                 <div class="col-lg-3 col-md-4 mb-3">
-                    <div class="card h-100 border-0 shadow-sm plat-card" data-bs-toggle="modal" data-bs-target="#platModal">
+                    <div class="uniform-card plat-card" data-bs-toggle="modal" data-bs-target="#platModal">
                         <!-- Badge de promotion -->
                         {% if plat.est_en_promotion %}
                         <!-- Badge de promotion -->
-                        <div class="promotion-badge">
+                        <div class="uniform-badge">
                             <i class="fas fa-fire"></i>
                             {% if plat.pourcentage_reduction %}
                                 -{{ plat.pourcentage_reduction }}%
@@ -109,20 +109,20 @@
                         </div>
                         {% endif %}
                         
-                        <div class="square-img-container">
+                        <div class="uniform-image-container">
                             {% if plat.photo %}
-                            <img src="{{ plat.photo.url }}" class="square-img" alt="{{ plat.nom }}">
+                            <img src="{{ plat.photo.url }}" class="uniform-image" alt="{{ plat.nom }}">
                             {% else %}
-                            <div class="square-img-placeholder">
-                                <i class="fas fa-utensils fa-3x"></i>
+                            <div class="uniform-placeholder">
+                                <i class="fas fa-utensils"></i>
                                 <p>Aucune image</p>
                             </div>
                             {% endif %}
                             <div class="img-badge">{{ plat.get_categorie_display }}</div>
                         </div>
-                        <div class="card-body">
-                            <h5 class="text-vert">{{ plat.nom }}</h5>
-                            <p class="card-text text-gray">{{ plat.description|truncatechars:80 }}</p>
+                        <div class="uniform-card-body">
+                            <h5 class="uniform-card-title">{{ plat.nom }}</h5>
+                            <p class="uniform-card-description">{{ plat.description|truncatechars:80 }}</p>
                                                          <div class="d-flex justify-content-between align-items-center">
                                  {% if plat.est_en_promotion %}
                                  <div>
@@ -136,7 +136,7 @@
                                  <span class="badge bg-jaune">{{ plat.temps_preparation|default:"15" }} min</span>
                              </div>
                         </div>
-                        <div class="card-footer bg-transparent">
+                        <div class="uniform-card-footer">
                             <div class="btn-group btn-group-sm w-100">
                                 <a href="{% url 'plats:plat-update' plat.pk %}" class="btn auth-submit-btn" onclick="event.stopPropagation();">
                                     <i class="fas fa-edit"></i>

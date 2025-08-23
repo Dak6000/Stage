@@ -1,0 +1,368 @@
+/* ===== SYSTÈME DE CARTES UNIFORME ===== */
+
+/* Variables pour les cartes */
+:root {
+    --card-width: 280px;
+    --card-height: 420px;
+    --card-image-height: 200px;
+    --card-border-radius: 12px;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --card-shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+    --card-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --card-margin: 1rem;
+}
+
+/* ===== CARTES UNIFORMES ===== */
+.uniform-card {
+    width: var(--card-width);
+    height: var(--card-height);
+    margin: var(--card-margin);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--card-shadow);
+    transition: var(--card-transition);
+    position: relative;
+    overflow: hidden;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+}
+
+.uniform-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--card-shadow-hover);
+}
+
+/* ===== CONTENEUR D'IMAGE UNIFORME ===== */
+.uniform-image-container {
+    width: 100%;
+    height: var(--card-image-height);
+    overflow: hidden;
+    position: relative;
+    border-radius: var(--card-border-radius) var(--card-border-radius) 0 0;
+}
+
+.uniform-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.uniform-card:hover .uniform-image {
+    transform: scale(1.1);
+}
+
+.uniform-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.uniform-placeholder i {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+}
+
+.uniform-placeholder p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* ===== BADGES ET ÉTIQUETTES ===== */
+.uniform-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    animation: pulse 2s infinite;
+}
+
+.uniform-vote-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--bs-jaune);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== CORPS DE LA CARTE ===== */
+.uniform-card-body {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.uniform-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--bs-text);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.uniform-card-description {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ===== INFORMATIONS SUPPLÉMENTAIRES ===== */
+.uniform-info-section {
+    margin-bottom: 1rem;
+}
+
+.uniform-price-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.uniform-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--bs-vert);
+}
+
+.uniform-original-price {
+    font-size: 0.9rem;
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 0.5rem;
+}
+
+.uniform-economy-badge {
+    background: var(--bs-vert);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.uniform-time-badge {
+    background: var(--bs-jaune);
+    color: var(--bs-text);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* ===== FOOTER DE LA CARTE ===== */
+.uniform-card-footer {
+    padding: 1rem;
+    background: transparent;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.uniform-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.uniform-btn-primary {
+    background: var(--bs-jaune);
+    color: var(--bs-text);
+}
+
+.uniform-btn-primary:hover {
+    background: var(--bs-vert);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== ANIMATIONS AU SCROLL ===== */
+.scroll-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-animate.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===== ANIMATIONS D'ENTRÉE ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* ===== CARTES DE PROMOTION ===== */
+.promotion-card {
+    border: 2px solid var(--bs-jaune);
+    position: relative;
+    width: 300px !important;
+    height: 450px !important;
+}
+
+.promotion-card:hover {
+    border-color: var(--bs-vert);
+}
+
+.promotion-card .uniform-image-container {
+    height: 220px !important;
+}
+
+.promotion-card .uniform-badge {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    animation: pulse 2s infinite;
+}
+
+.promotion-card .original-price {
+    font-size: 0.9rem;
+    text-decoration: line-through;
+    color: #999;
+    margin-right: 0.5rem;
+}
+
+.promotion-card .promotion-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+.promotion-card .economy-badge {
+    background: var(--bs-vert);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.promotion-card .promotion-duration {
+    margin-bottom: 0.75rem;
+}
+
+.promotion-card .promotion-duration .text-small {
+    font-size: 0.8rem;
+}
+
+.promotion-card .days-remaining {
+    margin-top: 0.5rem;
+}
+
+.promotion-card .days-remaining small {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* ===== RESPONSIVE DES CARTES ===== */
+@media (max-width: 768px) {
+    :root {
+        --card-width: 280px;
+        --card-height: 420px;
+        --card-image-height: 200px;
+        --card-margin: 0.5rem;
+    }
+    
+    .uniform-card {
+        margin-bottom: 1rem;
+        height: 420px;
+    }
+    
+    .uniform-image-container {
+        height: 200px;
+    }
+}
+
+@media (max-width: 576px) {
+    :root {
+        --card-width: 280px;
+        --card-height: 420px;
+        --card-image-height: 200px;
+    }
+    
+    .uniform-image-container {
+        height: 200px;
+    }
+    
+    .uniform-card {
+        margin-bottom: 1.5rem;
+        height: 420px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --card-width: 280px;
+        --card-height: 420px;
+        --card-image-height: 200px;
+    }
+    
+    .uniform-image-container {
+        height: 200px;
+    }
+    
+    .uniform-card {
+        height: 420px;
+    }
+    
+    .promotion-card {
+        width: 280px !important;
+        height: 420px !important;
+    }
+    
+    .promotion-card .uniform-image-container {
+        height: 200px !important;
+    }
+}
