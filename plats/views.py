@@ -37,14 +37,20 @@ def plat_detail(request, pk):
 # Vue publique pour voir les plats en promotion
 def plats_promotion(request):
     # Récupérer tous les plats configurés pour être en promotion
-    plats = Plats.objects.filter(disponibilite=True)
+    plats = Plats.objects.filter(disponibilite=True).select_related('createur', 'structure')
     plats_promotion = [plat for plat in plats if plat.est_en_promotion()]
     
     # Trier par date de modification/création
     plats_promotion.sort(key=lambda x: (x.date_modification or x.date_creation), reverse=True)
     
+    # Catégories uniques pour les filtres
+    unique_codes = list(Plats.objects.values_list('categorie', flat=True).distinct())
+    label_map = dict(Plats.CATEGORIES)
+    plat_categories = [(code, label_map.get(code, code)) for code in unique_codes]
+    
     context = {
         'plats_promotion': plats_promotion,
+        'plat_categories': plat_categories,
         'title': 'Plats en Promotion'
     }
     return render(request, 'plats/promotion.html', context)

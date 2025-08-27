@@ -46,7 +46,7 @@
             <!-- Cartes Structures -->
             <div class="row justify-content-center" id="structuresContainer">
                 {% for structure in featured_structures %}
-                <div class="col-lg-3 col-md-6 col-sm-12 mb-3 d-flex justify-content-center"
+                <div class="col-lg-3 col-md-6 col-sm-12 mb-2 d-flex justify-content-center structure-card-item"
                     data-ville="{{ structure.ville|lower }}"
                     data-categorie="{{ structure.type|lower }}"
                     data-nom="{{ structure.nom|lower }}">
@@ -66,7 +66,7 @@
                         
                         <div class="uniform-card-body">
                             <h5 class="uniform-card-title">{{ structure.nom }}</h5>
-                            <p class="uniform-card-description">{{ structure.description|truncatechars:60 }}</p>
+                            <!--<p class="uniform-card-description">{{ structure.description|truncatechars:60 }}</p>-->
                             
                             <!-- Localisation et note -->
                             <div class="price-section">
@@ -201,7 +201,7 @@
                         
                         <div class="uniform-card-body">
                             <h5 class="uniform-card-title">{{ plat.nom }}</h5>
-                            <p class="uniform-card-description">{{ plat.description|truncatechars:60 }}</p>
+                            <!--<p class="uniform-card-description">{{ plat.description|truncatechars:60 }}</p>-->
                             
                             <!-- Prix et temps de préparation -->
                             <div class="price-section">
@@ -354,6 +354,33 @@ document.addEventListener('DOMContentLoaded', function() {
         z-index: 2;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         animation: pulse 1.5s infinite;
+    }
+
+    /* ===== RÉDUCTION DES MARGES POUR LES CARTES DE STRUCTURES ===== */
+    .structure-card-item {
+        margin-bottom: 0.5rem !important;
+    }
+
+    .structure-card-item .uniform-card {
+        margin: 0.25rem;
+        width: 100% !important;
+        max-width: 100%;
+    }
+
+    /* Réduction des marges entre les colonnes */
+    .row.justify-content-center > .col-lg-3 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .row.justify-content-center > .col-md-6 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .row.justify-content-center > .col-sm-12 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
     }
 </style>
 

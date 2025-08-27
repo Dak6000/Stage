@@ -30,10 +30,14 @@
     </div>
 
     {% if plats_promotion %}
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" id="promotionsContainer">
         {% for plat in plats_promotion %}
-                 <div class="col-lg-3 col-md-6 col-sm-12 mb-3 d-flex justify-content-center">
-             <div class="uniform-card promotion-card" style="width: 300px; height: 450px;">
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-2 d-flex justify-content-center promotion-card-item"
+            data-categorie="{{ plat.categorie|lower }}"
+            data-nom="{{ plat.nom|lower }}"
+            data-disponibilite="{% if plat.disponibilite %}true{% else %}false{% endif %}"
+            data-promotion="{% if plat.en_promotion %}true{% else %}false{% endif %}">
+            <div class="uniform-card promotion-card">
                 <!-- Badge de promotion -->
                 <div class="uniform-badge">
                     <i class="fas fa-fire"></i>
@@ -172,7 +176,7 @@
 }
 
  .promotion-card {
-     border: 2px solid var(--bs-jaune);
+     border: 1px solid #e9ecef;
      position: relative;
      width: 300px !important;
      height: 450px !important;
@@ -295,5 +299,33 @@
          height: 200px !important;
      }
  }
+
+ /* ===== RÉDUCTION DES MARGES POUR DES CARTES PLUS LARGES ===== */
+ .promotion-card-item {
+     margin-bottom: 0.5rem !important;
+ }
+
+ .promotion-card-item .uniform-card {
+     margin: 0.25rem;
+     width: 100% !important;
+     max-width: 100%;
+ }
+
+ /* Réduction des marges entre les colonnes */
+ .row.justify-content-center > .col-lg-3 {
+     padding-left: 0.5rem;
+     padding-right: 0.5rem;
+ }
+
+ .row.justify-content-center > .col-md-6 {
+     padding-left: 0.5rem;
+     padding-right: 0.5rem;
+ }
+
+ .row.justify-content-center > .col-sm-12 {
+     padding-left: 0.5rem;
+     padding-right: 0.5rem;
+ }
 </style>
+
 {% endblock %}

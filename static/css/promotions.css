@@ -1,220 +1,57 @@
-/* ===== CSS PROMOTIONS UNIFORME ===== */
+/* ===== STYLES POUR LES CARTES DE PROMOTION ===== */
 
-/* Variables spécifiques aux promotions */
-:root {
-    --promotion-card-width: 280px;
-    --promotion-card-height: 420px;
-    --promotion-image-height: 200px;
-    --promotion-border-radius: 12px;
-    --promotion-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --promotion-shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
-    --promotion-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --promotion-margin: 1rem;
+/* Réduction des marges pour des cartes plus larges */
+.promotion-card-item,
+.structure-card-item,
+.menu-card {
+    margin-bottom: 0.5rem !important;
 }
 
-/* ===== CARTES DE PROMOTION UNIFORMES ===== */
+.promotion-card-item .uniform-card,
+.structure-card-item .uniform-card,
+.menu-card .uniform-card {
+    margin: 0.25rem;
+    width: 100% !important;
+    max-width: 100%;
+    transition: all 0.3s ease;
+}
+
+/* Réduction des marges entre les colonnes pour toutes les sections */
+.row.justify-content-center > .col-lg-3 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.row.justify-content-center > .col-md-6 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.row.justify-content-center > .col-sm-12 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+/* Style pour les cartes de promotion */
 .promotion-card {
-    width: var(--promotion-card-width);
-    height: var(--promotion-card-height);
-    margin: var(--promotion-margin);
-    border-radius: var(--promotion-border-radius);
-    box-shadow: var(--promotion-shadow);
-    transition: var(--promotion-transition);
+    border: 1px solid #e9ecef;
     position: relative;
-    overflow: hidden;
-    background: white;
-    border: 2px solid var(--bs-jaune);
-    display: flex;
-    flex-direction: column;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
 }
 
 .promotion-card:hover {
+    border-color: #dee2e6;
     transform: translateY(-8px);
-    box-shadow: var(--promotion-shadow-hover);
-    border-color: var(--bs-vert);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
-/* ===== CONTENEUR D'IMAGE DE PROMOTION ===== */
-.promotion-image-container {
-    width: 100%;
-    height: var(--promotion-image-height);
-    overflow: hidden;
-    position: relative;
-    border-radius: var(--promotion-border-radius) var(--promotion-border-radius) 0 0;
-}
-
-.promotion-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.promotion-card:hover .promotion-image {
-    transform: scale(1.1);
-}
-
-.promotion-placeholder {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
-
-.promotion-placeholder i {
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
-    opacity: 0.8;
-}
-
-.promotion-placeholder p {
-    margin: 0;
-    font-size: 0.9rem;
-    opacity: 0.9;
-}
-
-/* ===== BADGES DE PROMOTION ===== */
-.promotion-badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
+.promotion-card .uniform-badge {
     background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-    color: white;
-    padding: 6px 10px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    z-index: 10;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     animation: pulse 2s infinite;
-}
-
-.promotion-vote {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: var(--bs-jaune);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 15px;
-    font-size: 0.7rem;
     font-weight: bold;
-    z-index: 10;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-/* ===== CORPS DE LA CARTE DE PROMOTION ===== */
-.promotion-card-body {
-    flex: 1;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.promotion-card-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--bs-text);
-    margin-bottom: 0.5rem;
-    line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.promotion-card-description {
     font-size: 0.9rem;
-    color: #666;
-    line-height: 1.4;
-    margin-bottom: 1rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
 }
 
-/* ===== INFORMATIONS DE PRIX ===== */
-.promotion-price-section {
-    margin-bottom: 1rem;
-}
-
-.original-price {
-    font-size: 0.9rem;
-    text-decoration: line-through;
-    color: #999;
-    margin-right: 0.5rem;
-}
-
-.promotion-price {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #e74c3c;
-}
-
-.economy-badge {
-    background: var(--bs-vert);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
-
-/* ===== INFORMATIONS DE PROMOTION ===== */
-.promotion-duration {
-    margin-bottom: 0.75rem;
-}
-
-.promotion-duration .text-small {
-    font-size: 0.8rem;
-}
-
-.days-remaining {
-    margin-top: 0.5rem;
-}
-
-.days-remaining small {
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-/* ===== FOOTER DE LA CARTE DE PROMOTION ===== */
-.promotion-card-footer {
-    padding: 1rem;
-    background: transparent;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.promotion-btn {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    font-weight: 500;
-    text-align: center;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-    background: var(--bs-jaune);
-    color: var(--bs-text);
-    text-decoration: none;
-    display: inline-block;
-}
-
-.promotion-btn:hover {
-    background: var(--bs-vert);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    text-decoration: none;
-}
-
-/* ===== ANIMATIONS ===== */
 @keyframes pulse {
     0%, 100% {
         transform: scale(1);
@@ -226,54 +63,151 @@
     }
 }
 
-/* ===== RESPONSIVE DES CARTES DE PROMOTION ===== */
-@media (max-width: 768px) {
-    :root {
-        --promotion-card-width: 280px;
-        --promotion-card-height: 420px;
-        --promotion-image-height: 200px;
-        --promotion-margin: 0.5rem;
-    }
-    
-    .promotion-card {
-        margin-bottom: 1rem;
-        height: 420px;
-    }
-    
-    .promotion-image-container {
-        height: 200px;
-    }
+/* Style pour les informations des plats */
+.plat-info {
+    border-top: 1px solid #f8f9fa;
+    padding-top: 15px;
+    margin-top: 15px;
 }
 
-@media (max-width: 576px) {
-    :root {
-        --promotion-card-width: 280px;
-        --promotion-card-height: 420px;
-        --promotion-image-height: 200px;
+.plat-info .col-6 {
+    padding: 8px;
+}
+
+.plat-info small {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.days-remaining {
+    text-align: center;
+    padding: 8px;
+    background: #fff3cd;
+    border-radius: 8px;
+    border: 1px solid #ffeaa7;
+    margin-top: 10px;
+}
+
+.days-remaining small {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #856404;
+}
+
+/* Amélioration des prix */
+.original-price {
+    font-size: 0.9rem;
+    color: #6c757d;
+    text-decoration: line-through;
+}
+
+.promotion-price {
+    color: #dc3545;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.economy-badge {
+    background: var(--bs-vert);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Filtres de recherche */
+.filter-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border: 1px solid #e9ecef;
+}
+
+.filter-section .form-label {
+    font-weight: 600;
+    color: var(--bs-vert);
+    margin-bottom: 8px;
+}
+
+.filter-section .form-control,
+.filter-section .form-select {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+.filter-section .form-control:focus,
+.filter-section .form-select:focus {
+    border-color: var(--bs-vert);
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.filter-section .btn-jaune {
+    background: var(--bs-jaune);
+    border: none;
+    color: var(--bs-text);
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.filter-section .btn-jaune:hover {
+    background: var(--bs-vert);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .filter-section .row {
+        margin-bottom: 15px;
     }
     
-    .promotion-image-container {
-        height: 200px;
+    .filter-section .col-md-4,
+    .filter-section .col-md-3,
+    .filter-section .col-md-2 {
+        margin-bottom: 15px;
     }
     
-    .promotion-card {
-        margin-bottom: 1.5rem;
-        height: 420px;
+    .promotion-card-item {
+        margin-bottom: 1rem !important;
     }
 }
 
 @media (max-width: 480px) {
-    :root {
-        --promotion-card-width: 280px;
-        --promotion-card-height: 420px;
-        --promotion-image-height: 200px;
+    .filter-section {
+        padding: 15px;
     }
     
-    .promotion-image-container {
-        height: 200px;
-    }
-    
-    .promotion-card {
-        height: 420px;
+    .promotion-card-item .uniform-card {
+        margin: 0.5rem;
     }
 }
+
+/* Animation d'entrée pour les cartes */
+.promotion-card-item {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Délai d'animation pour chaque carte */
+.promotion-card-item:nth-child(1) { animation-delay: 0.1s; }
+.promotion-card-item:nth-child(2) { animation-delay: 0.2s; }
+.promotion-card-item:nth-child(3) { animation-delay: 0.3s; }
+.promotion-card-item:nth-child(4) { animation-delay: 0.4s; }
+.promotion-card-item:nth-child(5) { animation-delay: 0.5s; }
+.promotion-card-item:nth-child(6) { animation-delay: 0.6s; }

@@ -77,10 +77,14 @@
                 <p class="text-text">Découvrez nos promotions exclusives et économisez sur vos plats préférés !</p>
             </div>
 
-            <div class="row justify-content-center">
+            <div class="row justify-content-center" id="promotionsContainer">
                 {% for plat in plats_promotion|slice:":4" %}
-                <div class="col-lg-3 col-md-6 col-sm-12 mb-3 d-flex justify-content-center">
-                    <div class="uniform-card promotion-card" style="width: 300px; height: 450px;">
+                <div class="col-lg-3 col-md-6 col-sm-12 mb-2 d-flex justify-content-center promotion-card-item"
+                    data-categorie="{{ plat.categorie|lower }}"
+                    data-nom="{{ plat.nom|lower }}"
+                    data-disponibilite="{% if plat.disponibilite %}true{% else %}false{% endif %}"
+                    data-promotion="{% if plat.en_promotion %}true{% else %}false{% endif %}">
+                    <div class="uniform-card promotion-card">
                         <div class="uniform-vote-badge">
                             {% if plat.note_moyenne > 0 %}
                             <div class="rating-display me-3">
@@ -119,62 +123,59 @@
                         
                         <div class="uniform-card-body">
                             <h5 class="uniform-card-title">{{ plat.nom }}</h5>
-                            <p class="uniform-card-description">{{ plat.description|truncatechars:60 }}</p>
+                            <!--<p class="uniform-card-description">{{ plat.description|truncatechars:60 }}</p>-->
                             
-                            <!-- Prix -->
-                            <div class="price-section">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <span class="original-price text-muted text-decoration-line-through">
-                                            {{ plat.prix }} FCFA
-                                        </span>
-                                        <br>
-                                        <span class="promotion-price fw-bold text-danger fs-6">
-                                            {{ plat.get_prix_promotionnel|floatformat:2 }} FCFA
-                                        </span>
-                                    </div>
-                                    <div class="economy-badge">
-                                        <span class="badge bg-success">
-                                            Économisez {{ plat.get_economie|floatformat:2 }} FCFA
-                                        </span>
-                                    </div>
+                                                    <!-- Prix et temps de préparation -->
+                        <div class="price-section">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="original-price text-muted text-decoration-line-through">
+                                        {{ plat.prix }} FCFA
+                                    </span>
+                                    <br>
+                                    <span class="promotion-price fw-bold text-danger fs-6">
+                                        {{ plat.get_prix_promotionnel|floatformat:2 }} FCFA
+                                    </span>
+                                </div>
+                                <div class="economy-badge">
+                                    <span class="badge bg-success">
+                                        Économisez {{ plat.get_economie|floatformat:2 }} FCFA
+                                    </span>
                                 </div>
                             </div>
-                            
-                            <!-- Durée de la promotion -->
-                            <div class="promotion-duration mt-3">
-                                <div class="d-flex align-items-center text-small">
-                                    <i class="fas fa-clock text-vert me-2"></i>
-                                    <div>
-                                        {% if plat.date_debut_promotion and plat.heure_debut_promotion %}
-                                            <div class="text-muted">
-                                                <strong>Début:</strong> 
-                                                {{ plat.date_debut_promotion|date:"d/m/Y" }} à {{ plat.heure_debut_promotion }}
-                                            </div>
-                                        {% endif %}
-                                        {% if plat.date_fin_promotion and plat.heure_fin_promotion %}
-                                            <div class="text-muted">
-                                                <strong>Fin:</strong> 
-                                                {{ plat.date_fin_promotion|date:"d/m/Y" }} à {{ plat.heure_fin_promotion }}
-                                            </div>
-                                        {% endif %}
-                                    </div>
+                        </div>
+                        
+                        <!-- Informations supplémentaires -->
+                        <div class="plat-info mt-3">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>
+                                        {{ plat.temps_preparation|default:"15" }} min
+                                    </small>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">
+                                        <i class="fas fa-star me-1"></i>
+                                        {{ plat.note_moyenne|floatformat:1 }}/5
+                                    </small>
                                 </div>
                             </div>
-                            
-                            <!-- Jours restants -->
-                            {% if plat.get_jours_restants_promotion > 0 %}
-                            <div class="days-remaining mt-2">
-                                <small class="text-warning">
-                                    <i class="fas fa-calendar-alt me-1"></i>
-                                    {% if plat.get_jours_restants_promotion == 0 %}
-                                        Dernier jour!
-                                    {% else %}
-                                        Plus que {{ plat.get_jours_restants_promotion }} jour{{ plat.get_jours_restants_promotion|pluralize:"s" }}
-                                    {% endif %}
-                                </small>
-                            </div>
-                            {% endif %}
+                        </div>
+                        
+                        <!-- Jours restants -->
+                        {% if plat.get_jours_restants_promotion > 0 %}
+                        <div class="days-remaining mt-2">
+                            <small class="text-warning">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                {% if plat.get_jours_restants_promotion == 0 %}
+                                    Dernier jour!
+                                {% else %}
+                                    Plus que {{ plat.get_jours_restants_promotion }} jour{{ plat.get_jours_restants_promotion|pluralize:"s" }}
+                                {% endif %}
+                            </small>
+                        </div>
+                        {% endif %}
                         </div>
                         
                         <div class="uniform-card-footer">
@@ -236,7 +237,7 @@
             <!-- Cartes Structures -->
             <div class="row justify-content-center" id="structuresContainer">
                 {% for structure in featured_structures %}
-                <div class="col-lg-3 col-md-6 col-sm-12 mb-3 d-flex justify-content-center"
+                <div class="col-lg-3 col-md-6 col-sm-12 mb-2 d-flex justify-content-center structure-card-item"
                     data-ville="{{ structure.ville|lower }}"
                     data-categorie="{{ structure.type|lower }}"
                     data-nom="{{ structure.nom|lower }}">
@@ -256,7 +257,7 @@
                         
                         <div class="uniform-card-body">
                             <h5 class="uniform-card-title">{{ structure.nom }}</h5>
-                            <p class="uniform-card-description">{{ structure.description|truncatechars:60 }}</p>
+                            <!--<p class="uniform-card-description">{{ structure.description|truncatechars:60 }}</p>-->
                             
                             <!-- Localisation et note -->
                             <div class="price-section">
@@ -355,7 +356,7 @@
             <!-- Cartes Menus -->
             <div class="row justify-content-center" id="menusContainer">
                 {% for plat in featured_plats %}
-                <div class="col-lg-3 col-md-6 col-sm-12 mb-3 menu-card d-flex justify-content-center"
+                <div class="col-lg-3 col-md-6 col-sm-12 mb-2 menu-card d-flex justify-content-center"
                     data-categorie="{{ plat.categorie|lower }}"
                     data-nom="{{ plat.nom|lower }}"
                     data-disponibilite="{% if plat.disponibilite %}true{% else %}false{% endif %}"
@@ -397,7 +398,7 @@
                         
                         <div class="uniform-card-body">
                             <h5 class="uniform-card-title">{{ plat.nom }}</h5>
-                            <p class="uniform-card-description">{{ plat.description|truncatechars:60 }}</p>
+                            <!--<p class="uniform-card-description">{{ plat.description|truncatechars:60 }}</p>-->
                             
                             <!-- Prix et temps de préparation -->
                             <div class="price-section">
@@ -419,6 +420,7 @@
                         
                         <div class="uniform-card-footer">
                             <div class="d-grid">
+                                {% if menu_parent%}
                                 <a href="{% url 'plats:plat-detail' plat.pk %}" class="uniform-btn uniform-btn-primary">
                                     <i class="fas fa-eye me-2"></i>Voir les détails
                                 </a>
@@ -507,6 +509,106 @@
     {% endif %}
     </section>
 {% endwith %}
+
+<style>
+/* ===== RÉDUCTION DES MARGES POUR DES CARTES PLUS LARGES ===== */
+.promotion-card-item {
+    margin-bottom: 0.5rem !important;
+}
+
+.promotion-card-item .uniform-card {
+    margin: 0.25rem;
+    width: 100% !important;
+    max-width: 100%;
+}
+
+/* Réduction des marges entre les colonnes */
+.row.justify-content-center > .col-lg-3 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.row.justify-content-center > .col-md-6 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.row.justify-content-center > .col-sm-12 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+/* Style pour les cartes de promotion */
+.promotion-card {
+    border: 1px solid #e9ecef;
+    position: relative;
+}
+
+.promotion-card:hover {
+    border-color: var(--bs-vert);
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.promotion-card .uniform-badge {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* Style pour les informations des plats */
+.plat-info {
+    border-top: 1px solid #f8f9fa;
+    padding-top: 15px;
+}
+
+.days-remaining {
+    text-align: center;
+    padding: 8px;
+    background: #fff3cd;
+    border-radius: 8px;
+    border: 1px solid #ffeaa7;
+}
+
+/* ===== RÉDUCTION DES MARGES POUR TOUTES LES CARTES ===== */
+.structure-card-item,
+.menu-card {
+    margin-bottom: 0.5rem !important;
+}
+
+.structure-card-item .uniform-card,
+.menu-card .uniform-card {
+    margin: 0.25rem;
+    width: 100% !important;
+    max-width: 100%;
+}
+
+/* Réduction des marges entre les colonnes pour toutes les sections */
+.row.justify-content-center > .col-lg-3 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.row.justify-content-center > .col-md-6 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.row.justify-content-center > .col-sm-12 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+</style>
 
 <script>
 // Filtres pour les structures et recherche plats en direct
