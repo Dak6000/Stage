@@ -267,11 +267,14 @@
     {% endwith %}
 
 <script>
-// Script pour le filtrage des structures
+// Script pour le filtrage des structures avec délai de frappe
 document.addEventListener('DOMContentLoaded', function() {
     const structureSearch = document.getElementById('structureSearch');
     const villeFilter = document.getElementById('villeFilter');
     const structureCategoryFilter = document.getElementById('structureCategoryFilter');
+
+    let typingTimer;
+    const doneTypingInterval = 400; // ms
 
     function filterStructures() {
         const searchTerm = structureSearch ? structureSearch.value.toLowerCase() : '';
@@ -279,8 +282,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedCategory = structureCategoryFilter ? structureCategoryFilter.value.toLowerCase() : '';
 
         // Sélectionner les cartes de structures
-        const structureCards = document.querySelectorAll('#structuresContainer .col-lg-3.col-md-4.mb-3');
+        const structureCards = document.querySelectorAll('#structuresContainer .structure-card-item');
         
+        let visibleCount = 0;
         structureCards.forEach(card => {
             const nom = card.dataset.nom ? card.dataset.nom.toLowerCase() : '';
             const ville = card.dataset.ville ? card.dataset.ville.toLowerCase() : '';
@@ -291,19 +295,48 @@ document.addEventListener('DOMContentLoaded', function() {
             const matchesCategory = !selectedCategory || categorie === selectedCategory;
 
             if (matchesSearch && matchesVille && matchesCategory) {
-                card.style.display = 'block';
+                card.style.display = 'flex';
+                visibleCount++;
             } else {
                 card.style.display = 'none';
             }
         });
+
+        // Afficher un message si aucun résultat
+        const noResultsMessage = document.getElementById('noStructuresMessage');
+        if (visibleCount === 0) {
+            if (!noResultsMessage) {
+                const message = document.createElement('div');
+                message.id = 'noStructuresMessage';
+                message.className = 'col-12 text-center';
+                message.innerHTML = `
+                    <div class="guide-card">
+                        <i class="fas fa-search fa-3x mb-3 text-jaune"></i>
+                        <h4>Aucune structure trouvée</h4>
+                        <p>Aucune structure ne correspond à vos critères de recherche.</p>
+                    </div>
+                `;
+                document.getElementById('structuresContainer').appendChild(message);
+            }
+        } else {
+            if (noResultsMessage) {
+                noResultsMessage.remove();
+            }
+        }
     }
 
-    if (structureSearch) structureSearch.addEventListener('input', filterStructures);
+    // Gestion du délai de frappe pour la recherche
+    if (structureSearch) {
+        structureSearch.addEventListener('input', function() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(filterStructures, doneTypingInterval);
+        });
+    }
     if (villeFilter) villeFilter.addEventListener('change', filterStructures);
     if (structureCategoryFilter) structureCategoryFilter.addEventListener('change', filterStructures);
 });
 
-// Script pour le filtrage des plats (structures)
+// Script pour le filtrage des plats avec délai de frappe
 document.addEventListener('DOMContentLoaded', function() {
     const platSearch = document.getElementById('platSearch');
     const platCategorieFilter = document.getElementById('platCategorieFilter');
@@ -311,12 +344,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const platPromotionFilter = document.getElementById('platPromotionFilter');
     const menuCards = document.querySelectorAll('.menu-card');
 
+    let typingTimer;
+    const doneTypingInterval = 400; // ms
+
     function filterPlats() {
         const term = platSearch ? platSearch.value.toLowerCase() : '';
         const selectedCat = platCategorieFilter ? platCategorieFilter.value.toLowerCase() : '';
         const selectedDisp = platDisponibiliteFilter ? platDisponibiliteFilter.value : '';
         const selectedPromo = platPromotionFilter ? platPromotionFilter.value : '';
 
+        let visibleCount = 0;
         menuCards.forEach(card => {
             const nom = card.dataset.nom ? card.dataset.nom.toLowerCase() : '';
             const categorie = card.dataset.categorie ? card.dataset.categorie.toLowerCase() : '';
@@ -328,11 +365,44 @@ document.addEventListener('DOMContentLoaded', function() {
             const matchesDisp = !selectedDisp || dispo === selectedDisp;
             const matchesPromo = !selectedPromo || promo === selectedPromo;
 
-            card.style.display = (matchesTerm && matchesCat && matchesDisp && matchesPromo) ? 'block' : 'none';
+            if (matchesTerm && matchesCat && matchesDisp && matchesPromo) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
         });
+
+        // Afficher un message si aucun résultat
+        const noResultsMessage = document.getElementById('noPlatsMessage');
+        if (visibleCount === 0) {
+            if (!noResultsMessage) {
+                const message = document.createElement('div');
+                message.id = 'noPlatsMessage';
+                message.className = 'col-12 text-center';
+                message.innerHTML = `
+                    <div class="guide-card">
+                        <i class="fas fa-utensils fa-3x mb-3 text-jaune"></i>
+                        <h4>Aucun plat trouvé</h4>
+                        <p>Aucun plat ne correspond à vos critères de recherche.</p>
+                    </div>
+                `;
+                document.getElementById('menusContainer').appendChild(message);
+            }
+        } else {
+            if (noResultsMessage) {
+                noResultsMessage.remove();
+            }
+        }
     }
 
-    if (platSearch) platSearch.addEventListener('input', filterPlats);
+    // Gestion du délai de frappe pour la recherche
+    if (platSearch) {
+        platSearch.addEventListener('input', function() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(filterPlats, doneTypingInterval);
+        });
+    }
     if (platCategorieFilter) platCategorieFilter.addEventListener('change', filterPlats);
     if (platDisponibiliteFilter) platDisponibiliteFilter.addEventListener('change', filterPlats);
     if (platPromotionFilter) platPromotionFilter.addEventListener('change', filterPlats);

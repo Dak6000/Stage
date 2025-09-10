@@ -55,7 +55,7 @@
                 <div class="row">
                     {% for plat in plats %}
                         {% if plat.categorie == cat.key %}
-                        <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="col-lg-3 col-md-4 mb-4">
                             <a class="plat-card text-decoration-none" href="{% url 'plats:plat-detail' plat.pk %}">
                                 <div class="plat-image">
                                     {% if plat.photo %}
@@ -65,14 +65,24 @@
                                         <i class="fas fa-utensils fa-3x text-white"></i>
                                     </div>
                                     {% endif %}
-                                    <div class="plat-badge">{{ plat.get_categorie_display }}</div>
+                                    {% if plat.est_en_promotion %}
+                                    <!-- Badge de promotion -->
+                                    <div class="uniform-badge">
+                                        <i class="fas fa-fire"></i>
+                                        {% if plat.pourcentage_reduction %}
+                                            -{{ plat.pourcentage_reduction }}%
+                                        {% else %}
+                                            PROMO
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
                                 </div>
                                 <div class="plat-content">
                                     <h4 class="plat-name">{{ plat.nom }}</h4>
                                     <p class="plat-description">{{ plat.description|truncatechars:80 }}</p>
                                     <div class="plat-details">
                                         <span class="plat-price">{{ plat.prix }} FCFA</span>
-                                        <span class="plat-time">15 min</span>
+                                        <span class="plat-time">{{ plat.temps_preparation }} min</span>
                                     </div>
                                 </div>
                             </a>
@@ -170,7 +180,10 @@
             <a href="{% url 'structures:structure' %}" class="action-btn btn-rouge">
                 <i class="fas fa-arrow-left"></i>Retour
             </a>
-            {% if user.is_authenticated %}
+
+            {% if user.is_authenticated and user == structure.user %}
+            <div>
+                <!-- Bouton pour ajouter un avis -->
                 {% if user_has_avis %}
                     <a href="{% url 'avis:avis-update' user_avis.pk %}" class="action-btn btn-jaune">
                         <i class="fas fa-edit"></i> Modifier mon avis
@@ -180,7 +193,25 @@
                         <i class="fas fa-star"></i> Laisser un avis
                     </a>
                 {% endif %}
+                
+                <a href="{% url 'plats:plat-create' %}" class="action-btn btn-jaune">
+                    <i class="fas fa-utensils me-2"></i>Plats
+                </a>
+                <a href="{% url 'menus:menus-create' %}" class="action-btn btn-vert">
+                    <i class="fas fa-utensils me-2"></i>Menu
+                </a>
+                <a href="{% url 'structures:structure-update' structure.pk %}" class="action-btn btn-jaune">
+                    <i class="fas fa-edit me-2"></i>Modifier
+                </a>
+                <a href="{% url 'structures:structure-delete' structure.pk %}" class="action-btn btn-rouge">
+                    <i class="fas fa-trash me-2"></i>Supprimer
+                </a>
+            </div>
             {% endif %}
+            <!-- Bouton pour voir les avis -->
+            <a href="{% url 'avis:avis-structure-public' structure.pk %}" class="action-btn btn-jaune">
+                <i class="fas fa-star me-1"></i>Voir les avis
+            </a>
         </div>
     </div>
 </section>

@@ -5,7 +5,6 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/detail.css' %}">
-    <link rel="stylesheet" href="{% static 'css/promotions.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -40,71 +39,53 @@
         </div>
 
         {% if categories %}
+        <div class="menu-categories">
             {% for categorie, plats in categories.items %}
-            <div class="menu-section">
+            <a href="#cat-{{ categorie }}" class="category-tab {% if forloop.first %}active{% endif %}">{{ categorie }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if categories %}
+            {% for categorie, plats in categories.items %}
+            <div class="menu-section" id="cat-{{ categorie }}">
                 <h3 class="section-title">{{ categorie }}</h3>
                 <div class="row">
                     {% for plat in plats %}
-                    <div class="col-lg-3 col-md-4 mb-3">
-                        <div class="card h-100 promotion-card border-0 shadow-lg">
-                            <!-- Badge de promotion si applicable -->
-                            {% if plat.est_en_promotion %}
-                            <div class="promotion-badge">
-                                <i class="fas fa-fire"></i>
-                                PROMO
-                            </div>
-                            {% endif %}
-                            
-                            <!-- Image du plat -->
-                            <div class="promotion-image-container">
-                                {% if plat.photo %}
-                                <img src="{{ plat.photo.url }}" class="card-img-top promotion-image" alt="{{ plat.nom }}">
-                                {% else %}
-                                <div class="promotion-placeholder">
-                                    <i class="fas fa-utensils fa-3x"></i>
-                                    <p>Aucune image</p>
+                        {% if plat.categorie == categorie %}
+                        <div class="col-lg-3 col-md-4 mb-4">
+                            <a class="plat-card text-decoration-none" href="{% url 'plats:plat-detail' plat.pk %}">
+                                <div class="plat-image">
+                                    {% if plat.photo %}
+                                    <img src="{{ plat.photo.url }}" alt="{{ plat.nom }}">
+                                    {% else %}
+                                    <div class="d-flex align-items-center justify-content-center h-100" style="background: var(--bs-jaune)">
+                                        <i class="fas fa-utensils fa-3x text-white"></i>
+                                    </div>
+                                    {% endif %}
+                                    {% if plat.est_en_promotion %}
+                                    <!-- Badge de promotion -->
+                                    <div class="uniform-badge">
+                                        <i class="fas fa-fire"></i>
+                                        {% if plat.pourcentage_reduction %}
+                                            -{{ plat.pourcentage_reduction }}%
+                                        {% else %}
+                                            PROMO
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
                                 </div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">{{ plat.nom }}</h5>
-                                <p class="card-text text-text">{{ plat.description|truncatechars:60 }}</p>
-                                
-                                <!-- Prix -->
-                                <div class="price-section">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                                                                 <div>
-                                             {% if plat.est_en_promotion %}
-                                             <span class="original-price text-text text-decoration-line-through">
-                                                 {{ plat.prix }} FCFA
-                                             </span>
-                                             <br>
-                                             <span class="promotion-price fw-bold text-rouge fs-6">
-                                                 {{ plat.get_prix_promotionnel|floatformat:2 }} FCFA
-                                             </span>
-                                             {% else %}
-                                             <span class="promotion-price fw-bold fs-6">
-                                                 {{ plat.prix }} FCFA
-                                             </span>
-                                             {% endif %}
-                                         </div>
-                                        <span class="badge bg-vert text-font">
-                                            <i class="fas fa-clock me-1"></i>{{ plat.temps_preparation|default:"15" }} min
-                                        </span>
+                                <div class="plat-content">
+                                    <h4 class="plat-name">{{ plat.nom }}</h4>
+                                    <p class="plat-description">{{ plat.description|truncatechars:80 }}</p>
+                                    <div class="plat-details">
+                                        <span class="plat-price">{{ plat.prix }} FCFA</span>
+                                        <span class="plat-time">{{ plat.temps_preparation }} min</span>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div class="card-footer bg-transparent">
-                                <div class="d-flex justify-content-between">
-                                    <a href="{% url 'plats:plat-detail' plat.pk %}" class="btn btn-jaune">
-                                        <i class="fas fa-eye me-2"></i>Détails
-                                    </a>
-                                </div>
-                            </div>
+                            </a>
                         </div>
-                    </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>
@@ -121,7 +102,7 @@
 
         <!-- Boutons d'action -->
         <div class="action-buttons">
-            <a href="{% url 'structures:structure' %}" class="btn btn-rouge">
+            <a href="{% url 'structures:detail' menu.structure.pk %}" class="btn btn-rouge">
                 <i class="fas fa-arrow-left"></i> Retour
             </a>
             {% if user.is_authenticated and user == menu.createur %}

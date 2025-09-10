@@ -131,7 +131,7 @@
                     </div>
 
                     <div class="d-flex justify-content-between mt-4">
-                        <a href="{% if form.instance.pk %}{% url 'structures:structure-detail' form.instance.pk %}{% else %}{% url 'accounts:dashboard' %}{% endif %}"
+                        <a href="{% if form.instance.pk %}{% url 'structures:detail' form.instance.pk %}{% else %}{% url 'accounts:dashboard' %}{% endif %}"
                            class="btn btn-secondary">
                             <i class="fas fa-times me-2"></i>Annuler
                         </a>

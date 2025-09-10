@@ -420,7 +420,6 @@
                         
                         <div class="uniform-card-footer">
                             <div class="d-grid">
-                                {% if menu_parent%}
                                 <a href="{% url 'plats:plat-detail' plat.pk %}" class="uniform-btn uniform-btn-primary">
                                     <i class="fas fa-eye me-2"></i>Voir les détails
                                 </a>
@@ -611,7 +610,7 @@
 </style>
 
 <script>
-// Filtres pour les structures et recherche plats en direct
+// Filtres pour les structures et recherche plats avec délai de frappe
 document.addEventListener('DOMContentLoaded', function() {
     // Filtres pour les structures
     const structureSearch = document.getElementById('structureSearch');
@@ -625,14 +624,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const platPromotionFilter = document.getElementById('platPromotionFilter');
     const menuCards = document.querySelectorAll('.menu-card');
 
+    let typingTimerStructures;
+    let typingTimerPlats;
+    const doneTypingInterval = 400; // ms
+
     function filterStructures() {
         const searchTerm = structureSearch ? structureSearch.value.toLowerCase() : '';
         const selectedVille = villeFilter ? villeFilter.value.toLowerCase() : '';
         const selectedCategory = structureCategoryFilter ? structureCategoryFilter.value.toLowerCase() : '';
 
-        // Sélectionner les cartes de structures (pas les cartes de plats)
-        const structureCards = document.querySelectorAll('#structuresContainer .col-lg-3.col-md-4.mb-3');
+        // Sélectionner les cartes de structures
+        const structureCards = document.querySelectorAll('#structuresContainer .structure-card-item');
         
+        let visibleCount = 0;
         structureCards.forEach(card => {
             const nom = card.dataset.nom ? card.dataset.nom.toLowerCase() : '';
             const ville = card.dataset.ville ? card.dataset.ville.toLowerCase() : '';
@@ -643,11 +647,34 @@ document.addEventListener('DOMContentLoaded', function() {
             const matchesCategory = !selectedCategory || categorie === selectedCategory;
 
             if (matchesSearch && matchesVille && matchesCategory) {
-                card.style.display = 'block';
+                card.style.display = 'flex';
+                visibleCount++;
             } else {
                 card.style.display = 'none';
             }
         });
+
+        // Afficher un message si aucun résultat
+        const noResultsMessage = document.getElementById('noStructuresMessage');
+        if (visibleCount === 0) {
+            if (!noResultsMessage) {
+                const message = document.createElement('div');
+                message.id = 'noStructuresMessage';
+                message.className = 'col-12 text-center';
+                message.innerHTML = `
+                    <div class="guide-card">
+                        <i class="fas fa-search fa-3x mb-3 text-jaune"></i>
+                        <h4>Aucune structure trouvée</h4>
+                        <p>Aucune structure ne correspond à vos critères de recherche.</p>
+                    </div>
+                `;
+                document.getElementById('structuresContainer').appendChild(message);
+            }
+        } else {
+            if (noResultsMessage) {
+                noResultsMessage.remove();
+            }
+        }
     }
 
     function filterMenus() {
@@ -656,6 +683,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedDisp = platDisponibiliteFilter ? platDisponibiliteFilter.value : '';
         const selectedPromo = platPromotionFilter ? platPromotionFilter.value : '';
 
+        let visibleCount = 0;
         menuCards.forEach(card => {
             const nom = card.dataset.nom ? card.dataset.nom.toLowerCase() : '';
             const categorie = card.dataset.categorie ? card.dataset.categorie.toLowerCase() : '';
@@ -667,16 +695,49 @@ document.addEventListener('DOMContentLoaded', function() {
             const matchesDisp = !selectedDisp || dispo === selectedDisp;
             const matchesPromo = !selectedPromo || promo === selectedPromo;
 
-            card.style.display = (matchesTerm && matchesCat && matchesDisp && matchesPromo) ? 'block' : 'none';
+            if (matchesTerm && matchesCat && matchesDisp && matchesPromo) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
         });
+
+        // Afficher un message si aucun résultat
+        const noResultsMessage = document.getElementById('noPlatsMessage');
+        if (visibleCount === 0) {
+            if (!noResultsMessage) {
+                const message = document.createElement('div');
+                message.id = 'noPlatsMessage';
+                message.className = 'col-12 text-center';
+                message.innerHTML = `
+                    <div class="guide-card">
+                        <i class="fas fa-utensils fa-3x mb-3 text-jaune"></i>
+                        <h4>Aucun plat trouvé</h4>
+                        <p>Aucun plat ne correspond à vos critères de recherche.</p>
+                    </div>
+                `;
+                document.getElementById('menusContainer').appendChild(message);
+            }
+        } else {
+            if (noResultsMessage) {
+                noResultsMessage.remove();
+            }
+        }
     }
 
-    // Écouteurs d'événements pour les structures
+    // Écouteurs d'événements pour les structures avec délai de frappe
     if (structureSearch) {
-        structureSearch.addEventListener('input', filterStructures);
+        structureSearch.addEventListener('input', function() {
+            clearTimeout(typingTimerStructures);
+            typingTimerStructures = setTimeout(filterStructures, doneTypingInterval);
+        });
     }
     if (platSearch) {
-        platSearch.addEventListener('input', filterMenus);
+        platSearch.addEventListener('input', function() {
+            clearTimeout(typingTimerPlats);
+            typingTimerPlats = setTimeout(filterMenus, doneTypingInterval);
+        });
     }
     if (villeFilter) {
         villeFilter.addEventListener('change', filterStructures);
